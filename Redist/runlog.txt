@@ -1,0 +1,10 @@
+ Tue Jun 16 16:40:17 2026.948 Starting Engine::Init()
+ Tue Jun 16 16:40:17 2026.948 Starting StateMachine::Init
+ Tue Jun 16 16:40:17 2026.948 Leaving StateMachine::Init
+ Tue Jun 16 16:40:17 2026.948 Starting InputSystem::Init()
+ Tue Jun 16 16:40:17 2026.948 Done With InputSystem::Init()
+ Tue Jun 16 16:40:18 2026.128 Done with Engine::Init()
+ Tue Jun 16 16:40:18 2026.128 Created state TitleState with ID 0
+ Tue Jun 16 16:40:18 2026.128 Created state MainState with ID 1
+ Tue Jun 16 16:40:18 2026.128 Created state OptionsState with ID 2
+ Tue Jun 16 16:40:18 2026.128 StateMachine: Transitioning to state TitleState, ID 0

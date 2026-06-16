@@ -1,0 +1,10 @@
+382 328
+data/font.txt
+#  Type|ID|Active|Group|TileX|TileY|PosX|PosY|Width|Height|Bitmap
+   1    1   1     1       0       0    0    0    32    32 images/0020.png
+   1    2   1     1       0       0   32    0    32    32 images/0018.png
+   1    3   1     1       0       0   64    0    32    32 images/0017.png
+   1    4   1     1       0       0   96    0    32    32 images/0019.png
+#   0    5   1     1       0       0  144    0    32    32 images/0022.png
+#   0    6   1     1       0       0  176    0    32    32 images/0021.png
+   1    7   1     1       0       0  208    0    32    32 images/0107.png
