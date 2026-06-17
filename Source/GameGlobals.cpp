@@ -10,10 +10,10 @@ Player* g_Player;
 Map* g_Map;
 Map* g_AllMaps[14];
 int g_CurrentEditorMap;
-LegacySprite* g_Tiles[NUMBER_OF_TILES];
+Sprite* g_Tiles[NUMBER_OF_TILES];
 Texture* g_Mask;
-LegacySprite* g_Star;
-LegacySprite* g_Bubble;
+Sprite* g_Star;
+Sprite* g_Bubble;
 Texture* g_WallShadows[8];
 Texture* g_FloorShadows[6];
 deque<ColoredString> g_ConsoleStrings;
@@ -105,7 +105,7 @@ void AddConsoleString( std::string str, int r, int g, int b )
 {
    char string1[256];
    char string2[256];
-   if( g_Font->GetStringMetrics( str ) > 610 )
+   if( GetStringMetrics(g_font.get(), g_fontSize,  str ) > 610 )
    {
       int lastsplit;
       for(int i = 0; i < str.length(); ++i )
@@ -114,7 +114,7 @@ void AddConsoleString( std::string str, int r, int g, int b )
          {
             int length = str.copy(string1, i, 0 );
             string1[length] = '\0';
-            if(g_Font->GetStringMetrics(string(string1)) < 610 )
+            if(GetStringMetrics(g_font.get(), g_fontSize, string(string1)) < 610 )
                lastsplit = i;
          }
       }
@@ -151,7 +151,7 @@ void DrawConsoleStrings()
    int posy = 380;
    for(node; node != g_ConsoleStrings.end(); ++node)
    {
-      g_Font->DrawTextA((*node).m_String.c_str(), 18, posy, (*node).m_Color.r, (*node).m_Color.g, (*node).m_Color.b);
+      DrawTextAt(g_font.get(), g_fontSize, (*node).m_String, 18, posy, (*node).m_Color);
       posy += 12;
    }
 
@@ -162,24 +162,24 @@ bool DrawButton( std::string text, int x, int y, int r, int g, int b, int a )
    if( text.empty() )
       return false;
 
-   int xwidth = g_Font->GetStringMetrics( text );
+   int xwidth = GetStringMetrics(g_font.get(), g_fontSize,  text );
 
    int yheight = 12;
 
-   g_Display->BlitImageRect( g_Mask, 0, 0, xwidth - 1, yheight - 1, x + 1, y + 1 );
+   DrawImageRectAt( g_Mask, 0, 0, xwidth - 1, yheight - 1, x + 1, y + 1 );
 
-   if( g_Input->IsLButtonDownInRegion( x, y, x + xwidth, y + yheight ) )
+   if( g_InputSystem->IsLButtonDownInDesignRegion( x, y, x + xwidth, y + yheight ) )
    {
-      g_Display->DrawBox(x, y, xwidth + 2, yheight + 2, r, g, b, a, true);
-      g_Font->DrawText( text, x + 2, y, 255 - r, 255 - g, 255 - b, a );
+      DrawBoxAt(x, y, xwidth + 2, yheight + 2, r, g, b, a, true);
+      DrawTextAt(g_font.get(), g_fontSize,  text, x + 2, y, 255 - r, 255 - g, 255 - b, a );
    }
    else
    {
-      g_Display->DrawBox(x, y, xwidth + 2, yheight + 2, r, g, b, a);
-      g_Font->DrawText( text, x + 2, y, r, g, b, a );
+      DrawBoxAt(x, y, xwidth + 2, yheight + 2, r, g, b, a);
+      DrawTextAt(g_font.get(), g_fontSize,  text, x + 2, y, r, g, b, a );
    }
 
-   if( g_Input->WasLButtonClickedInRegion( x, y, x + xwidth, y + yheight ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( x, y, x + xwidth, y + yheight ) )
       return true;
    else
       return false;
@@ -190,26 +190,26 @@ bool DrawButtonCentered( std::string text, int x, int y, int r, int g, int b, in
    if( text.empty() )
       return false;
 
-   int xwidth = g_Font->GetStringMetrics( text );
+   int xwidth = GetStringMetrics(g_font.get(), g_fontSize,  text );
 
    x -= (xwidth / 2);
 
    int yheight = 12;
 
-   g_Display->BlitImageRect( g_Mask, 0, 0, xwidth - 1, yheight - 1, x + 1, y + 1 );
+   DrawImageRectAt( g_Mask, 0, 0, xwidth - 1, yheight - 1, x + 1, y + 1 );
 
-   if( g_Input->IsLButtonDownInRegion( x, y, x + xwidth, y + yheight ) )
+   if( g_InputSystem->IsLButtonDownInDesignRegion( x, y, x + xwidth, y + yheight ) )
    {
-      g_Display->DrawBox(x, y, xwidth + 2, yheight + 2, r, g, b, a, true);
-      g_Font->DrawText( text, x + 2, y, 255 - r, 255 - g, 255 - b, a );
+      DrawBoxAt(x, y, xwidth + 2, yheight + 2, r, g, b, a, true);
+      DrawTextAt(g_font.get(), g_fontSize,  text, x + 2, y, 255 - r, 255 - g, 255 - b, a );
    }
    else
    {
-      g_Display->DrawBox(x, y, xwidth + 2, yheight + 2, r, g, b, a);
-      g_Font->DrawText( text, x + 2, y, r, g, b, a );
+      DrawBoxAt(x, y, xwidth + 2, yheight + 2, r, g, b, a);
+      DrawTextAt(g_font.get(), g_fontSize,  text, x + 2, y, r, g, b, a );
    }
 
-   if( g_Input->WasLButtonClickedInRegion( x, y, x + xwidth, y + yheight ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( x, y, x + xwidth, y + yheight ) )
       return true;
    else
       return false;
@@ -840,7 +840,7 @@ NPC* UnitFactory(int type, bool savegame)
 
 bool CheckPath( int x1, int y1, int x2, int y2, bool careaboutnpcs, bool careaboutitems )
 {
-   int ticksthiscall = SDL_GetTicks();
+   int ticksthiscall = static_cast<uint32_t>(g_Engine->GameTimeInMS());
 
    signed char ix;
    signed char iy;
@@ -1033,7 +1033,7 @@ bool CheckPath( int x1, int y1, int x2, int y2, bool careaboutnpcs, bool careabo
       visible = visible || thisvisible;
    }
 
-   g_CheckPathCount += SDL_GetTicks() - ticksthiscall;
+   g_CheckPathCount += static_cast<uint32_t>(g_Engine->GameTimeInMS()) - ticksthiscall;
 
    return visible;
 }*/
@@ -1091,9 +1091,9 @@ bool CheckPath( int x1, int y1, int x2, int y2, bool careaboutnpcs, bool careabo
 
 float LineLength( float x, float y, float endx, float endy )
 {
-	int ticksthisupdate = SDL_GetTicks();
+	int ticksthisupdate = static_cast<uint32_t>(g_Engine->GameTimeInMS());
    return sqrt( abs(float(endx - x) * float(endx - x)) + abs(float(endy - y) * float(endy - y )) );
-   ticksthisupdate = SDL_GetTicks() - ticksthisupdate;
+   ticksthisupdate = static_cast<uint32_t>(g_Engine->GameTimeInMS()) - ticksthisupdate;
    g_LineLengthCount += ticksthisupdate;
 }
 
@@ -1123,7 +1123,7 @@ void PlayMusic()
          {
             if( g_CurrentMusic != MUSIC_DANCEPARTY )
             {
-               g_Sound->Play( g_MusicTracks[MUSIC_DANCEPARTY], true, true);
+               g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_DANCEPARTY]);
                g_CurrentMusic = MUSIC_DANCEPARTY;
             }
          }
@@ -1131,7 +1131,7 @@ void PlayMusic()
          {
             if( g_CurrentMusic != MUSIC_WIN )
             {
-               g_Sound->Play( g_MusicTracks[MUSIC_WIN], true, true);
+               g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_WIN]);
                g_CurrentMusic = MUSIC_WIN;
             }
          }
@@ -1144,7 +1144,7 @@ void PlayMusic()
          {
             if( g_CurrentMusic != MUSIC_EMERALD )
             {
-               g_Sound->Play( g_MusicTracks[MUSIC_EMERALD], true, true);
+               g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_EMERALD]);
                g_CurrentMusic = MUSIC_EMERALD;
             }
          }
@@ -1153,7 +1153,7 @@ void PlayMusic()
          {
             if( g_CurrentMusic != MUSIC_LASTFRONT )
             {
-               g_Sound->Play( g_MusicTracks[MUSIC_LASTFRONT], true, true);
+               g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_LASTFRONT]);
                g_CurrentMusic = MUSIC_LASTFRONT;
             }
          }
@@ -1162,7 +1162,7 @@ void PlayMusic()
          {
             if( g_CurrentMusic != MUSIC_SAPPHIRE )
             {
-               g_Sound->Play( g_MusicTracks[MUSIC_SAPPHIRE], true, true);
+               g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_SAPPHIRE]);
                g_CurrentMusic = MUSIC_SAPPHIRE;
             }
          }
@@ -1171,14 +1171,14 @@ void PlayMusic()
          {
             if( g_CurrentMusic != MUSIC_RUBY )
             {
-               g_Sound->Play( g_MusicTracks[MUSIC_RUBY], true, true);
+               g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_RUBY]);
                g_CurrentMusic = MUSIC_RUBY;
             }
          }
 
          else if( g_CurrentMusic != MUSIC_OVERWORLD )
          {
-            g_Sound->Play( g_MusicTracks[MUSIC_OVERWORLD], true, true);
+            g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_OVERWORLD]);
             g_CurrentMusic = MUSIC_OVERWORLD;
          }
       }
@@ -1186,7 +1186,7 @@ void PlayMusic()
 
       if( g_Map->m_MapTitle == "The Mountain Trial"  && g_CurrentMusic != MUSIC_OVERWORLD )
       {
-         g_Sound->Play( g_MusicTracks[MUSIC_OVERWORLD], true, true);
+         g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_OVERWORLD]);
          g_CurrentMusic = MUSIC_OVERWORLD;
       }
 
@@ -1200,19 +1200,19 @@ void PlayMusic()
          g_Map->m_MapTitle == "The Oubliette" || 
          g_Map->m_MapTitle == "The Underwater Tunnel" ) && g_CurrentMusic != MUSIC_DUNGEON )
       {
-         g_Sound->Play( g_MusicTracks[MUSIC_DUNGEON], true, true);
+         g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_DUNGEON]);
          g_CurrentMusic = MUSIC_DUNGEON;
       }
 
       if( g_Map->m_MapTitle == "The Castle of the Slornite King" && g_CurrentMusic != MUSIC_CASTLE )
       {
-         g_Sound->Play( g_MusicTracks[MUSIC_CASTLE], true, true);
+         g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_CASTLE]);
          g_CurrentMusic = MUSIC_CASTLE;
       }
 
       if( g_Map->m_MapTitle == "Volcano's Heart" && g_CurrentMusic != MUSIC_VOLCANOHEART )
       {
-         g_Sound->Play( g_MusicTracks[MUSIC_VOLCANOHEART], true, true);
+         g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_VOLCANOHEART]);
          g_CurrentMusic = MUSIC_VOLCANOHEART;
       }
    }
@@ -1221,7 +1221,7 @@ void PlayMusic()
    {
       if( g_CurrentMusic != MUSIC_SHOPPING )
       {
-         g_Sound->Play( g_MusicTracks[MUSIC_SHOPPING], true, true);
+         g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_SHOPPING]);
          g_CurrentMusic = MUSIC_SHOPPING;
       }
    }
@@ -1230,14 +1230,14 @@ void PlayMusic()
    {
       if( g_CurrentMusic != MUSIC_THEME )
       {
-         g_Sound->Play( g_MusicTracks[MUSIC_THEME], true, true);
+         g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_THEME]);
          g_CurrentMusic = MUSIC_THEME;
       }
    }
 
    else if( g_StateMachine->GetCurrentState() == STATE_EDITORSTATE )
    {
-      g_Sound->StopMusic();
+      g_SoundSystem->StopCurrentMusic();
    }
 }
 
@@ -1292,7 +1292,7 @@ bool SaveGame()
    //  Player inventory.
    ostream << g_Player->m_PlayerInventory.size() << endl;
 
-   for( UINT i = 0; i < g_Player->m_PlayerInventory.size(); ++i)
+   for( uint32_t i = 0; i < g_Player->m_PlayerInventory.size(); ++i)
    {
       ostream << g_Player->m_PlayerInventory[i]->m_ItemType << endl;
       ostream << g_Player->m_PlayerInventory[i]->m_STRBonus << endl;
@@ -1554,70 +1554,30 @@ Texture* g_TalkSpurLeft;
 Texture* g_TalkSpurRight;
 Texture* g_TalkSpurRightUp;
 
-static void DrawToolTipImpl(InariaFont* font, const std::vector<ColoredString>& strings, int x, int y, int linewidth, int anchorcorner)
+void DrawToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, int anchorcorner)
 {
-    if (!font || strings.empty())
-        return;
-
-    int xwidth = 0;
-    for (const auto& str : strings)
-    {
-        int w = font->GetStringMetrics(str.m_String);
-        if (w > xwidth)
-            xwidth = w;
-    }
-    xwidth += 6;
-    int yheight = static_cast<int>(font->m_FontSize * strings.size() * 1.3f);
-
-    auto drawStrings = [&](int boxX, int boxY)
-    {
-        DrawRectangle(static_cast<int>(boxX * SX) - 1, static_cast<int>(boxY * SY) - 1,
-            static_cast<int>((xwidth + 2) * SX), static_cast<int>((yheight + 1) * SY), Color{ 0, 0, 0, 255 });
-        int posy = boxY;
-        for (const auto& str : strings)
-        {
-            font->DrawTextA(str.m_String.c_str(), boxX + 3, posy, str.m_Color.r, str.m_Color.g, str.m_Color.b);
-            posy += static_cast<int>(font->m_FontSize);
-        }
-    };
-
-    switch (anchorcorner)
-    {
-    case 1:
-        drawStrings(x - xwidth, y);
-        break;
-    case 2:
-        drawStrings(x - xwidth, y - yheight);
-        break;
-    case 3:
-        drawStrings(x, y - yheight);
-        break;
-    default:
-        drawStrings(x, y);
-        break;
-    }
+    DrawToolTipRender(font, fontSize, strings,
+        static_cast<int>(DesignToRenderX(static_cast<float>(x))),
+        static_cast<int>(DesignToRenderY(static_cast<float>(y))), 1.0f, anchorcorner);
 }
 
-void DrawToolTip(InariaFont* font, std::vector<ColoredString> strings, int x, int y, int anchorcorner)
-{
-    DrawToolTipImpl(font, strings, x, y, 1, anchorcorner);
-}
-
-void DrawToolTip(InariaFont* font, std::string strings, int x, int y, int anchorcorner, int r, int g, int b)
+void DrawToolTip(Font* font, float fontSize, std::string strings, int x, int y, int anchorcorner, int r, int g, int b)
 {
     std::vector<ColoredString> temp;
-    temp.emplace_back(strings, r, g, b);
-    DrawToolTipImpl(font, temp, x, y, 1, anchorcorner);
+    temp.emplace_back(strings, MakeColor(r, g, b));
+    DrawToolTip(font, fontSize, temp, x, y, anchorcorner);
 }
 
-void DrawToolTip(InariaFont* font, std::vector<ColoredString> strings, int x, int y, int linewidth, int anchorcorner)
+void DrawToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, float linewidth, int anchorcorner)
 {
-    DrawToolTipImpl(font, strings, x, y, linewidth, anchorcorner);
+    DrawToolTipRender(font, fontSize, strings,
+        static_cast<int>(DesignToRenderX(static_cast<float>(x))),
+        static_cast<int>(DesignToRenderY(static_cast<float>(y))), linewidth, anchorcorner);
 }
 
-void DrawToolTip(InariaFont* font, std::string strings, int x, int y, int linewidth, int anchorcorner, int r, int g, int b)
+void DrawToolTip(Font* font, float fontSize, std::string strings, int x, int y, float linewidth, int anchorcorner, int r, int g, int b)
 {
     std::vector<ColoredString> temp;
-    temp.emplace_back(strings, r, g, b);
-    DrawToolTipImpl(font, temp, x, y, linewidth, anchorcorner);
+    temp.emplace_back(strings, MakeColor(r, g, b));
+    DrawToolTip(font, fontSize, temp, x, y, linewidth, anchorcorner);
 }

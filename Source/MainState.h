@@ -12,7 +12,6 @@
 #define _MAINSTATE_H_
 
 #include "Geist/State.h"
-#include "InariaCompat.h"
 #include "Map.h"
 #include "NPC.h"
 #include "Geist/Gui.h"
@@ -77,11 +76,11 @@ private:
 
    int m_ActiveGUIState;
 
-   UINT m_PlayerMoveTimer;
+   uint32_t m_PlayerMoveTimer;
    bool m_AbilityInventorySwitch;
 
-   UINT m_UpdateTimer;
-   UINT m_DrawTimer;
+   uint32_t m_UpdateTimer;
+   uint32_t m_DrawTimer;
 
    
 

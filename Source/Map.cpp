@@ -90,7 +90,7 @@ void Map::DrawPeer()
    {
       for( int j = 0; j < m_Height; ++ j)
       {
-         g_Display->DrawSpriteResized( g_Tiles[m_terrainTypes[m_map[i][j].m_TerrainType].m_tile], g_Offset + newwidth + i * cellwidth, g_Offset + newwidth + j * cellwidth, cellwidth, cellwidth );
+         DrawSpriteResizedAt( g_Tiles[m_terrainTypes[m_map[i][j].m_TerrainType].m_tile], g_Offset + newwidth + i * cellwidth, g_Offset + newwidth + j * cellwidth, cellwidth, cellwidth );
       }
    }
 
@@ -99,7 +99,7 @@ void Map::DrawPeer()
    list<NPC*>::iterator node;
    for( node = g_Map->m_NPCList.begin(); node != g_Map->m_NPCList.end(); ++node )
    {
-      g_Display->DrawSpriteResized( g_Tiles[(*node)->m_Tile], g_Offset + newwidth + (*node)->m_PosX * cellwidth, g_Offset + newwidth + (*node)->m_PosY * cellwidth, cellwidth, cellwidth );
+      DrawSpriteResizedAt( g_Tiles[(*node)->m_Tile], g_Offset + newwidth + (*node)->m_PosX * cellwidth, g_Offset + newwidth + (*node)->m_PosY * cellwidth, cellwidth, cellwidth );
    }
 
 
@@ -107,11 +107,11 @@ void Map::DrawPeer()
    list<Item*>::iterator itemnode;
    for(itemnode = g_Map->m_ItemList.begin(); itemnode != g_Map->m_ItemList.end(); ++itemnode)
    {
-      g_Display->DrawSpriteResized( g_Tiles[(*itemnode)->m_Tile], g_Offset + newwidth + (*itemnode)->m_PosX * cellwidth, g_Offset + newwidth + (*itemnode)->m_PosY * cellwidth, cellwidth, cellwidth );
+      DrawSpriteResizedAt( g_Tiles[(*itemnode)->m_Tile], g_Offset + newwidth + (*itemnode)->m_PosX * cellwidth, g_Offset + newwidth + (*itemnode)->m_PosY * cellwidth, cellwidth, cellwidth );
    }
 
    //  Draw the player
-   g_Display->DrawSpriteResized( g_Tiles[46], g_Offset + newwidth + g_Player->m_PlayerPosX * cellwidth, g_Offset + newwidth + g_Player->m_PlayerPosY * cellwidth, cellwidth, cellwidth );
+   DrawSpriteResizedAt( g_Tiles[46], g_Offset + newwidth + g_Player->m_PlayerPosX * cellwidth, g_Offset + newwidth + g_Player->m_PlayerPosY * cellwidth, cellwidth, cellwidth );
 }
 
 void Map::DrawEditor()
@@ -133,7 +133,7 @@ void Map::DrawEditor()
             adjustedy = y - (g_Player->m_PlayerPosY - ( g_ViewRange * 2 ));
          }
 
-         g_Display->DrawSpriteResized( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * ( g_TileSize / 2)) - (g_ViewRange * (g_TileSize / 2)), g_Offset + (adjustedy * ( g_TileSize / 2))  - (g_ViewRange * (g_TileSize / 2)), ( g_TileSize / 2), ( g_TileSize / 2) );
+         DrawSpriteResizedAt( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * ( g_TileSize / 2)) - (g_ViewRange * (g_TileSize / 2)), g_Offset + (adjustedy * ( g_TileSize / 2))  - (g_ViewRange * (g_TileSize / 2)), ( g_TileSize / 2), ( g_TileSize / 2) );
       }
    }
 
@@ -173,7 +173,7 @@ void Map::DrawEditor()
                }
 
                if( invisible )
-                  g_Display->DrawBox( g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize), g_TileSize - 1, g_TileSize, 255, 255, 0 );
+                  DrawBoxAt( g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize), g_TileSize - 1, g_TileSize, 255, 255, 0 );
 
                bool linktarget = false;
                //  Check if this square is the target of another map link.
@@ -191,7 +191,7 @@ void Map::DrawEditor()
                }
 
                if( linktarget )
-                  g_Display->DrawBox( g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize), g_TileSize - 1, g_TileSize, 255, 0, 0 );
+                  DrawBoxAt( g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize), g_TileSize - 1, g_TileSize, 255, 0, 0 );
                   */
 
 
@@ -205,13 +205,13 @@ void Map::Update()
 
 void Map::Draw()
 {
-   static UINT scrolltimer = SDL_GetTicks();
+   static uint32_t scrolltimer = static_cast<uint32_t>(g_Engine->GameTimeInMS());
    static int scroller = g_TileSize;
 
-   if( SDL_GetTicks() - scrolltimer > 100 )
+   if( static_cast<uint32_t>(g_Engine->GameTimeInMS()) - scrolltimer > 100 )
    {
       --scroller;
-      scrolltimer = SDL_GetTicks();
+      scrolltimer = static_cast<uint32_t>(g_Engine->GameTimeInMS());
    }
 
    if( scroller == 0 )
@@ -261,8 +261,8 @@ void Map::Draw()
             //  Draw water and lava with scrolling animation.
             if( m_terrainTypes[m_map[x][y].m_TerrainType].m_tile == 2 || m_terrainTypes[m_map[x][y].m_TerrainType].m_tile == 7 )
             {
-               g_Display->DrawSpriteRect( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], 0,              scroller, g_TileSize, g_TileSize - scroller, g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
-               g_Display->DrawSpriteRect( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], 0,                     0, g_TileSize,              scroller, g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) + (g_TileSize - scroller) );
+               DrawSpriteRectAt( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], 0,              scroller, g_TileSize, g_TileSize - scroller, g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
+               DrawSpriteRectAt( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], 0,                     0, g_TileSize,              scroller, g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) + (g_TileSize - scroller) );
 
             }
             else if( isGrassType( m_map[x][y].m_TerrainType ) )
@@ -281,25 +281,25 @@ void Map::Draw()
 
                if( beachCounter == 15 ) // no beach
                {
-                  g_Display->DrawSprite( g_Tiles[0], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
-                  g_Display->DrawSprite( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
+                  DrawSpriteAt( g_Tiles[0], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
+                  DrawSpriteAt( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
                }
                else
                {
-                  g_Display->DrawSpriteRect( g_Tiles[2], 0,              scroller, g_TileSize, g_TileSize - scroller, g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
-                  g_Display->DrawSpriteRect( g_Tiles[2], 0,                     0, g_TileSize,              scroller, g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) + (g_TileSize - scroller) );
-                  g_Display->DrawSprite( g_Tiles[82 + beachCounter], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
+                  DrawSpriteRectAt( g_Tiles[2], 0,              scroller, g_TileSize, g_TileSize - scroller, g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
+                  DrawSpriteRectAt( g_Tiles[2], 0,                     0, g_TileSize,              scroller, g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) + (g_TileSize - scroller) );
+                  DrawSpriteAt( g_Tiles[82 + beachCounter], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
 
                   if( m_map[x][y].m_TerrainType != 0 )
                   {
-                     g_Display->DrawSprite( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
+                     DrawSpriteAt( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
                   }
                }
             }
             else if( isPavedType( m_terrainTypes[m_map[x][y].m_TerrainType].m_tile) )
             {
-               g_Display->DrawSprite( g_Tiles[5], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
-               g_Display->DrawSprite( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
+               DrawSpriteAt( g_Tiles[5], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
+               DrawSpriteAt( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize) );
             }
             else
             {
@@ -309,7 +309,7 @@ void Map::Draw()
                glTranslatef(g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize), -100);
                glBindTexture(GL_TEXTURE_2D, g_Tiles[0]->m_Texture->m_Texture);
                glBegin(GL_TRIANGLES);
-               Mesh* currentmesh = m_terrainTypes[m_map[x][y].m_TerrainType].m_Mesh;
+               void* currentmesh = m_terrainTypes[m_map[x][y].m_TerrainType].m_Mesh;
                for( int i = 0; i < currentmesh->m_VertexList.size(); ++i )
                {
                   
@@ -317,7 +317,7 @@ void Map::Draw()
                }
                glEnd();
                glPopMatrix();*/
-               g_Display->DrawSprite( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+               DrawSpriteAt( g_Tiles[m_terrainTypes[m_map[x][y].m_TerrainType].m_tile], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
             }
          }
       }
@@ -378,35 +378,35 @@ void Map::Draw()
 
          if (NEEdge && !NEdge && !EEdge)
          {
-            g_Display->BlitImage( g_WallShadows[2], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_WallShadows[2], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          if (NWEdge && !NEdge && !WEdge)
          {
-            g_Display->BlitImage( g_WallShadows[3], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_WallShadows[3], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          if (SEEdge && !SEdge && !EEdge)
          {
-            g_Display->BlitImage( g_WallShadows[5], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_WallShadows[5], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          if (SWEdge && !SEdge && !WEdge)
          {
-            g_Display->BlitImage( g_WallShadows[6], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_WallShadows[6], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }            
          if (NEdge)
          {
-            g_Display->BlitImage( g_WallShadows[1], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_WallShadows[1], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          if (SEdge)
          {
-            g_Display->BlitImage( g_WallShadows[4], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_WallShadows[4], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          if (EEdge)
          {
-            g_Display->BlitImage( g_WallShadows[0], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_WallShadows[0], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          if (WEdge)
          {
-            g_Display->BlitImage( g_WallShadows[7], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_WallShadows[7], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
       }
    }
@@ -452,27 +452,27 @@ void Map::Draw()
          if (CornerShadow2)
          {
 
-            g_Display->BlitImage( g_FloorShadows[1], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_FloorShadows[1], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          else if (CornerShadow3)
          {
-            g_Display->BlitImage( g_FloorShadows[2], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_FloorShadows[2], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          else if (CornerShadow4)
          {
-            g_Display->BlitImage( g_FloorShadows[3], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_FloorShadows[3], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          else if (SShadow)
          {
-            g_Display->BlitImage( g_FloorShadows[5], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_FloorShadows[5], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          else if (EShadow)
          {
-            g_Display->BlitImage( g_FloorShadows[4], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_FloorShadows[4], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
          else if (CornerShadow1)
          {
-            g_Display->BlitImage( g_FloorShadows[0], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
+            DrawImageAt( g_FloorShadows[0], g_Offset + (adjustedx * g_TileSize), g_Offset + (adjustedy * g_TileSize));
          }
       }
    }

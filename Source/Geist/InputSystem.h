@@ -117,6 +117,13 @@ public:
       return (m_MouseX >= rect.x && m_MouseX <= rect.x + rect.width) && (m_MouseY >= rect.y && m_MouseY <= rect.y + rect.height);
    }
 
+   // Design-space regions (absolute corner coordinates in 640x480 logical space)
+   bool IsMouseInDesignRegion(int x1, int y1, int x2, int y2);
+   bool IsLButtonDownInDesignRegion(int x1, int y1, int x2, int y2);
+   bool WasLButtonClickedInDesignRegion(int x1, int y1, int x2, int y2);
+   bool WasRButtonClickedInDesignRegion(int x1, int y1, int x2, int y2);
+   bool WasLButtonJustClickedInDesignRegion(int x1, int y1, int x2, int y2);
+
    //  Gamepad
    void UpdateGamepadState();
 

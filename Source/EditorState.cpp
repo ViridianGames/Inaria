@@ -104,26 +104,26 @@ void EditorState::Shutdown()
 
 void EditorState::Update()
 {
-   UINT startTime = SDL_GetTicks();
+   uint32_t startTime = static_cast<uint32_t>(g_Engine->GameTimeInMS());
 
-   if(g_Input->WasKeyPressed(SDLK_e) && g_Input->IsKeyDown(SDLK_LCTRL) )
+   if(g_InputSystem->WasKeyPressed(KEY_E) && g_InputSystem->IsKeyDown(KEY_LEFT_CONTROL) )
    {
       g_StateMachine->MakeStateTransition(STATE_MAINSTATE);
    }
 
-   if( (g_Input->m_KeyboardState[SDLK_a] || g_Input->m_KeyboardState[SDLK_LEFT]) && g_Player->m_PlayerPosX > 0 )
+   if( (g_InputSystem->IsKeyDown(KEY_A) || g_InputSystem->IsKeyDown(KEY_LEFT)) && g_Player->m_PlayerPosX > 0 )
    {
       g_Player->m_PlayerPosX -= 1;
    }
-   else if( (g_Input->m_KeyboardState[SDLK_d] || g_Input->m_KeyboardState[SDLK_RIGHT]) && g_Player->m_PlayerPosX < g_AllMaps[g_CurrentEditorMap]->m_Width )
+   else if( (g_InputSystem->IsKeyDown(KEY_D) || g_InputSystem->IsKeyDown(KEY_RIGHT)) && g_Player->m_PlayerPosX < g_AllMaps[g_CurrentEditorMap]->m_Width )
    {
       g_Player->m_PlayerPosX += 1;
    }
-   else if( (g_Input->m_KeyboardState[SDLK_w] || g_Input->m_KeyboardState[SDLK_UP]) && g_Player->m_PlayerPosY > 0 )
+   else if( (g_InputSystem->IsKeyDown(KEY_W) || g_InputSystem->IsKeyDown(KEY_UP)) && g_Player->m_PlayerPosY > 0 )
    {
       g_Player->m_PlayerPosY -= 1;
    }
-   else if( (g_Input->m_KeyboardState[SDLK_s] || g_Input->m_KeyboardState[SDLK_DOWN]) && g_Player->m_PlayerPosY < g_AllMaps[g_CurrentEditorMap]->m_Width )
+   else if( (g_InputSystem->IsKeyDown(KEY_S) || g_InputSystem->IsKeyDown(KEY_DOWN)) && g_Player->m_PlayerPosY < g_AllMaps[g_CurrentEditorMap]->m_Width )
    {
       g_Player->m_PlayerPosY += 1;
    }
@@ -157,7 +157,7 @@ void EditorState::Draw()
    {
       for( int j = 0; j < g_AllMaps[g_CurrentEditorMap]->m_Height; j = j + 1 )     
       {
-         g_Display->DrawBox(384 + (i * xstepper), (j * ystepper), xstepper, ystepper, 
+         DrawBoxAt(384 + (i * xstepper), (j * ystepper), xstepper, ystepper, 
                               g_AllMaps[g_CurrentEditorMap]->m_terrainTypes[g_AllMaps[g_CurrentEditorMap]->m_map[i][j].m_TerrainType].m_MinimapColor.r,
                   g_AllMaps[g_CurrentEditorMap]->m_terrainTypes[g_AllMaps[g_CurrentEditorMap]->m_map[i][j].m_TerrainType].m_MinimapColor.g,
                   g_AllMaps[g_CurrentEditorMap]->m_terrainTypes[g_AllMaps[g_CurrentEditorMap]->m_map[i][j].m_TerrainType].m_MinimapColor.b,
@@ -169,29 +169,29 @@ void EditorState::Draw()
    //  Draw all items on this map
 /*   for( list<Item*>::iterator node = g_AllMaps[g_CurrentEditorMap]->m_ItemList.begin(); node != g_AllMaps[g_CurrentEditorMap]->m_ItemList.end(); ++node )
    {
-      g_Display->DrawSpriteResized( g_Tiles[(*node)->m_Tile], 384 + (xstepper * (*node)->m_PosX), (ystepper * (*node)->m_PosY), xstepper, ystepper );
+      DrawSpriteResizedAt( g_Tiles[(*node)->m_Tile], 384 + (xstepper * (*node)->m_PosX), (ystepper * (*node)->m_PosY), xstepper, ystepper );
    }
 
 
    //  Draw all NPCs on this map
    for( list<NPC*>::iterator node = g_AllMaps[g_CurrentEditorMap]->m_NPCList.begin(); node != g_AllMaps[g_CurrentEditorMap]->m_NPCList.end(); ++node )
    {
-      g_Display->DrawSpriteResized( g_Tiles[(*node)->m_Tile], 384 + (xstepper * (*node)->m_PosX), (ystepper * (*node)->m_PosY), xstepper, ystepper );
+      DrawSpriteResizedAt( g_Tiles[(*node)->m_Tile], 384 + (xstepper * (*node)->m_PosX), (ystepper * (*node)->m_PosY), xstepper, ystepper );
    }*/
 
    //  Draw a box representing what the player is looking at.
    xstepper = 256 / g_AllMaps[g_CurrentEditorMap]->m_Width;
    ystepper = 256 / g_AllMaps[g_CurrentEditorMap]->m_Height;
 
-   g_Display->DrawBox( 384 + ((g_Player->m_PlayerPosX - g_ViewRange) * xstepper), (g_Player->m_PlayerPosY - g_ViewRange ) * ystepper, 23 * xstepper, 23 * ystepper );
+   DrawBoxAt( 384 + ((g_Player->m_PlayerPosX - g_ViewRange) * xstepper), (g_Player->m_PlayerPosY - g_ViewRange ) * ystepper, 23 * xstepper, 23 * ystepper );
 
 
-   g_SmallFont->DrawText(g_AllMaps[g_CurrentEditorMap]->m_MapName.c_str(), 0, 370 );
+   DrawTextAt(g_smallFont.get(), g_smallFontSize, g_AllMaps[g_CurrentEditorMap]->m_MapName.c_str(), 0, 370 );
 
-   if( g_Input->IsMouseInRegion(g_Offset, g_Offset, 368, 368) )
+   if( g_InputSystem->IsMouseInDesignRegion(g_Offset, g_Offset, 368, 368) )
    {
-      int x = ( g_Input->m_MouseX - g_Offset ) / 16;
-      int y = ( g_Input->m_MouseY - g_Offset ) / 16;
+      int x = ( GetDesignMouseX() - g_Offset ) / 16;
+      int y = ( GetDesignMouseY() - g_Offset ) / 16;
 
       x += g_Player->m_PlayerPosX;
       y += g_Player->m_PlayerPosY;
@@ -201,13 +201,13 @@ void EditorState::Draw()
 
       char temp[64];
       sprintf( temp, "X: %d Y: %d", x, y);
-      g_SmallFont->DrawTextA( temp, 368 - g_SmallFont->GetStringMetrics(temp), 370 );
+      DrawTextAt(g_smallFont.get(), g_smallFontSize,  temp, 368 - GetStringMetrics(g_smallFont.get(), g_smallFontSize, temp), 370 );
    }
    else
    {
       char temp[64];
       sprintf( temp, "X: %d Y: %d", g_Player->m_PlayerPosX, g_Player->m_PlayerPosY);
-      g_SmallFont->DrawTextA( temp, 368 - g_SmallFont->GetStringMetrics(temp), 370 );
+      DrawTextAt(g_smallFont.get(), g_smallFontSize,  temp, 368 - GetStringMetrics(g_smallFont.get(), g_smallFontSize, temp), 370 );
    }
 
 
@@ -219,13 +219,13 @@ void EditorState::Draw()
    case 0:
 
       //  Draw the terrain types.
-      g_Font->DrawText("Terrain", 438, 260);
-      g_Font->DrawText("Items", 518, 260, 128, 128, 128 );
-      g_Font->DrawText("NPCs", 578, 260, 128, 128, 128 );
+      DrawTextAt(g_font.get(), g_fontSize, "Terrain", 438, 260);
+      DrawTextAt(g_font.get(), g_fontSize, "Items", 518, 260, 128, 128, 128 );
+      DrawTextAt(g_font.get(), g_fontSize, "NPCs", 578, 260, 128, 128, 128 );
       counter = 0;      
       for(int i = 0; i <= 21; ++ i)
       {
-         g_Display->DrawSpriteResized( g_Tiles[g_AllMaps[0]->m_terrainTypes[i].m_tile], m_ItemListX + ( ( counter % 10 ) * 24 ), m_ItemListY + ((counter / 10 ) * 24 ), 24, 24 );
+         DrawSpriteResizedAt( g_Tiles[g_AllMaps[0]->m_terrainTypes[i].m_tile], m_ItemListX + ( ( counter % 10 ) * 24 ), m_ItemListY + ((counter / 10 ) * 24 ), 24, 24 );
          ++counter;
       }
       break;
@@ -233,26 +233,26 @@ void EditorState::Draw()
 
    case 1:
       //  Draw the item types.
-      g_Font->DrawText("Terrain", 438, 260, 128, 128, 128);
-      g_Font->DrawText("Items", 518, 260 );
-      g_Font->DrawText("NPCs", 578, 260, 128, 128, 128 );
+      DrawTextAt(g_font.get(), g_fontSize, "Terrain", 438, 260, 128, 128, 128);
+      DrawTextAt(g_font.get(), g_fontSize, "Items", 518, 260 );
+      DrawTextAt(g_font.get(), g_fontSize, "NPCs", 578, 260, 128, 128, 128 );
       counter = 0;
       for ( list<Item*>::iterator node = m_AllItems.begin(); node != m_AllItems.end(); ++node )
       {
-         g_Display->DrawSpriteResized( g_Tiles[(*node)->m_Tile], m_ItemListX + ( ( counter % 10 ) * 24 ), m_ItemListY + ((counter / 10 ) * 24 ), 24, 24 );
+         DrawSpriteResizedAt( g_Tiles[(*node)->m_Tile], m_ItemListX + ( ( counter % 10 ) * 24 ), m_ItemListY + ((counter / 10 ) * 24 ), 24, 24 );
          ++counter;
       }
       break;
 
       //  Draw the NPCs.
    case 2:
-      g_Font->DrawText("Terrain", 438, 260, 128, 128, 128 );
-      g_Font->DrawText("Items", 518, 260, 128, 128, 128 );
-      g_Font->DrawText("NPCs", 578, 260 );
+      DrawTextAt(g_font.get(), g_fontSize, "Terrain", 438, 260, 128, 128, 128 );
+      DrawTextAt(g_font.get(), g_fontSize, "Items", 518, 260, 128, 128, 128 );
+      DrawTextAt(g_font.get(), g_fontSize, "NPCs", 578, 260 );
       counter = 0;
       for ( list<NPC*>::iterator node = m_AllNPCs.begin(); node != m_AllNPCs.end(); ++node )
       {
-         g_Display->DrawSpriteResized( g_Tiles[(*node)->m_Tile], m_ItemListX + ( ( counter % 10 ) * 24 ), m_ItemListY + ((counter / 10 ) * 24 ), 24, 24 );
+         DrawSpriteResizedAt( g_Tiles[(*node)->m_Tile], m_ItemListX + ( ( counter % 10 ) * 24 ), m_ItemListY + ((counter / 10 ) * 24 ), 24, 24 );
          ++counter;
       }
       break;
@@ -261,10 +261,10 @@ void EditorState::Draw()
    //  Draw tooltips
    if( m_MapMode == 0 )
    {
-      if( g_Input->IsMouseInRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
-         int index = ((g_Input->m_MouseY - m_ItemListY) / 24 ) * 10 ;
-         index += ((g_Input->m_MouseX - m_ItemListX) / 24);
+         int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
+         index += ((GetDesignMouseX() - m_ItemListX) / 24);
 
          if( index < 22 )
          {
@@ -282,7 +282,7 @@ void EditorState::Draw()
                coloredstrings.push_back(*temp);
             }
 
-            DrawToolTip( g_SmallFont,  coloredstrings, g_Input->m_MouseX - (g_Input->m_MouseX % 24), g_Input->m_MouseY - (g_Input->m_MouseY % 24), 2 );
+            DrawToolTip( g_smallFont.get(), g_smallFontSize,  coloredstrings, GetDesignMouseX() - (GetDesignMouseX() % 24), GetDesignMouseY() - (GetDesignMouseY() % 24), 2 );
          }
       }
    }
@@ -291,10 +291,10 @@ void EditorState::Draw()
    //  Draw tooltips
    if( m_MapMode == 1 )
    {
-      if( g_Input->IsMouseInRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
-         int index = ((g_Input->m_MouseY - m_ItemListY) / 24 ) * 10 ;
-         index += ((g_Input->m_MouseX - m_ItemListX) / 24);
+         int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
+         index += ((GetDesignMouseX() - m_ItemListX) / 24);
 
          if( index < m_AllItems.size() )
          {
@@ -304,7 +304,7 @@ void EditorState::Draw()
             ColoredString* temp = new ColoredString((*node)->m_Name);
             vector<ColoredString> coloredstrings;
             coloredstrings.push_back(*temp);
-            DrawToolTip( g_SmallFont, coloredstrings, g_Input->m_MouseX - (g_Input->m_MouseX % 24), g_Input->m_MouseY - (g_Input->m_MouseY % 24), 2 );
+            DrawToolTip( g_smallFont.get(), g_smallFontSize, coloredstrings, GetDesignMouseX() - (GetDesignMouseX() % 24), GetDesignMouseY() - (GetDesignMouseY() % 24), 2 );
          }
       }
    }
@@ -312,10 +312,10 @@ void EditorState::Draw()
    //  Draw tooltips
    if( m_MapMode == 2 )
    {
-      if( g_Input->IsMouseInRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
-         int index = ((g_Input->m_MouseY - m_ItemListY) / 24 ) * 10 ;
-         index += ((g_Input->m_MouseX - m_ItemListX) / 24);
+         int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
+         index += ((GetDesignMouseX() - m_ItemListX) / 24);
 
          if( index < m_AllNPCs.size() )
          {
@@ -325,7 +325,7 @@ void EditorState::Draw()
             ColoredString* temp = new ColoredString((*node)->m_Name);
             vector<ColoredString> coloredstrings;
             coloredstrings.push_back(*temp);
-            DrawToolTip( g_SmallFont,  coloredstrings, g_Input->m_MouseX - (g_Input->m_MouseX % 24), g_Input->m_MouseY - (g_Input->m_MouseY % 24), 2 );
+            DrawToolTip( g_smallFont.get(), g_smallFontSize,  coloredstrings, GetDesignMouseX() - (GetDesignMouseX() % 24), GetDesignMouseY() - (GetDesignMouseY() % 24), 2 );
          }
       }
    }
@@ -333,14 +333,14 @@ void EditorState::Draw()
    if( m_MapMode == 0 )
    {
       if( m_CurrentTerrainType >= 0 )
-         g_Display->DrawSprite(g_Tiles[g_AllMaps[g_CurrentEditorMap]->m_terrainTypes[m_CurrentTerrainType].m_tile], g_Input->m_MouseX, g_Input->m_MouseY );
+         DrawSpriteAt(g_Tiles[g_AllMaps[g_CurrentEditorMap]->m_terrainTypes[m_CurrentTerrainType].m_tile], GetDesignMouseX(), GetDesignMouseY() );
    }
 
    if( m_MapMode == 1 )
    {
       if( m_CurrentItem )
       {
-         g_Display->DrawSprite(g_Tiles[m_CurrentItem->m_Tile], g_Input->m_MouseX, g_Input->m_MouseY );
+         DrawSpriteAt(g_Tiles[m_CurrentItem->m_Tile], GetDesignMouseX(), GetDesignMouseY() );
       }
    }
 
@@ -348,38 +348,38 @@ void EditorState::Draw()
    {
       if( m_CurrentNPC )
       {
-         g_Display->DrawSprite(g_Tiles[m_CurrentNPC->m_Tile], g_Input->m_MouseX, g_Input->m_MouseY );
+         DrawSpriteAt(g_Tiles[m_CurrentNPC->m_Tile], GetDesignMouseX(), GetDesignMouseY() );
       }
    }
 
    //  Draw Miscellanious Buttons
-   g_Font->DrawTextA("Delete Mode", 428, 428 );
+   DrawTextAt(g_font.get(), g_fontSize, "Delete Mode", 428, 428 );
 
    //  Draw status info
 /*   if( m_Deleting )
    {
-      g_Font->DrawTextA( "In Delete mode.  Right-click to cancel.", 0, 432, 255, 255, 0);
+      DrawTextAt(g_font.get(), g_fontSize,  "In Delete mode.  Right-click to cancel.", 0, 432, 255, 255, 0);
    }
 
    if( m_PlacingMapLinkSource )
    {
-      g_Font->DrawTextA( "Please click the source of the map link.", 0, 432, 255, 255, 0);
+      DrawTextAt(g_font.get(), g_fontSize,  "Please click the source of the map link.", 0, 432, 255, 255, 0);
    }
 
    if( m_PlacingMapLinkDestination )
    {
-      g_Font->DrawTextA( "Please click the destination of the map link.", 0, 432, 255, 255, 0);
+      DrawTextAt(g_font.get(), g_fontSize,  "Please click the destination of the map link.", 0, 432, 255, 255, 0);
    }
 
    if( m_LinkingEgg )
    {
-      g_Font->DrawTextA( "Please click the item this item is linked to.", 0, 432, 255, 255, 0);
+      DrawTextAt(g_font.get(), g_fontSize,  "Please click the item this item is linked to.", 0, 432, 255, 255, 0);
    }*/
 
-   if( g_Input->IsMouseInRegion( g_Offset, g_Offset, 364, 364 ) )
+   if( g_InputSystem->IsMouseInDesignRegion( g_Offset, g_Offset, 364, 364 ) )
    {
-      int x = (g_Input->m_MouseX - g_Offset) / 32;
-      int y = (g_Input->m_MouseY - g_Offset) / 32;
+      int x = (GetDesignMouseX() - g_Offset) / 32;
+      int y = (GetDesignMouseY() - g_Offset) / 32;
 
       x -= g_ViewRange;
       y -= g_ViewRange;
@@ -398,7 +398,7 @@ void EditorState::Draw()
             ColoredString* temp = new ColoredString(sstream.str());
             vector<ColoredString> coloredstrings;
             coloredstrings.push_back(*temp);
-            DrawToolTip( g_SmallFont, coloredstrings, g_Input->m_MouseX, g_Input->m_MouseY, 3);
+            DrawToolTip( g_smallFont.get(), g_smallFontSize, coloredstrings, GetDesignMouseX(), GetDesignMouseY(), 3);
             break;
          }
       }
@@ -416,7 +416,7 @@ void EditorState::Draw()
                ColoredString* temp = new ColoredString(sstream.str());
                vector<ColoredString> coloredstrings;
                coloredstrings.push_back(*temp);
-               DrawToolTip( g_SmallFont, coloredstrings, g_Input->m_MouseX, g_Input->m_MouseY, 3);
+               DrawToolTip( g_smallFont.get(), g_smallFontSize, coloredstrings, GetDesignMouseX(), GetDesignMouseY(), 3);
                break;
             }
          }
@@ -431,8 +431,8 @@ void EditorState::Draw()
             //  Draw a line to the linked item
             if( (*itemnode)->m_TargetX != 0 || (*itemnode)->m_TargetY != 0 )
             {
-               int sourcex = (g_Input->m_MouseX - g_Offset) / 32;
-               int sourcey = (g_Input->m_MouseY - g_Offset) / 32;
+               int sourcex = (GetDesignMouseX() - g_Offset) / 32;
+               int sourcey = (GetDesignMouseY() - g_Offset) / 32;
 
                int targetx = (*itemnode)->m_TargetX;
                int targety = (*itemnode)->m_TargetY;
@@ -443,10 +443,10 @@ void EditorState::Draw()
                targetx += g_ViewRange;
                targety += g_ViewRange;
 
-               g_Display->DrawLine(g_Offset + sourcex * g_TileSize + 16,
-                  g_Offset + sourcey * g_TileSize + 16,
-                  g_Offset + targetx * g_TileSize + 16,
-                  g_Offset + targety * g_TileSize + 16 );
+               DrawLineEx(
+                  Vector2{ float(g_Offset + sourcex * g_TileSize + 16), float(g_Offset + sourcey * g_TileSize + 16) },
+                  Vector2{ float(g_Offset + targetx * g_TileSize + 16), float(g_Offset + targety * g_TileSize + 16) },
+                  1.0f, WHITE);
 
                break;
             }
@@ -473,38 +473,38 @@ void EditorState::Draw()
          g_CurrentEditorMap = 0;
    }
 
-   if( g_Input->WasLButtonClickedInRegion( 428, 428, 428 + g_Font->GetStringMetrics("Delete Mode"), 428 + 16 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( 428, 428, 428 + GetStringMetrics(g_font.get(), g_fontSize, "Delete Mode"), 428 + 16 ) )
    {
    }
 
 
-   if( g_Input->WasLButtonClickedInRegion( 428, 444, 428 + g_Font->GetStringMetrics("Add Map Link"), 444 + 16 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( 428, 444, 428 + GetStringMetrics(g_font.get(), g_fontSize, "Add Map Link"), 444 + 16 ) )
    {
    }
 
 
-   g_Display->BlitImage(g_Cursors[0], g_Input->m_MouseX, g_Input->m_MouseY);
+   DrawImageAt(g_Cursors[0], GetDesignMouseX(), GetDesignMouseY());
 }
 
 void EditorState::DoPlayerInput()
 {
-   if(  g_Input->IsMouseInRegion( 0, 0, 416, 416 ) )
+   if(  g_InputSystem->IsMouseInDesignRegion( 0, 0, 416, 416 ) )
    {
 
    }
 
-   if( g_Input->m_IsLeftButtonDown )
+   if( g_InputSystem->IsLButtonDown() )
    {
       //  Scroll around the minimap
-      if( g_Input->m_MouseX >= 372 && g_Input->m_MouseX < 564 &&
-         g_Input->m_MouseY >= 0 && g_Input->m_MouseY < 192 )
+      if( GetDesignMouseX() >= 372 && GetDesignMouseX() < 564 &&
+         GetDesignMouseY() >= 0 && GetDesignMouseY() < 192 )
       {
-         g_Player->m_PlayerPosX = ( g_Input->m_MouseX - 372 ) / 3;
-         g_Player->m_PlayerPosY = ( g_Input->m_MouseY ) / 3;
+         g_Player->m_PlayerPosX = ( GetDesignMouseX() - 372 ) / 3;
+         g_Player->m_PlayerPosY = ( GetDesignMouseY() ) / 3;
       }
    }
 
-   if( g_Input->m_WasRightButtonClicked )
+   if( g_InputSystem->WasRButtonClicked() )
    {
       m_CurrentTerrainType = -1;
       m_CurrentNPC = NULL;
@@ -512,17 +512,17 @@ void EditorState::DoPlayerInput()
    }
 
 
-   if( g_Input->WasLButtonClickedInRegion( 438, 196, 517, 212 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( 438, 196, 517, 212 ) )
    {
       m_MapMode = 0;
    }
 
-   if( g_Input->WasLButtonClickedInRegion( 518, 196, 577, 212 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( 518, 196, 577, 212 ) )
    {
       m_MapMode = 1;
    }
 
-   if( g_Input->WasLButtonClickedInRegion( 578, 196, 639, 212 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( 578, 196, 639, 212 ) )
    {
       m_MapMode = 2;
    }
@@ -530,10 +530,10 @@ void EditorState::DoPlayerInput()
 
    if( m_MapMode == 0 )
    {
-      if( g_Input->WasLButtonClickedInRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( g_InputSystem->WasLButtonClickedInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
-         int index = ((g_Input->m_MouseY - m_ItemListY) / 24 ) * 10 ;
-         index += ((g_Input->m_MouseX - m_ItemListX) / 24);
+         int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
+         index += ((GetDesignMouseX() - m_ItemListX) / 24);
 
          if( index < 22 )
          {
@@ -541,10 +541,10 @@ void EditorState::DoPlayerInput()
          }
       }
 
-      if( g_Input->IsLButtonDownInRegion( g_Offset, g_Offset, 364, 364 ) && m_CurrentTerrainType >= 0 )
+      if( g_InputSystem->IsLButtonDownInDesignRegion( g_Offset, g_Offset, 364, 364 ) && m_CurrentTerrainType >= 0 )
       {
-         int x = (g_Input->m_MouseX - g_Offset) / 16;
-         int y = (g_Input->m_MouseY - g_Offset) / 16;
+         int x = (GetDesignMouseX() - g_Offset) / 16;
+         int y = (GetDesignMouseY() - g_Offset) / 16;
 
          x -= g_ViewRange;
          y -= g_ViewRange;
@@ -560,10 +560,10 @@ void EditorState::DoPlayerInput()
 
    if( m_MapMode == 2 )
    {
-      if( g_Input->WasLButtonClickedInRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( g_InputSystem->WasLButtonClickedInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
-         int index = ((g_Input->m_MouseY - m_ItemListY) / 24 ) * 10 ;
-         index += ((g_Input->m_MouseX - m_ItemListX) / 24);
+         int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
+         index += ((GetDesignMouseX() - m_ItemListX) / 24);
 
          if( index < m_AllNPCs.size() )
          {
@@ -574,10 +574,10 @@ void EditorState::DoPlayerInput()
          }
       }
 
-      if( g_Input->WasLButtonClickedInRegion( g_Offset, g_Offset, 364, 364 ) )
+      if( g_InputSystem->WasLButtonClickedInDesignRegion( g_Offset, g_Offset, 364, 364 ) )
       {
-         int x = (g_Input->m_MouseX - g_Offset) / 16;
-         int y = (g_Input->m_MouseY - g_Offset) / 16;
+         int x = (GetDesignMouseX() - g_Offset) / 16;
+         int y = (GetDesignMouseY() - g_Offset) / 16;
 
          x -= g_ViewRange;
          y -= g_ViewRange;
@@ -599,10 +599,10 @@ void EditorState::DoPlayerInput()
 
    if( m_MapMode == 1 )
    {
-      if( g_Input->WasLButtonClickedInRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( g_InputSystem->WasLButtonClickedInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
-         int index = ((g_Input->m_MouseY - m_ItemListY) / 24 ) * 10 ;
-         index += ((g_Input->m_MouseX - m_ItemListX) / 24);
+         int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
+         index += ((GetDesignMouseX() - m_ItemListX) / 24);
 
          if( index < m_AllItems.size() )
          {
@@ -613,10 +613,10 @@ void EditorState::DoPlayerInput()
          }
       }
 
-      if( g_Input->WasLButtonClickedInRegion( g_Offset, g_Offset, 364, 364 ) )
+      if( g_InputSystem->WasLButtonClickedInDesignRegion( g_Offset, g_Offset, 364, 364 ) )
       {
-         int x = (g_Input->m_MouseX - g_Offset) / 16;
-         int y = (g_Input->m_MouseY - g_Offset) / 16;
+         int x = (GetDesignMouseX() - g_Offset) / 16;
+         int y = (GetDesignMouseY() - g_Offset) / 16;
 
          x -= g_ViewRange;
          y -= g_ViewRange;

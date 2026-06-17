@@ -5,6 +5,7 @@
 #include "BaseUnit.h"
 #include "Geist/Config.h"
 #include "Item.h"
+#include <cstdint>
 #include <vector>
 
 class NPC: public BaseUnit
@@ -67,7 +68,7 @@ public:
    bool m_HasUsedSpecialAbility;
 
    bool m_Talking;
-   DWORD  m_TalkCounter;
+   uint32_t  m_TalkCounter;
    
 };
 

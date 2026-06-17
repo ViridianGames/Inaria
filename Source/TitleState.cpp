@@ -40,7 +40,7 @@ void TitleState::Shutdown()
 void TitleState::Update()
 {
 
-   if( SDL_GetTicks() - m_TitleTimer < 1000 )
+   if( static_cast<uint32_t>(g_Engine->GameTimeInMS()) - m_TitleTimer < 1000 )
       return;
 
    if( m_StartingNewGame && g_StateMachine->GetCurrentState() == STATE_TITLESTATE )
@@ -142,7 +142,7 @@ void TitleState::Update()
 
 void TitleState::Draw()
 {
-   g_Display->BlitImage(m_Background, 0, 0);
+   DrawImageAt(m_Background, 0, 0);
 
    g_Map->Draw();
 
@@ -162,11 +162,11 @@ void TitleState::Draw()
       }
    }
 
-   g_Display->BlitImage(m_Overlay, 0, 0);
+   DrawImageAt(m_Overlay, 0, 0);
 
    if( !m_ShowingCredits )
    {
-      g_Display->BlitImage(m_Logo, 405, 50 );
+      DrawImageAt(m_Logo, 405, 50 );
 
       if( DrawButtonCentered("New Game", 501, 130 ) )
       {
@@ -177,7 +177,7 @@ void TitleState::Draw()
          g_Offset = (int)g_Engine->m_EngineConfig.GetNumber("offset");
          g_ViewRange = (int)g_Engine->m_EngineConfig.GetNumber("viewrange");
 
-         g_Input->DumpInput();
+         g_InputSystem->DumpInput();
 
          g_AnimationList.clear();
          g_ConsoleStrings.clear();
@@ -205,7 +205,7 @@ void TitleState::Draw()
             g_Offset = (int)g_Engine->m_EngineConfig.GetNumber("offset");
             g_ViewRange = (int)g_Engine->m_EngineConfig.GetNumber("viewrange");
 
-            g_Input->DumpInput();
+            g_InputSystem->DumpInput();
 
             g_AnimationList.clear();
             g_ConsoleStrings.clear();
@@ -226,7 +226,7 @@ void TitleState::Draw()
             g_Offset = (int)g_Engine->m_EngineConfig.GetNumber("offset");
             g_ViewRange = (int)g_Engine->m_EngineConfig.GetNumber("viewrange");
 
-            g_Input->DumpInput();
+            g_InputSystem->DumpInput();
 
             g_AnimationList.clear();
             g_ConsoleStrings.clear();
@@ -245,66 +245,66 @@ void TitleState::Draw()
          exit(0);
       }
 
-      g_SmallFont->DrawText( g_Version, 620 - g_SmallFont->GetStringMetrics(g_Version), 350 );
+      DrawTextAt(g_smallFont.get(), g_smallFontSize,  g_Version, 620 - GetStringMetrics(g_smallFont.get(), g_smallFontSize, g_Version), 350 );
       
       DrawConsoleStrings();
    }
    else
    {
-      g_Display->BlitImageResized(g_Mask, 40, 20, 560, 430 );
-      g_Display->DrawBox(40, 20, 560, 430);
+      DrawImageResizedAt(g_Mask, 40, 20, 560, 430 );
+      DrawBoxAt(40, 20, 560, 430);
 
-      g_Font->DrawTextCentered("INARIA", 320, 40, 255, 255, 64);
-      g_SmallFont->DrawTextCentered("by Anthony Salter", 320, 60, 255, 255, 128);
-      g_SmallFont->DrawTextCentered("viridiangames.com", 320, 76, 255, 255, 128);
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "INARIA", 320, 40, 255, 255, 64);
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "by Anthony Salter", 320, 60, 255, 255, 128);
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "viridiangames.com", 320, 76, 255, 255, 128);
 
-      g_Font->DrawTextCentered("Music by", 200, 100, 128, 255, 128);
-      g_SmallFont->DrawTextCentered("H. Arnold Jones", 200, 120, 128, 255, 128);
-      g_SmallFont->DrawTextCentered("cfxmusic.com", 200, 136, 128, 255, 128 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "Music by", 200, 100, 128, 255, 128);
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "H. Arnold Jones", 200, 120, 128, 255, 128);
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "cfxmusic.com", 200, 136, 128, 255, 128 );
 
-      g_Font->DrawTextCentered("Additional Art by", 440, 100, 255, 128, 255 );
-      g_SmallFont->DrawTextCentered("Jeffrey Pfau", 440, 120, 255, 128, 255 );
-
-
-      g_Font->DrawTextCentered("8bitfunding.com Donors:", 200, 160, 255, 128, 128 );
-
-      g_SmallFont->DrawTextCentered("Noble Kale", 200, 180, 255, 128, 128 );
-      g_SmallFont->DrawTextCentered("GBGames", 200, 196, 255, 128, 128);
-      g_SmallFont->DrawTextCentered("Joshua J. Slone", 200, 212, 255, 128, 128);
-      g_SmallFont->DrawTextCentered("ChaosKnight127", 200, 228, 255, 128, 128);
-      g_SmallFont->DrawTextCentered("D. Moonfire", 200, 244, 255, 128, 128);
-      g_SmallFont->DrawTextCentered("Scurvy Lobster", 200, 260, 255, 128, 128);
-      g_SmallFont->DrawTextCentered("(And several anonymous donors)", 200, 276, 255, 128, 128);
-
-      g_Font->DrawTextCentered( "Beta Testers:", 440, 160, 128, 128, 255);
-
-      g_SmallFont->DrawTextCentered("Henry Kropf",       390, 180, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("E. Roberts",        390, 196, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Seth Norton",       390, 212, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("ChaosKnight127",    390, 228, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Wolfengange",       390, 244, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("irwin1139",         390, 260, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Jari Komppa",       390, 276, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Marko Turunen",     390, 292, 128, 128, 255 );
-
-      g_SmallFont->DrawTextCentered("Wondermellon",      490, 180, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Dan Cardin",        490, 196, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Nick Anderson",     490, 212, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("H. Arnold Jones",   490, 228, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Martin Damiano",    490, 244, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Lorenzo Stoakes",   490, 260, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Jay Barnson",       490, 276, 128, 128, 255 );
-      g_SmallFont->DrawTextCentered("Brian Critser",     490, 292, 128, 128, 255 );
-
-      g_Font->DrawTextCentered("For inspiring me and keeping me on track over the years:", 320, 314, 128, 255, 255 );
-      g_SmallFont->DrawTextCentered("Ryan Clark, Jay Barnson and Jari Komppa", 320, 334, 128, 255, 255 );
-
-      g_Font->DrawTextCentered("Inaria Official Soundtrack available for purchase at:", 320, 360, 255, 192, 128 );
-      g_SmallFont->DrawTextCentered("store.cfxmusic.com", 320, 380, 255, 192, 128 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "Additional Art by", 440, 100, 255, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Jeffrey Pfau", 440, 120, 255, 128, 255 );
 
 
-      g_SmallFont->DrawTextCentered("\"I'd like to thank each and every person listed above.", 320, 400, 255, 255, 64 );
-      g_SmallFont->DrawTextCentered("Without you, Inaria would not be what it is today.\" - Anthony Salter", 320, 412, 255, 255, 64 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "8bitfunding.com Donors:", 200, 160, 255, 128, 128 );
+
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Noble Kale", 200, 180, 255, 128, 128 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "GBGames", 200, 196, 255, 128, 128);
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Joshua J. Slone", 200, 212, 255, 128, 128);
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "ChaosKnight127", 200, 228, 255, 128, 128);
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "D. Moonfire", 200, 244, 255, 128, 128);
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Scurvy Lobster", 200, 260, 255, 128, 128);
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "(And several anonymous donors)", 200, 276, 255, 128, 128);
+
+      DrawTextCenteredAt(g_font.get(), g_fontSize,  "Beta Testers:", 440, 160, 128, 128, 255);
+
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Henry Kropf",       390, 180, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "E. Roberts",        390, 196, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Seth Norton",       390, 212, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "ChaosKnight127",    390, 228, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Wolfengange",       390, 244, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "irwin1139",         390, 260, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Jari Komppa",       390, 276, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Marko Turunen",     390, 292, 128, 128, 255 );
+
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Wondermellon",      490, 180, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Dan Cardin",        490, 196, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Nick Anderson",     490, 212, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "H. Arnold Jones",   490, 228, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Martin Damiano",    490, 244, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Lorenzo Stoakes",   490, 260, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Jay Barnson",       490, 276, 128, 128, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Brian Critser",     490, 292, 128, 128, 255 );
+
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "For inspiring me and keeping me on track over the years:", 320, 314, 128, 255, 255 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Ryan Clark, Jay Barnson and Jari Komppa", 320, 334, 128, 255, 255 );
+
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "Inaria Official Soundtrack available for purchase at:", 320, 360, 255, 192, 128 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "store.cfxmusic.com", 320, 380, 255, 192, 128 );
+
+
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "\"I'd like to thank each and every person listed above.", 320, 400, 255, 255, 64 );
+      DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize, "Without you, Inaria would not be what it is today.\" - Anthony Salter", 320, 412, 255, 255, 64 );
 
 
       if( DrawButtonCentered("Wow, these are all such cool people!", 320, 430 ) )
@@ -313,14 +313,14 @@ void TitleState::Draw()
       }
    }
 
-   g_Display->BlitImage(g_Cursors[0], g_Input->m_MouseX, g_Input->m_MouseY);
+   DrawImageAt(g_Cursors[0], GetDesignMouseX(), GetDesignMouseY());
 
 }
 
 void TitleState::OnEnter()
 {
    g_Map->LoadMap("Maps/intro.map");
-   m_TitleTimer = SDL_GetTicks();
+   m_TitleTimer = static_cast<uint32_t>(g_Engine->GameTimeInMS());
    AddConsoleString("Slornite King: \"Your land, your goods, your souls - all mine!\"", 255, 128, 255 );
 
 

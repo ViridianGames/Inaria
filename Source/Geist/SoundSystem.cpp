@@ -118,3 +118,20 @@ void SoundSystem::SetGlobalMusicVolume(float newVolume)
 
       g_Engine->m_EngineConfig.SetNumber("music_volume", m_GlobalMusicVolume);
 }
+
+void SoundSystem::StopCurrentMusic()
+{
+      if (!m_currentMusicName.empty())
+      {
+            StopMusic(m_currentMusicName);
+      }
+}
+
+void SoundSystem::PlaySoundGroup(const std::string& prefix, int count, const std::string& extension)
+{
+      if (count <= 0 || !m_RNG)
+            return;
+
+      int index = m_RNG->Random(count) + 1;
+      PlaySound(prefix + std::to_string(index) + extension);
+}

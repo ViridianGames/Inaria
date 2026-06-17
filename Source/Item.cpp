@@ -34,9 +34,9 @@ Item::Item()
 
    m_Equippable = 0;
 
-   m_Passable = TRUE;
+   m_Passable = true;
 
-   m_Pickupable = TRUE;
+   m_Pickupable = true;
 
    m_PickupHandled = false;
    m_DidPlayerSee = true;
@@ -196,7 +196,7 @@ void Item::Draw()
       {
          int adjustedx = m_PosX - (g_Player->m_PlayerPosX - ( g_ViewRange * 2 ));
          int adjustedy = m_PosY - (g_Player->m_PlayerPosY - ( g_ViewRange * 2 ));
-         g_Display->DrawSpriteResized( g_Tiles[m_Tile], g_Offset + (adjustedx * ( g_TileSize / 2)) - (g_ViewRange * (g_TileSize / 2)), g_Offset + (adjustedy * ( g_TileSize / 2))  - (g_ViewRange * (g_TileSize / 2)), ( g_TileSize / 2), ( g_TileSize / 2) );
+         DrawSpriteResizedAt( g_Tiles[m_Tile], g_Offset + (adjustedx * ( g_TileSize / 2)) - (g_ViewRange * (g_TileSize / 2)), g_Offset + (adjustedy * ( g_TileSize / 2))  - (g_ViewRange * (g_TileSize / 2)), ( g_TileSize / 2), ( g_TileSize / 2) );
       }
       return;
    }
@@ -208,7 +208,7 @@ void Item::Draw()
    {
       if( m_ItemType == ITEM_SLEEPFIELD || m_ItemType == ITEM_POISONFIELD || m_ItemType == ITEM_FIREFIELD || m_ItemType == ITEM_ELECTRICFIELD || m_ItemType == ITEM_TRANSFORMATIONFIELD )
       {
-         g_Display->DrawSprite(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize,
+         DrawSpriteAt(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize,
             255, 255, 255, 255);
       }
       else if( m_ItemType == ITEM_STEPSWITCH )
@@ -217,7 +217,7 @@ void Item::Draw()
          if( m_DidPlayerSee 
             || g_StateMachine->GetCurrentState() == STATE_EDITORSTATE )
          {
-            g_Display->DrawSprite(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize);
+            DrawSpriteAt(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize);
          }
       }
       else if( m_ItemType == ITEM_SECRETDOOR )
@@ -226,17 +226,17 @@ void Item::Draw()
          if( m_DidPlayerSee
             || g_StateMachine->GetCurrentState() == STATE_EDITORSTATE )
          {
-            g_Display->DrawSprite(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize);
+            DrawSpriteAt(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize);
          }
          else
          {
-            g_Display->DrawSprite(g_Tiles[4], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize);
+            DrawSpriteAt(g_Tiles[4], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize);
          }
 
       }
       else
       {
-         g_Display->DrawSprite(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize);
+         DrawSpriteAt(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize);
       }
    }
 }
@@ -524,7 +524,7 @@ void Item::OnAttack()
       }
 
 
-      g_Sound->PlaySoundGroup("Sounds/Hit", 5, ".wav");
+      g_SoundSystem->PlaySoundGroup("Sounds/Hit", 5, ".wav");
       m_IsDead = true;
    }
 }

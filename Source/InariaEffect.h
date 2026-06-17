@@ -1,11 +1,12 @@
 #ifndef _INARIAEFFECT_H_
 #define _INARIAEFFECT_H_
 
+#include <cstdint>
 #include <deque>
 #include <list>
 #include <string>
 
-#include "InariaCompat.h"
+#include "Geist/Primitives.h"
 
 struct Position
 {
@@ -19,7 +20,7 @@ public:
     InariaEffect() = default;
     virtual ~InariaEffect();
 
-    void Init(LegacySprite* sprite,
+    void Init(Sprite* sprite,
         int posxstart, int posystart,
         int posxend, int posyend,
         uint32_t time, bool isblocking = true,
@@ -57,7 +58,7 @@ public:
     int m_Blue = 255;
     int m_Alpha = 255;
 
-    LegacySprite* m_Texture = nullptr;
+    Sprite* m_Sprite = nullptr;
 
     std::string m_PlayOnStart;
     std::string m_PlayOnEnd;

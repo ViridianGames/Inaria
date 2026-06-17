@@ -33,17 +33,17 @@ void InfiniteWarningState::Update()
 void InfiniteWarningState::Draw()
 {
 
-   g_Display->BlitImageResized(g_Mask, 40, 40, 560, 400 );
-   g_Display->DrawBox(40, 40, 560, 400);
+   DrawImageResizedAt(g_Mask, 40, 40, 560, 400 );
+   DrawBoxAt(40, 40, 560, 400);
 
-   g_Font->DrawTextCentered("WARNING! You are about to enter THE INFINITE.", 320, 45);
+   DrawTextCenteredAt(g_font.get(), g_fontSize, "WARNING! You are about to enter THE INFINITE.", 320, 45);
 
-   g_Font->DrawParagraph("The Infinite is a randomly-generated dungeon, with strong enemies \
+   DrawParagraphAt(g_font.get(), g_fontSize, "The Infinite is a randomly-generated dungeon, with strong enemies \
 and extra opportunities to gain items and money.  Once you enter The Infinite, you will not be able to \
 save your game until you find the exit stairs and leave.  The random nature of the dungeon means that \
 it can be brutally unfair, and thus we recommend that you save before entering." , 80, 66, 480, 16);
 
-   g_Font->DrawTextCentered("Do you still wish to enter The Infinite?", 320, 200);
+   DrawTextCenteredAt(g_font.get(), g_fontSize, "Do you still wish to enter The Infinite?", 320, 200);
 
 
    if( DrawButton("Yes!", 405, 420 ) )
@@ -58,7 +58,7 @@ it can be brutally unfair, and thus we recommend that you save before entering."
       g_StateMachine->PopState();
    }
 
-   g_Display->BlitImage(g_Cursors[0], g_Input->m_MouseX, g_Input->m_MouseY);
+   DrawImageAt(g_Cursors[0], GetDesignMouseX(), GetDesignMouseY());
 }
 
 void InfiniteWarningState::OnEnter()

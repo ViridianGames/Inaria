@@ -43,99 +43,99 @@ void LevelUpState::Update()
 
 void LevelUpState::Draw()
 {
-   //   g_Display->BlitImageRect( g_Mask, 0, 0, 352, 352, g_Offset, g_Offset);
+   //   DrawImageRectAt( g_Mask, 0, 0, 352, 352, g_Offset, g_Offset);
 
-   g_Display->BlitImageRect( g_Mask, 0, 0, 427, 199, m_PosX + 1, m_PosY + 1);
-   g_Display->DrawBox(m_PosX, m_PosY, 428, 200);
+   DrawImageRectAt( g_Mask, 0, 0, 427, 199, m_PosX + 1, m_PosY + 1);
+   DrawBoxAt(m_PosX, m_PosY, 428, 200);
 
    char temp[64];
    if(g_FirstTime)
    {
-      g_Font->DrawTextCentered( "Create Your Character", m_PosX + (428 / 2), 112 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize,  "Create Your Character", m_PosX + (428 / 2), 112 );
    }
    else
-      g_Font->DrawTextCentered( "Improve Your Character", m_PosX + (428 / 2), 112 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize,  "Improve Your Character", m_PosX + (428 / 2), 112 );
 
    sprintf(temp, "Points Left: %d", g_Player->m_StatPoints );
-   int stringlength = g_Font->GetStringMetrics( string(temp) );
-   g_Font->DrawTextCentered( string(temp), m_PosX + (428 / 2), 128 );
+   int stringlength = GetStringMetrics(g_font.get(), g_fontSize,  string(temp) );
+   DrawTextCenteredAt(g_font.get(), g_fontSize,  string(temp), m_PosX + (428 / 2), 128 );
 
 
 
    //  STATS
 
    // Strength
-   g_Display->DrawSprite( g_Tiles[64], m_PosX + 20, m_PosY + m_StatsY );
-   g_Font->DrawTextA( "Strength", m_PosX + 40, m_PosY + m_StatsY);
+   DrawSpriteAt( g_Tiles[64], m_PosX + 20, m_PosY + m_StatsY );
+   DrawTextAt(g_font.get(), g_fontSize,  "Strength", m_PosX + 40, m_PosY + m_StatsY);
    sprintf(temp, "%d", g_Player->m_Strength );
    if( m_StrAdd > 0 )
    {
       sprintf(temp, "%d", g_Player->m_Strength + m_StrAdd);
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY, 255, 255, 128 );
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY, 255, 255, 128 );
    }
    else
    {
       sprintf(temp, "%d", g_Player->m_Strength );
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY);
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY);
    }
 
    // Dexterity
-   g_Display->DrawSprite( g_Tiles[107], m_PosX + 20, m_PosY + m_StatsY + 25 );
-   g_Font->DrawTextA( "Dexterity", m_PosX + 40, m_PosY + m_StatsY + 25 );
+   DrawSpriteAt( g_Tiles[107], m_PosX + 20, m_PosY + m_StatsY + 25 );
+   DrawTextAt(g_font.get(), g_fontSize,  "Dexterity", m_PosX + 40, m_PosY + m_StatsY + 25 );
    if( m_DexAdd > 0 )
    {
       sprintf(temp, "%d", g_Player->m_Dexterity + m_DexAdd);
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY + 25, 255, 255, 128 );
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY + 25, 255, 255, 128 );
    }
    else
    {
       sprintf(temp, "%d", g_Player->m_Dexterity);
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY + 25);
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY + 25);
    }
 
    // Intelligence
-   g_Display->DrawSprite( g_Tiles[109], m_PosX + 20, m_PosY + m_StatsY + 50 );
-   g_Font->DrawTextA( "Intelligence", m_PosX + 40, m_PosY + m_StatsY + 50 );
+   DrawSpriteAt( g_Tiles[109], m_PosX + 20, m_PosY + m_StatsY + 50 );
+   DrawTextAt(g_font.get(), g_fontSize,  "Intelligence", m_PosX + 40, m_PosY + m_StatsY + 50 );
    sprintf(temp, "%d", g_Player->m_Intelligence);
    if( m_IntAdd > 0 )
    {
       sprintf(temp, "%d", g_Player->m_Intelligence + m_IntAdd);
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY + 50, 255, 255, 128 );
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY + 50, 255, 255, 128 );
    }
    else
    {
       sprintf(temp, "%d", g_Player->m_Intelligence);
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY + 50);
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY + 50);
    }
 
    //  Endurance
-   g_Display->DrawSprite( g_Tiles[108], m_PosX + 20, m_PosY + m_StatsY + 75 );
-   g_Font->DrawTextA( "Endurance", m_PosX + 40, m_PosY + m_StatsY + 75 );
+   DrawSpriteAt( g_Tiles[108], m_PosX + 20, m_PosY + m_StatsY + 75 );
+   DrawTextAt(g_font.get(), g_fontSize,  "Endurance", m_PosX + 40, m_PosY + m_StatsY + 75 );
    sprintf(temp, "%d", g_Player->m_Endurance);
    if( m_EndAdd > 0 )
    {
       sprintf(temp, "%d", g_Player->m_Endurance + m_EndAdd);
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY + 75, 255, 255, 128 );
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY + 75, 255, 255, 128 );
    }
    else
    {
       sprintf(temp, "%d", g_Player->m_Endurance);
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY + 75);
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY + 75);
    }
 
    //  Will
-   g_Display->DrawSprite( g_Tiles[110], m_PosX + 20, m_PosY + m_StatsY + 100);
-   g_Font->DrawTextA( "Will", m_PosX + 40, m_PosY + m_StatsY + 100 );
+   DrawSpriteAt( g_Tiles[110], m_PosX + 20, m_PosY + m_StatsY + 100);
+   DrawTextAt(g_font.get(), g_fontSize,  "Will", m_PosX + 40, m_PosY + m_StatsY + 100 );
    sprintf(temp, "%d", g_Player->m_Will);
    if( m_WilAdd > 0 )
    {
       sprintf(temp, "%d", g_Player->m_Will + m_WilAdd);
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY + 100, 255, 255, 128 );
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY + 100, 255, 255, 128 );
    }
    else
    {
       sprintf(temp, "%d", g_Player->m_Will);
-      g_Font->DrawTextA( string(temp), m_PosX + 170, m_PosY + m_StatsY + 100);
+      DrawTextAt(g_font.get(), g_fontSize,  string(temp), m_PosX + 170, m_PosY + m_StatsY + 100);
    }
 
 
@@ -144,19 +144,19 @@ void LevelUpState::Draw()
    {
       if( g_SpecialAbilities[invcount].m_Active == true )
       {
-         g_Display->DrawSprite( g_Tiles[ g_SpecialAbilities[invcount].m_Tile], m_PosX + 220 + ((invcount % 4) * 47), m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize) );
+         DrawSpriteAt( g_Tiles[ g_SpecialAbilities[invcount].m_Tile], m_PosX + 220 + ((invcount % 4) * 47), m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize) );
       }
       else
       {
-         g_Display->DrawSprite( g_Tiles[ g_SpecialAbilities[invcount].m_Tile], m_PosX + 220 + ((invcount % 4) * 47), m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize), 128, 128, 128 );
+         DrawSpriteAt( g_Tiles[ g_SpecialAbilities[invcount].m_Tile], m_PosX + 220 + ((invcount % 4) * 47), m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize), 128, 128, 128 );
       }
    }
 
 
    //  FINALIZE
    sprintf(temp, "Finished" );
-   stringlength = g_Font->GetStringMetrics( string(temp) );
-   if( DrawButton("Finished", m_PosX + 428 - g_Font->GetStringMetrics("Finished") - 24, m_PosY + 180 ) )
+   stringlength = GetStringMetrics(g_font.get(), g_fontSize,  string(temp) );
+   if( DrawButton("Finished", m_PosX + 428 - GetStringMetrics(g_font.get(), g_fontSize, "Finished") - 24, m_PosY + 180 ) )
    {
       //  Finalize the player's selections
       g_Player->m_Strength += m_StrAdd;
@@ -187,113 +187,113 @@ void LevelUpState::Draw()
    stringstream thestream;
    thestream.str("");
 
-   if( g_Input->IsMouseInRegion( m_PosX + 20, m_PosY + m_StatsY, m_PosX + 200, m_PosY + m_StatsY + 20 ) )
+   if( g_InputSystem->IsMouseInDesignRegion( m_PosX + 20, m_PosY + m_StatsY, m_PosX + 200, m_PosY + m_StatsY + 20 ) )
    {
       if( g_Player->m_Strength >= 12 )
       {
          thestream << "Your Strength is already at maximum.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
 
       else if( g_Player->m_StatPoints >= g_Player->m_Strength + m_StrAdd )
       {
          thestream << "Upgrade Strength for " << g_Player->m_Strength + m_StrAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3 );
       }
       else
       {
          thestream << "Upgrade Strength for " << g_Player->m_Strength + m_StrAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
    }
 
-   if( g_Input->IsMouseInRegion( m_PosX + 20, m_PosY + m_StatsY + 25, m_PosX + 200, m_PosY + m_StatsY + 25 + 20 ) )
+   if( g_InputSystem->IsMouseInDesignRegion( m_PosX + 20, m_PosY + m_StatsY + 25, m_PosX + 200, m_PosY + m_StatsY + 25 + 20 ) )
    {
       if( g_Player->m_Dexterity >= 12 )
       {
          thestream << "Your Dexterity is already at maximum.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
 
 
       if( g_Player->m_StatPoints >= g_Player->m_Dexterity + m_DexAdd)
       {
          thestream << "Upgrade Dexterity for " << g_Player->m_Dexterity + m_DexAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3 );
       }
       else
       {
          thestream << "Upgrade Dexterity for " << g_Player->m_Dexterity + m_DexAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
    }
 
-   if( g_Input->IsMouseInRegion( m_PosX + 20, m_PosY + m_StatsY + 50, m_PosX + 200, m_PosY + m_StatsY + 50 + 20 ) )
+   if( g_InputSystem->IsMouseInDesignRegion( m_PosX + 20, m_PosY + m_StatsY + 50, m_PosX + 200, m_PosY + m_StatsY + 50 + 20 ) )
    {
       if( g_Player->m_Intelligence >= 12 )
       {
          thestream << "Your Intelligence is already at maximum.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
 
 
       if( g_Player->m_StatPoints >= g_Player->m_Intelligence + m_IntAdd )
       {
          thestream << "Upgrade Intelligence for " << g_Player->m_Intelligence + m_IntAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3 );
       }
       else
       {
          thestream << "Upgrade Intelligence for " << g_Player->m_Intelligence + m_IntAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
    }
 
-   if( g_Input->IsMouseInRegion( m_PosX + 20, m_PosY + m_StatsY + 75, m_PosX + 200, m_PosY + m_StatsY + 75 + 20 ) )
+   if( g_InputSystem->IsMouseInDesignRegion( m_PosX + 20, m_PosY + m_StatsY + 75, m_PosX + 200, m_PosY + m_StatsY + 75 + 20 ) )
    {
       if( g_Player->m_Endurance >= 12 )
       {
          thestream << "Your Endurance is already at maximum.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
 
 
       if( g_Player->m_StatPoints >= g_Player->m_Endurance + m_EndAdd)
       {
          thestream << "Upgrade Endurance for " << g_Player->m_Endurance + m_EndAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3 );
       }
       else
       {
          thestream << "Upgrade Endurance for " << g_Player->m_Endurance + m_EndAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
    }
 
-   if( g_Input->IsMouseInRegion( m_PosX + 20, m_PosY + m_StatsY + 100, m_PosX + 200, m_PosY + m_StatsY + 100 + 20 ) )
+   if( g_InputSystem->IsMouseInDesignRegion( m_PosX + 20, m_PosY + m_StatsY + 100, m_PosX + 200, m_PosY + m_StatsY + 100 + 20 ) )
    {
       if( g_Player->m_Will >= 12 )
       {
          thestream << "Your Will is already at maximum.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
 
 
       if( g_Player->m_StatPoints >= g_Player->m_Will + m_WilAdd)
       {
          thestream << "Upgrade Will for " << g_Player->m_Will + m_WilAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3 );
       }
       else
       {
          thestream << "Upgrade Will for " << g_Player->m_Will + m_WilAdd << " points.";
-         DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 3, 255, 128, 128 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 3, 255, 128, 128 );
       }
    }
 
    for(unsigned int invcount = 0; invcount < 16; ++invcount)
    {
-      if( g_Input->IsMouseInRegion( m_PosX + 220 + ((invcount % 4) * 47), m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize), m_PosX + 220 + ((invcount % 4) * 47) + 32, m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize) + 32 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( m_PosX + 220 + ((invcount % 4) * 47), m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize), m_PosX + 220 + ((invcount % 4) * 47) + 32, m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize) + 32 ) )
       {
          if( g_SpecialAbilities[invcount].m_Active == false )
          {
@@ -301,25 +301,25 @@ void LevelUpState::Draw()
             {
                thestream.str("");
                thestream << "Purchase " << g_SpecialAbilities[invcount].m_Name << " for " << g_SpecialAbilities[invcount].m_SkillPointCost << " points.";
-               DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 2 );
+               DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 2 );
             }
             else
             {
                thestream.str("");
                thestream << "Purchase " << g_SpecialAbilities[invcount].m_Name << " for " << g_SpecialAbilities[invcount].m_SkillPointCost << " points.";
-               DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 2, 255, 128, 128 );
+               DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 2, 255, 128, 128 );
             }
          }
          else
          {
             thestream.str("");
             thestream << g_SpecialAbilities[invcount].m_Name << " has already been purchased.";
-            DrawToolTip( g_SmallFont,  thestream.str(), g_Input->m_MouseX, g_Input->m_MouseY, 2, 255, 128, 128 );
+            DrawToolTip( g_smallFont.get(), g_smallFontSize,  thestream.str(), GetDesignMouseX(), GetDesignMouseY(), 2, 255, 128, 128 );
          }
       }
    }
 
-   g_Display->BlitImage(g_Cursors[0], g_Input->m_MouseX, g_Input->m_MouseY);
+   DrawImageAt(g_Cursors[0], GetDesignMouseX(), GetDesignMouseY());
 
 
 }
@@ -346,7 +346,7 @@ void LevelUpState::OnExit()
 
 void LevelUpState::DoPlayerInput()
 {
-   if( g_Input->WasLButtonClickedInRegion( m_PosX + 20, m_PosY + m_StatsY, m_PosX + 200, m_PosY + m_StatsY + 20 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( m_PosX + 20, m_PosY + m_StatsY, m_PosX + 200, m_PosY + m_StatsY + 20 ) )
    {
       if( g_Player->m_Strength + m_StrAdd == 12 )
          return;
@@ -360,7 +360,7 @@ void LevelUpState::DoPlayerInput()
       }
    }
 
-   if( g_Input->WasLButtonClickedInRegion( m_PosX + 20, m_PosY + m_StatsY + 25, m_PosX + 200, m_PosY + m_StatsY + 25 + 20 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( m_PosX + 20, m_PosY + m_StatsY + 25, m_PosX + 200, m_PosY + m_StatsY + 25 + 20 ) )
    {
       if( g_Player->m_Dexterity + m_DexAdd == 12 )
          return;
@@ -375,7 +375,7 @@ void LevelUpState::DoPlayerInput()
 
    }
 
-   if( g_Input->WasLButtonClickedInRegion( m_PosX + 20, m_PosY + m_StatsY + 50, m_PosX + 200, m_PosY + m_StatsY + 50 + 20 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( m_PosX + 20, m_PosY + m_StatsY + 50, m_PosX + 200, m_PosY + m_StatsY + 50 + 20 ) )
    {
       if( g_Player->m_Intelligence + m_IntAdd == 12 )
          return;
@@ -390,7 +390,7 @@ void LevelUpState::DoPlayerInput()
 
    }
 
-   if( g_Input->WasLButtonClickedInRegion( m_PosX + 20, m_PosY + m_StatsY + 75, m_PosX + 200, m_PosY + m_StatsY + 75 + 20 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( m_PosX + 20, m_PosY + m_StatsY + 75, m_PosX + 200, m_PosY + m_StatsY + 75 + 20 ) )
    {
       if( g_Player->m_Endurance + m_EndAdd == 12 )
          return;
@@ -405,7 +405,7 @@ void LevelUpState::DoPlayerInput()
 
    }
 
-   if( g_Input->WasLButtonClickedInRegion( m_PosX + 20, m_PosY + m_StatsY + 100, m_PosX + 200, m_PosY + m_StatsY + 100 + 20 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( m_PosX + 20, m_PosY + m_StatsY + 100, m_PosX + 200, m_PosY + m_StatsY + 100 + 20 ) )
    {
       if( g_Player->m_Will + m_WilAdd == 12 )
          return;
@@ -421,7 +421,7 @@ void LevelUpState::DoPlayerInput()
 
    for(unsigned int invcount = 0; invcount < 16; ++invcount)
    {
-      if( g_Input->WasLButtonClickedInRegion( m_PosX + 220 + ((invcount % 4) * 47), m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize), m_PosX + 220 + ((invcount % 4) * 47) + 32, m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize) + 32 ) )
+      if( g_InputSystem->WasLButtonClickedInDesignRegion( m_PosX + 220 + ((invcount % 4) * 47), m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize), m_PosX + 220 + ((invcount % 4) * 47) + 32, m_PosY + 45 + ((invcount / 4) * g_InventoryTileSize) + 32 ) )
       {
          if( g_SpecialAbilities[invcount].m_Active == false )
          {

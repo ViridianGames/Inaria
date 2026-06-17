@@ -152,7 +152,6 @@ set(SOURCES
         Source/EditorState.cpp
         Source/EnchantingState.cpp
         Source/GameGlobals.cpp
-        Source/InariaCompat.cpp
         Source/InariaEffect.cpp
         Source/InfiniteWarningState.cpp
         Source/Item.cpp

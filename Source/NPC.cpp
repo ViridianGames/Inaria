@@ -239,7 +239,7 @@ void NPC::Update()
                {
                   InariaEffect* tempanimation = new InariaEffect;
 
-                  LegacySprite* arrow = NULL;
+                  Sprite* arrow = NULL;
                   if( m_PosX == (*node)->m_PosX && m_PosY < (*node)->m_PosY ) //  Firing right
                      arrow = g_Tiles[141];
 
@@ -328,7 +328,7 @@ void NPC::Update()
       {
          InariaEffect* tempanimation = new InariaEffect;
 
-         LegacySprite* arrow = NULL;
+         Sprite* arrow = NULL;
          if( m_PosX == g_Player->m_PlayerPosX && m_PosY < g_Player->m_PlayerPosY ) //  Firing right
             arrow = g_Tiles[141];
 
@@ -1041,7 +1041,7 @@ void NPC::Update()
 
 bool NPC::IsTurnDone()
 {
-   return TRUE;
+   return true;
 }
 
 void NPC::Draw()
@@ -1053,7 +1053,7 @@ void NPC::Draw()
       {
          int adjustedx = m_PosX - (g_Player->m_PlayerPosX - ( g_ViewRange * 2 ));
          int adjustedy = m_PosY - (g_Player->m_PlayerPosY - ( g_ViewRange * 2 ));
-         g_Display->DrawSpriteResized( g_Tiles[m_Tile], g_Offset + (adjustedx * ( g_TileSize / 2)) - (g_ViewRange * (g_TileSize / 2)), g_Offset + (adjustedy * ( g_TileSize / 2))  - (g_ViewRange * (g_TileSize / 2)), ( g_TileSize / 2), ( g_TileSize / 2) );
+         DrawSpriteResizedAt( g_Tiles[m_Tile], g_Offset + (adjustedx * ( g_TileSize / 2)) - (g_ViewRange * (g_TileSize / 2)), g_Offset + (adjustedy * ( g_TileSize / 2))  - (g_ViewRange * (g_TileSize / 2)), ( g_TileSize / 2), ( g_TileSize / 2) );
       }
       return;
    }
@@ -1061,59 +1061,59 @@ void NPC::Draw()
    if(m_PosX >= g_Player->m_PlayerPosX - g_ViewRange && m_PosX <= g_Player->m_PlayerPosX + g_ViewRange
       && m_PosY >=  g_Player->m_PlayerPosY - g_ViewRange && m_PosY <= g_Player->m_PlayerPosY + g_ViewRange)
    {
-//      if( SDL_GetTicks() % 1000 > 500 && g_DanceParty && g_Map->m_MapTitle == "Inaria Special" ) 
+//      if( static_cast<uint32_t>(g_Engine->GameTimeInMS()) % 1000 > 500 && g_DanceParty && g_Map->m_MapTitle == "Inaria Special" ) 
 //         g_Display->BlitImageReversed(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize);
 //      else
-         g_Display->DrawSprite(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize );
+         DrawSpriteAt(g_Tiles[m_Tile], g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize, g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize );
 
 /*#ifdef _DEBUG
       int basex = g_Offset + (m_PosX - (g_Player->m_PlayerPosX - g_ViewRange)) * g_TileSize;
       int basey = g_Offset + (m_PosY - (g_Player->m_PlayerPosY - g_ViewRange)) * g_TileSize;
-      g_Display->BlitImageRect(g_Mask, 0, 0, 32, 32, basex, basey ); 
+      DrawImageRectAt(g_Mask, 0, 0, 32, 32, basex, basey ); 
 
 
       stringstream temp;
 
       temp.str("");
       temp << "s:" << m_Strength;
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 1, basey + 1, 0, 0, 0);
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex, basey);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 1, basey + 1, 0, 0, 0);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex, basey);
 
       temp.str("");
       temp << "d:" << m_Dexterity;
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 1, basey + 9, 0, 0, 0);
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex, basey + 8);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 1, basey + 9, 0, 0, 0);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex, basey + 8);
 
       temp.str("");
       temp << "i:" << m_Intelligence;
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 1, basey + 17, 0, 0, 0);
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex, basey + 16);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 1, basey + 17, 0, 0, 0);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex, basey + 16);
 
       temp.str("");
       temp << "e:" << m_Endurance;
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 1, basey + 24, 0, 0, 0);
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex, basey + 24);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 1, basey + 24, 0, 0, 0);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex, basey + 24);
 
 
       temp.str("");
       temp << "w:" << m_Will;
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 17, basey + 1, 0, 0, 0);
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 16, basey );
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 17, basey + 1, 0, 0, 0);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 16, basey );
 
       temp.str("");
       temp << "h:" << m_MaxHitPoints;
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 17, basey + 9, 0, 0, 0);
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 16, basey + 8 );
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 17, basey + 9, 0, 0, 0);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 16, basey + 8 );
 
       temp.str("");
       temp << "c:" << m_HitPoints;
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 17, basey + 17, 0, 0, 0);
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 16, basey + 16);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 17, basey + 17, 0, 0, 0);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 16, basey + 16);
 
       temp.str("");
       temp << "a:" << m_Armor;
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 17, basey + 25, 0, 0, 0);
-      g_SmallFont->DrawTextA(temp.str().c_str(), basex + 16, basey  + 24);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 17, basey + 25, 0, 0, 0);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, temp.str().c_str(), basex + 16, basey  + 24);
 
 
 #endif*/
@@ -1124,12 +1124,12 @@ void NPC::OnTalk()
 {
    if( m_Name == "Emerald Dancing Girl" && m_CurrentTalk == 0 )
    {
-      g_Sound->Play( g_MusicTracks[MUSIC_DANCEPARTY], true, true);
+      g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_DANCEPARTY]);
       g_DanceParty = true;
    }
    else if( m_Name == "Emerald Dancing Girl" )
    {
-      g_Sound->Play( g_MusicTracks[MUSIC_WIN], true, true);
+      g_SoundSystem->PlayMusic(g_MusicTracks[MUSIC_WIN]);
       g_DanceParty = false;
    }
    else if ( g_Player->m_KilledEvilOne &&
@@ -1341,7 +1341,7 @@ void NPC::DoDamage(int damage, bool critical, NPC* hitter )
          }
 
          sprintf(_tempString, "You kill %s!", m_Name.c_str());
-         g_Sound->PlaySoundGroup("Sounds/Kill", 5, ".wav");
+         g_SoundSystem->PlaySoundGroup("Sounds/Kill", 5, ".wav");
          AddConsoleString(_tempString);
 
          int _gainedXP = (this->m_Strength + this->m_Dexterity + this->m_Endurance + this->m_Intelligence + this->m_Will) - 5; 
@@ -1363,7 +1363,7 @@ void NPC::DoDamage(int damage, bool critical, NPC* hitter )
       else
       {
          //  Hit 'em, didn't kill 'em.
-         g_Sound->PlaySoundGroup("Sounds/Hit", 5, ".wav");
+         g_SoundSystem->PlaySoundGroup("Sounds/Hit", 5, ".wav");
       }
    }
    else
@@ -1398,7 +1398,7 @@ void NPC::DoDamage(int damage, bool critical, NPC* hitter )
       if(m_HitPoints <= 0)
       {
          sprintf(_tempString, "%s kills the %s!", hitter->m_Name.c_str(), m_Name.c_str());
-//         g_Sound->PlaySoundGroup("Sounds/Kill", 5, ".wav");
+//         g_SoundSystem->PlaySoundGroup("Sounds/Kill", 5, ".wav");
 //         AddConsoleString(_tempString);
          m_IsDead = true;
          if(m_Name == "Slornite King")
@@ -1410,7 +1410,7 @@ void NPC::DoDamage(int damage, bool critical, NPC* hitter )
       else
       {
          //  Hit 'em, didn't kill 'em.
-//         g_Sound->Play("Sounds/Hit1.wav");
+//         g_SoundSystem->PlaySound("Sounds/Hit1.wav");
       }
    }
 }
@@ -1427,10 +1427,10 @@ int NPC::GetDamage()
 
 void NPC::DrawBark( std::string text )
 {
-   g_Font->DrawParagraph(text, (5 + (abs(m_PosX) - abs(g_Player->m_PlayerPosX))) * 32, (4 +  (abs(m_PosY) - abs(g_Player->m_PlayerPosY))) * 32, 250, 16 );
+   DrawParagraphAt(g_font.get(), g_fontSize, text, (5 + (abs(m_PosX) - abs(g_Player->m_PlayerPosX))) * 32, (4 +  (abs(m_PosY) - abs(g_Player->m_PlayerPosY))) * 32, 250, 16 );
 
 
-/*	int _TextWidth = g_Font->GetStringMetrics( text );
+/*	int _TextWidth = GetStringMetrics(g_font.get(), g_fontSize,  text );
 
 	int x = m_PosX;
 	int y = m_PosY;
@@ -1442,21 +1442,21 @@ void NPC::DrawBark( std::string text )
 
 	for(int i = 0; i < _TextWidth; ++i)
 	{
-		g_Display->BlitImage(g_TextBackground, x + i, y - 8);
-		g_Display->BlitImage(g_TextBackground, x + i, y + 8);
+		DrawImageAt(g_TextBackground, x + i, y - 8);
+		DrawImageAt(g_TextBackground, x + i, y + 8);
 	}
 
 	for(int i = 0; i < 8; ++i)
 	{
-		g_Display->BlitImage(g_TextBackground, x - 8 + i,          y);
-		g_Display->BlitImage(g_TextBackground, x + _TextWidth + i, y);
+		DrawImageAt(g_TextBackground, x - 8 + i,          y);
+		DrawImageAt(g_TextBackground, x + _TextWidth + i, y);
 	}
 
 
-	g_Display->BlitImage(g_TBUL, x - 8,          y -  8 );
-	g_Display->BlitImage(g_TBUR, x + _TextWidth, y -  8 );
-	g_Display->BlitImage(g_TBLL, x - 8,          y + 16 );
-	g_Display->BlitImage(g_TBLR, x + _TextWidth, y + 16 );
+	DrawImageAt(g_TBUL, x - 8,          y -  8 );
+	DrawImageAt(g_TBUR, x + _TextWidth, y -  8 );
+	DrawImageAt(g_TBLL, x - 8,          y + 16 );
+	DrawImageAt(g_TBLR, x + _TextWidth, y + 16 );
 
 /*	if((*node).m_Attribute5 == 0)
 		gp_Display->BlitImage(g_TalkSpurLeft, x + (_TextWidth * .25) - 16, y + 24, r2, g2, b2);
@@ -1465,7 +1465,7 @@ void NPC::DrawBark( std::string text )
 	else if((*node).m_Attribute5 == 2)
 		gp_Display->BlitImage(g_TalkSpurRightUp, x + (_TextWidth * .75) - 16, y - 16, r2, g2, b2);*/
 
-//	g_SmallFont->DrawText(text, x, y, 255, 255, 255, 255);
+//	DrawTextAt(g_smallFont.get(), g_smallFontSize, text, x, y, 255, 255, 255, 255);
 }
 
 /*		else if( (*node).m_Event == GE_BARKUNIT )

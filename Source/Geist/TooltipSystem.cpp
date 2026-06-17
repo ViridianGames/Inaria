@@ -3,16 +3,16 @@
 
 using namespace std;
 
-void DrawToolTip(Font* font, float size, std::string strings, int x, int y, float linewidth, int anchorcorner, Color color)
+void DrawToolTipRender(Font* font, float size, std::string strings, int x, int y, float linewidth, int anchorcorner, Color color)
 {
 	vector<ColoredString> temp;
 	ColoredString* newstring = new ColoredString(strings, color);
 
 	temp.push_back(*newstring);
-	DrawToolTip(font, size, temp, x, y, linewidth, anchorcorner);
+	DrawToolTipRender(font, size, temp, x, y, linewidth, anchorcorner);
 }
 
-void DrawToolTip(Font* font, float size, std::vector<ColoredString> strings, int x, int y, float linewidth, int anchorcorner)
+void DrawToolTipRender(Font* font, float size, std::vector<ColoredString> strings, int x, int y, float linewidth, int anchorcorner)
 {
 	if (strings.empty())
 		return;

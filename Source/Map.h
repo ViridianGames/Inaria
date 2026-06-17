@@ -1,7 +1,6 @@
 #ifndef _MAP_H_
 #define _MAP_H_
 #include "Geist/Object.h"
-#include "InariaCompat.h"
 #include "raylib.h"
 #include "Item.h"
 #include "NPC.h"
@@ -34,7 +33,7 @@ enum TerrainTypes
 struct TerrainType
 {
 	int m_tile;       //  Tile that represents this terrain type
-   LegacyMeshStub* m_Mesh;
+   void* m_Mesh;
 	bool m_passable;  //  We're not using travel types, so this is either yes or no
    std::string m_Name;
    Color m_MinimapColor;

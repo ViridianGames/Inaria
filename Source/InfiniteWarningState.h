@@ -12,7 +12,6 @@
 #define _InfiniteWarningSTATE_H_
 
 #include "Geist/State.h"
-#include "InariaCompat.h"
 #include "Map.h"
 #include "NPC.h"
 #include "Geist/Gui.h"

@@ -3,14 +3,19 @@
 
 #include <deque>
 #include <list>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "Geist/Globals.h"
+#include "Geist/Engine.h"
+#include "Geist/InputSystem.h"
+#include "Geist/SoundSystem.h"
+#include "Geist/TooltipSystem.h"
+#include "raylib.h"
 #include "Geist/Primitives.h"
 #include "Geist/RNG.h"
 #include "Geist/StateMachine.h"
-#include "InariaCompat.h"
 #include "InariaEffect.h"
 #include "NPC.h"
 #include "Map.h"
@@ -31,6 +36,18 @@
 #define NUMBER_OF_TILES 256
 #define NUMBER_OF_CURSORS 10
 #define NUMBER_OF_MUSIC_TRACKS 12
+#define ATLAS_TILE_SIZE 32
+
+inline std::shared_ptr<Font> g_font;
+inline std::shared_ptr<Font> g_smallFont;
+inline float g_fontSize = 12.0f;
+inline float g_smallFontSize = 8.0f;
+
+inline Color MakeColor(int r, int g, int b, int a = 255)
+{
+    return Color{ static_cast<unsigned char>(r), static_cast<unsigned char>(g),
+        static_cast<unsigned char>(b), static_cast<unsigned char>(a) };
+}
 
 extern std::string g_HappyResponses[30];
 
@@ -39,10 +56,10 @@ extern Player* g_Player;
 extern Map* g_Map;
 extern Map* g_AllMaps[14];
 extern int g_CurrentEditorMap;
-extern LegacySprite* g_Tiles[NUMBER_OF_TILES];
+extern Sprite* g_Tiles[NUMBER_OF_TILES];
 extern Texture* g_Mask;
-extern LegacySprite* g_Star;
-extern LegacySprite* g_Bubble;
+extern Sprite* g_Star;
+extern Sprite* g_Bubble;
 extern Texture* g_WallShadows[8];
 extern Texture* g_FloorShadows[6];
 extern std::deque<ColoredString> g_ConsoleStrings;
@@ -236,9 +253,9 @@ extern int g_InfiniteYes;
 extern int g_CheckPathCount;
 extern int g_LineLengthCount;
 
-void DrawToolTip(InariaFont* font, std::vector<ColoredString> strings, int x, int y, int anchorcorner = 0);
-void DrawToolTip(InariaFont* font, std::string strings, int x, int y, int anchorcorner = 0, int r = 255, int g = 255, int b = 255);
-void DrawToolTip(InariaFont* font, std::vector<ColoredString> strings, int x, int y, int linewidth, int anchorcorner);
-void DrawToolTip(InariaFont* font, std::string strings, int x, int y, int linewidth, int anchorcorner, int r, int g, int b);
+void DrawToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, int anchorcorner = 0);
+void DrawToolTip(Font* font, float fontSize, std::string strings, int x, int y, int anchorcorner = 0, int r = 255, int g = 255, int b = 255);
+void DrawToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, float linewidth, int anchorcorner);
+void DrawToolTip(Font* font, float fontSize, std::string strings, int x, int y, float linewidth, int anchorcorner, int r, int g, int b);
 
 #endif

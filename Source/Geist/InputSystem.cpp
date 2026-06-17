@@ -395,3 +395,30 @@ void InputSystem::UpdateMouseState()
     m_LastMouseZ = m_MouseZ;
     m_MouseZ += GetMouseWheelMove();
 }
+
+bool InputSystem::IsMouseInDesignRegion(int x1, int y1, int x2, int y2)
+{
+    int mouseX = GetDesignMouseX();
+    int mouseY = GetDesignMouseY();
+    return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
+}
+
+bool InputSystem::IsLButtonDownInDesignRegion(int x1, int y1, int x2, int y2)
+{
+    return m_IsLeftButtonDown && IsMouseInDesignRegion(x1, y1, x2, y2);
+}
+
+bool InputSystem::WasLButtonClickedInDesignRegion(int x1, int y1, int x2, int y2)
+{
+    return m_WasLeftButtonClicked && IsMouseInDesignRegion(x1, y1, x2, y2);
+}
+
+bool InputSystem::WasRButtonClickedInDesignRegion(int x1, int y1, int x2, int y2)
+{
+    return m_WasRightButtonClicked && IsMouseInDesignRegion(x1, y1, x2, y2);
+}
+
+bool InputSystem::WasLButtonJustClickedInDesignRegion(int x1, int y1, int x2, int y2)
+{
+    return m_IsLeftButtonDown && !m_WasLeftButtonDown && IsMouseInDesignRegion(x1, y1, x2, y2);
+}

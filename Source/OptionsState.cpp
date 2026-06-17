@@ -28,7 +28,7 @@ void OptionsState::Init(const std::string& configfile)
 void OptionsState::Shutdown(){}
 void OptionsState::Update()
 {
-   if( g_Input->WasKeyPressed(SDLK_ESCAPE) )
+   if( g_InputSystem->WasKeyPressed(KEY_ESCAPE) )
    {
       g_StateMachine->PopState();
    }
@@ -36,19 +36,19 @@ void OptionsState::Update()
 }
 void OptionsState::Draw()
 {
-   g_Display->BlitImageRect( g_Mask, 0, 0, 228, 276, 76, 57);
-   g_Display->DrawBox(76, 57, 228, 276);
+   DrawImageRectAt( g_Mask, 0, 0, 228, 276, 76, 57);
+   DrawBoxAt(76, 57, 228, 276);
 
    stringstream temp;
 
-   g_Font->DrawTextCentered("Options", 190, 67 );
+   DrawTextCenteredAt(g_font.get(), g_fontSize, "Options", 190, 67 );
 
    if( m_Returning )
    {
 
-      g_Font->DrawTextCentered("Return to the", 190, 130 );
-      g_Font->DrawTextCentered("Main Menu? You will lose", 190, 150 );
-      g_Font->DrawTextCentered("any unsaved progress.", 190, 170 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "Return to the", 190, 130 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "Main Menu? You will lose", 190, 150 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "any unsaved progress.", 190, 170 );
 
       if( DrawButton("Yes", 150, 190 ) )
       {
@@ -63,9 +63,9 @@ void OptionsState::Draw()
    else if( m_Quitting )
    {
 
-      g_Font->DrawTextCentered("Do you wish to quit", 190, 130 );
-      g_Font->DrawTextCentered("the game? You will lose", 190, 150 );
-      g_Font->DrawTextCentered("any unsaved progress.", 190, 170 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "Do you wish to quit", 190, 130 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "the game? You will lose", 190, 150 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "any unsaved progress.", 190, 170 );
 
       if( DrawButton("Yes", 150, 190 ) )
       {
@@ -79,33 +79,33 @@ void OptionsState::Draw()
    }
    else
    {
-      g_Font->DrawTextCentered("Sound Volume", 190, 97 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "Sound Volume", 190, 97 );
 
       if( DrawButton("<-", 110, 97 ) )
       {
-         int currentvolume = g_Sound->GetSoundVolume();
-         g_Sound->SetSoundVolume( currentvolume -= 8);
-         g_Sound->Play("Sounds/level_up.wav");
+         float currentvolume = g_SoundSystem->GetGlobalSoundVolume();
+         g_SoundSystem->SetGlobalSoundVolume(currentvolume - 8.0f);
+         g_SoundSystem->PlaySound("Sounds/level_up.wav");
       }
 
       if( DrawButton("->", 253, 97 ) )
       {
-         int currentvolume = g_Sound->GetSoundVolume();
-         g_Sound->SetSoundVolume( currentvolume += 8);
-         g_Sound->Play("Sounds/level_up.wav");
+         float currentvolume = g_SoundSystem->GetGlobalSoundVolume();
+         g_SoundSystem->SetGlobalSoundVolume(currentvolume + 8.0f);
+         g_SoundSystem->PlaySound("Sounds/level_up.wav");
       }
 
-      g_Font->DrawTextCentered("Music Volume", 190, 117 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "Music Volume", 190, 117 );
       if( DrawButton("<-", 110, 117 ) )
       {
-         int currentvolume = g_Sound->GetMusicVolume();
-         g_Sound->SetMusicVolume( currentvolume -= 8);
+         float currentvolume = g_SoundSystem->GetGlobalMusicVolume();
+         g_SoundSystem->SetGlobalMusicVolume(currentvolume - 8.0f);
       }
 
       if( DrawButton("->", 253, 117 ) )
       {
-         int currentvolume = g_Sound->GetMusicVolume();
-         g_Sound->SetMusicVolume( currentvolume += 8);
+         float currentvolume = g_SoundSystem->GetGlobalMusicVolume();
+         g_SoundSystem->SetGlobalMusicVolume(currentvolume + 8.0f);
       }
 
 
@@ -124,11 +124,11 @@ void OptionsState::Draw()
          }
       }
 
-      if( g_Display->m_FullScreen )
+      if( IsWindowFullscreen() )
       {
          if( DrawButtonCentered("Go Windowed", 190, 177 ) )
          {
-            g_Display->ChangeToWindowed();
+            ToggleFullscreen();
             AddConsoleString("Please restart the game to switch to windowed mode.");
          }
       }
@@ -136,7 +136,7 @@ void OptionsState::Draw()
       {
          if( DrawButtonCentered("Go Fullscreen", 190, 177 ) )
          {
-            g_Display->ChangeToFullscreen();
+            ToggleFullscreen();
             AddConsoleString("Please restart the game to switch to fullscreen mode.");
          }
       }
@@ -180,7 +180,7 @@ void OptionsState::Draw()
          g_StateMachine->PushState(STATE_TUTORIALSTATE);
       }
 
-      if( DrawButton("Return", 60 + (228 - g_Font->GetStringMetrics("Return")), 307 ) )
+      if( DrawButton("Return", 60 + (228 - GetStringMetrics(g_font.get(), g_fontSize, "Return")), 307 ) )
       {
          g_StateMachine->PopState();
       }
@@ -193,7 +193,7 @@ void OptionsState::Draw()
    }
 
 
-   g_Display->BlitImage(g_Cursors[0], g_Input->m_MouseX, g_Input->m_MouseY);
+   DrawImageAt(g_Cursors[0], GetDesignMouseX(), GetDesignMouseY());
 }
 
 void OptionsState::OnEnter()

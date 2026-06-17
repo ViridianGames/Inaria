@@ -29,16 +29,16 @@ void StoreState::Shutdown(){}
 void StoreState::Update()
 {
    DoPlayerInput();
-   if( g_Input->m_WasRightButtonClicked )
+   if( g_InputSystem->WasRButtonClicked() )
       g_StateMachine->PopState();
 }
 
 void StoreState::Draw()
 {
-   g_Display->BlitImageRect( g_Mask, 0, 0, 165, 165, 108, 108);
-   g_Display->DrawBox(107, 107, 166, 166);
+   DrawImageRectAt( g_Mask, 0, 0, 165, 165, 108, 108);
+   DrawBoxAt(107, 107, 166, 166);
 
-   g_SmallFont->DrawTextCentered( "Merchant's Inventory", 187, 110 );
+   DrawTextCenteredAt(g_smallFont.get(), g_smallFontSize,  "Merchant's Inventory", 187, 110 );
 
 
    //  Draw the player's inventory
@@ -46,18 +46,18 @@ void StoreState::Draw()
    {
       if(invcount < g_Player->m_PlayerInventory.size())
       {
-         g_Display->BlitImage( g_Tiles[g_Player->m_PlayerInventory[invcount]->m_Tile], g_InventoryX + ((invcount % 4) * g_InventoryTileSize), g_InventoryY + ((invcount / 4) * g_InventoryTileSize) );
+         DrawImageAt( g_Tiles[g_Player->m_PlayerInventory[invcount]->m_Tile], g_InventoryX + ((invcount % 4) * g_InventoryTileSize), g_InventoryY + ((invcount / 4) * g_InventoryTileSize) );
          if( g_Player->m_PlayerInventory[invcount]->m_Stackable )
          {
             stringstream tempstream;
             tempstream << g_Player->m_PlayerInventory[invcount]->m_CurrentNumber;
-            g_SmallFont->DrawTextA( tempstream.str(), g_InventoryX + ((invcount % 4) * g_InventoryTileSize) + 23, g_InventoryY + ((invcount / 4) * g_InventoryTileSize) + 23, 0, 0, 0 );
-            g_SmallFont->DrawTextA( tempstream.str(), g_InventoryX + ((invcount % 4) * g_InventoryTileSize) + 22, g_InventoryY + ((invcount / 4) * g_InventoryTileSize) + 22 );
+            DrawTextAt(g_smallFont.get(), g_smallFontSize,  tempstream.str(), g_InventoryX + ((invcount % 4) * g_InventoryTileSize) + 23, g_InventoryY + ((invcount / 4) * g_InventoryTileSize) + 23, 0, 0, 0 );
+            DrawTextAt(g_smallFont.get(), g_smallFontSize,  tempstream.str(), g_InventoryX + ((invcount % 4) * g_InventoryTileSize) + 22, g_InventoryY + ((invcount / 4) * g_InventoryTileSize) + 22 );
          }
       }
       else
       {
-         g_Display->BlitImage( g_Tiles[70], g_InventoryX + ((invcount % 4) * g_InventoryTileSize), g_InventoryY + ((invcount / 4) * 32) );
+         DrawImageAt( g_Tiles[70], g_InventoryX + ((invcount % 4) * g_InventoryTileSize), g_InventoryY + ((invcount / 4) * 32) );
       }
    }*/
 
@@ -66,11 +66,11 @@ void StoreState::Draw()
    {
       if(invcount < m_StoreInventory.size())
       {
-         g_Display->DrawSprite( g_Tiles[m_StoreInventory[invcount]->m_Tile], 124 + ((invcount % 4) * g_InventoryTileSize), 124 + ((invcount / 4) * g_InventoryTileSize) );
+         DrawSpriteAt( g_Tiles[m_StoreInventory[invcount]->m_Tile], 124 + ((invcount % 4) * g_InventoryTileSize), 124 + ((invcount / 4) * g_InventoryTileSize) );
       }
       else
       {
-         g_Display->DrawSprite( g_Tiles[70], 124 + ((invcount % 4) * g_InventoryTileSize), 124 + ((invcount / 4) * 32) );
+         DrawSpriteAt( g_Tiles[70], 124 + ((invcount % 4) * g_InventoryTileSize), 124 + ((invcount / 4) * 32) );
       }
    }
    DrawConsoleStrings();
@@ -78,35 +78,35 @@ void StoreState::Draw()
    if( DrawButton("Done", 220, 256 ) )
       g_StateMachine->PopState();
 
-   if( g_Input->IsMouseInRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
+   if( g_InputSystem->IsMouseInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
    {
       //  Turn the screen coordinates into inventory coordinates.
-      int mapx = ((g_Input->m_MouseX - 124) / 32);
-      int mapy = ((g_Input->m_MouseY - 124) / 32);
+      int mapx = ((GetDesignMouseX() - 124) / 32);
+      int mapy = ((GetDesignMouseY() - 124) / 32);
       int inventoryindex = mapy * 4 + mapx;
 
       if(inventoryindex < m_StoreInventory.size())
       {
-         DrawToolTip( g_SmallFont, ConstructItemTooltip(m_StoreInventory[inventoryindex]), 123 + mapx * 32, 124 + mapy * 32, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(m_StoreInventory[inventoryindex]), 123 + mapx * 32, 124 + mapy * 32, 2 );
       }
    }
 
    //  Do inventory tooltips.
-   if( g_Input->IsMouseInRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 32), g_InventoryY + ( 4 * 32 ) ) )
+   if( g_InputSystem->IsMouseInDesignRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 32), g_InventoryY + ( 4 * 32 ) ) )
    {
       //  Turn the screen coordinates into inventory coordinates.
-      int mapx = ((g_Input->m_MouseX - g_InventoryX) / 32);
-      int mapy = ((g_Input->m_MouseY - g_InventoryY) / 32);
+      int mapx = ((GetDesignMouseX() - g_InventoryX) / 32);
+      int mapy = ((GetDesignMouseY() - g_InventoryY) / 32);
       int inventoryindex = mapy * 4 + mapx;
 
       if(inventoryindex < g_Player->m_PlayerInventory.size())
       {
-         DrawToolTip( g_SmallFont, ConstructItemTooltip(g_Player->m_PlayerInventory[inventoryindex]), g_InventoryX + mapx * 32, g_InventoryY + mapy * 32, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_PlayerInventory[inventoryindex]), g_InventoryX + mapx * 32, g_InventoryY + mapy * 32, 2 );
       }
    }
 
 
-   g_Display->BlitImage(g_Cursors[0], g_Input->m_MouseX, g_Input->m_MouseY);
+   DrawImageAt(g_Cursors[0], GetDesignMouseX(), GetDesignMouseY());
 
 }
 
@@ -164,14 +164,14 @@ void StoreState::OnExit()
 
 void StoreState::DoPlayerInput()
 {
-   if( g_Input->m_WasLeftButtonClicked )
+   if( g_InputSystem->WasLButtonClicked() )
    {
-      if( g_Input->m_MouseX > g_InventoryX && g_Input->m_MouseX < g_InventoryX + 4 * 32 && g_Input->m_MouseY > g_InventoryY && g_Input->m_MouseY < g_InventoryY + 4 * 32 )
+      if( GetDesignMouseX() > g_InventoryX && GetDesignMouseX() < g_InventoryX + 4 * 32 && GetDesignMouseY() > g_InventoryY && GetDesignMouseY() < g_InventoryY + 4 * 32 )
       {
 
          //  Turn the screen coordinates into inventory coordinates.
-         int mapx = ((g_Input->m_MouseX - g_InventoryX) / 32);
-         int mapy = ((g_Input->m_MouseY - g_InventoryY) / 32);
+         int mapx = ((GetDesignMouseX() - g_InventoryX) / 32);
+         int mapy = ((GetDesignMouseY() - g_InventoryY) / 32);
          int inventoryindex = mapy * 4 + mapx;
 
          if(inventoryindex < g_Player->m_PlayerInventory.size())
@@ -191,11 +191,11 @@ void StoreState::DoPlayerInput()
       }
    }
 
-   if( g_Input->WasLButtonClickedInRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
    {
       //  Turn the screen coordinates into inventory coordinates.
-      int mapx = ((g_Input->m_MouseX - 124) / 32);
-      int mapy = ((g_Input->m_MouseY - 124) / 32);
+      int mapx = ((GetDesignMouseX() - 124) / 32);
+      int mapy = ((GetDesignMouseY() - 124) / 32);
       int inventoryindex = mapy * 4 + mapx;
 
       bool stackfound = false;

@@ -19,7 +19,6 @@
 #include <string>
 
 #include "GameGlobals.h"
-#include "InariaCompat.h"
 #include "InariaEffect.h"
 
 #include "EditorState.h"
@@ -40,32 +39,20 @@ int main(int argv, char** argc)
     g_Engine->Init("engine.cfg");
     g_Engine->m_useVirtualResolution = true;
 
-    g_Display = new InariaDisplay();
-    g_Input = new InariaInput();
-    g_Sound = new InariaSound();
-
-    g_Display->Enter2DMode();
-
-    g_Font = new InariaFont();
-    g_Font->Init("Fonts/softsquare.ttf", 12);
-
-    g_SmallFont = new InariaFont();
-    g_SmallFont->Init("Fonts/littleleague.ttf", 8);
-
-    g_SmallFixedFont = new InariaFont();
-    g_SmallFixedFont->Init("Fonts/littleleague.ttf", 8);
-    g_SmallFixedFont->SetFixedWidth();
+    g_fontSize = 12.0f;
+    g_smallFontSize = 8.0f;
+    g_font = make_shared<Font>(LoadFontEx("Fonts/softsquare.ttf", static_cast<int>(g_fontSize), nullptr, 0));
+    g_smallFont = make_shared<Font>(LoadFontEx("Fonts/littleleague.ttf", static_cast<int>(g_smallFontSize), nullptr, 0));
 
     g_Mask = g_ResourceManager->GetTexture("Images/mask.png");
-    g_Star = new LegacySprite();
-    g_Star->m_Texture = g_ResourceManager->GetTexture("Images/star.png");
-    g_Star->m_Width = static_cast<int>(g_Star->m_Texture->width);
-    g_Star->m_Height = static_cast<int>(g_Star->m_Texture->height);
 
-    g_Bubble = new LegacySprite();
-    g_Bubble->m_Texture = g_ResourceManager->GetTexture("Images/bubble.png");
-    g_Bubble->m_Width = static_cast<int>(g_Bubble->m_Texture->width);
-    g_Bubble->m_Height = static_cast<int>(g_Bubble->m_Texture->height);
+    g_Star = new Sprite();
+    g_Star->m_texture = g_ResourceManager->GetTexture("Images/star.png");
+    g_Star->m_sourceRect = { 0, 0, float(g_Star->m_texture->width), float(g_Star->m_texture->height) };
+
+    g_Bubble = new Sprite();
+    g_Bubble->m_texture = g_ResourceManager->GetTexture("Images/bubble.png");
+    g_Bubble->m_sourceRect = { 0, 0, float(g_Bubble->m_texture->width), float(g_Bubble->m_texture->height) };
 
     g_TextBackground = g_ResourceManager->GetTexture("Images/textbackground.png");
     g_TBUL = g_ResourceManager->GetTexture("Images/tbul.png");
@@ -153,12 +140,14 @@ int main(int argv, char** argc)
     Texture* spritesTex = g_ResourceManager->GetTexture("Images/sprites.png");
     for (int i = 0; i < NUMBER_OF_TILES; ++i)
     {
-        LegacySprite* sprite = new LegacySprite();
-        sprite->m_Texture = spritesTex;
-        sprite->m_Width = g_TileSize;
-        sprite->m_Height = g_TileSize;
-        sprite->m_PosX = (i % 16) * g_TileSize;
-        sprite->m_PosY = (i / 16) * g_TileSize;
+        Sprite* sprite = new Sprite();
+        sprite->m_texture = spritesTex;
+        sprite->m_sourceRect = {
+            float((i % 16) * ATLAS_TILE_SIZE),
+            float((i / 16) * ATLAS_TILE_SIZE),
+            float(ATLAS_TILE_SIZE),
+            float(ATLAS_TILE_SIZE)
+        };
         g_Tiles[i] = sprite;
     }
 
@@ -166,7 +155,6 @@ int main(int argv, char** argc)
 
     while (!g_Engine->m_Done && !WindowShouldClose())
     {
-        g_Input->Update();
         g_Engine->Update();
         g_Engine->Draw();
         PlayMusic();
@@ -174,12 +162,13 @@ int main(int argv, char** argc)
 
     g_Engine->Shutdown();
 
-    delete g_Font;
-    delete g_SmallFont;
-    delete g_SmallFixedFont;
-    delete g_Input;
-    delete g_Sound;
-    delete g_Display;
+    for (int i = 0; i < NUMBER_OF_TILES; ++i)
+    {
+        delete g_Tiles[i];
+    }
+    delete g_Star;
+    delete g_Bubble;
+    delete g_RNG;
 
     return 0;
 }

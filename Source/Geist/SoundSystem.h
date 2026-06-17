@@ -31,6 +31,8 @@ public:
    void StopSound(std::string fName);
    void PlayMusic(std::string fName, float volume = -1);
    void StopMusic(std::string fName);
+   void StopCurrentMusic();
+   void PlaySoundGroup(const std::string& prefix, int count, const std::string& extension);
 
    void SetGlobalSoundVolume(float newVolume);
    void SetGlobalMusicVolume(float newVolume);

@@ -100,7 +100,7 @@ void Player::Update()
       m_StatPoints += m_Level;
 
       AddConsoleString( "Level up!", 64, 255, 64 );
-      g_Sound->Play("Sounds/level_up.wav");
+      g_SoundSystem->PlaySound("Sounds/level_up.wav");
       RecalculateHitpointsAndMana();
       stringstream temp;
       temp.str("");
@@ -114,7 +114,7 @@ void Player::Draw()
    int playerLocation = g_TileSize * g_ViewRange + g_Offset;
 
    if( !g_Map->m_Peer )
-      g_Display->DrawSprite(g_Tiles[m_PlayerSprite], playerLocation, playerLocation);
+      DrawSpriteAt(g_Tiles[m_PlayerSprite], playerLocation, playerLocation);
 
 }
 
@@ -143,9 +143,9 @@ void Player::DoDamage(string _NPCName, int _damage)
       m_CurrentHitPoints = 0;
       AddConsoleString("You have been killed!");
       m_IsDead = true;
-      g_Sound->StopMusic();
+      g_SoundSystem->StopCurrentMusic();
       g_CurrentMusic = -1;
-      g_Sound->Play("Sounds/inaria-death_withfade.wav");
+      g_SoundSystem->PlaySound("Sounds/inaria-death_withfade.wav");
    }
 }
 

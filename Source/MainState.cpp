@@ -50,7 +50,7 @@ void MainState::Init(const std::string& configfile)
    g_Player = new Player;
    g_Player->Init("");
 
-   g_IsPlayerTurn = TRUE;
+   g_IsPlayerTurn = true;
 
    m_GameGui = new Gui;
    m_GameGui->Init("Data/game.txt");
@@ -64,7 +64,7 @@ void MainState::Init(const std::string& configfile)
 
    m_ActiveGUIState = 0;
 
-   m_PlayerMoveTimer = SDL_GetTicks();
+   m_PlayerMoveTimer = static_cast<uint32_t>(g_Engine->GameTimeInMS());
 
    m_AbilityInventorySwitch = false;
 
@@ -205,8 +205,8 @@ void MainState::Update()
 {
    g_CheckPathCount = 0;
    g_LineLengthCount = 0;
-   m_UpdateTimer = SDL_GetTicks();
-   if( g_Input->WasKeyPressed(SDLK_ESCAPE) )
+   m_UpdateTimer = static_cast<uint32_t>(g_Engine->GameTimeInMS());
+   if( g_InputSystem->WasKeyPressed(KEY_ESCAPE) )
    {
       g_StateMachine->PushState(STATE_OPTIONSSTATE);
    }
@@ -321,9 +321,9 @@ void MainState::Update()
                g_Player->m_CurrentHitPoints = 0;
                AddConsoleString("You have been killed!");
                g_Player->m_IsDead = true;
-               g_Sound->StopMusic();
+               g_SoundSystem->StopCurrentMusic();
                g_CurrentMusic = -1;
-               g_Sound->Play("Sounds/inaria-death_withfade.wav");
+               g_SoundSystem->PlaySound("Sounds/inaria-death_withfade.wav");
             }
             --g_Player->m_PoisonCounter;
             if( g_Player->m_PoisonCounter == 0 && !g_Player->m_IsDead )
@@ -346,20 +346,20 @@ void MainState::Update()
 
          g_Player->Update();
          g_Player->m_IsPerceptive = DoRPGCheck( g_Player->GetIntelligenceWithBonus(), 20 - g_Player->GetIntelligenceWithBonus() );
-         g_IsPlayerTurn = TRUE;
+         g_IsPlayerTurn = true;
       }
    }
 
    g_Map->Update();
 
-   m_UpdateTimer = SDL_GetTicks() - m_UpdateTimer;
+   m_UpdateTimer = static_cast<uint32_t>(g_Engine->GameTimeInMS()) - m_UpdateTimer;
 }
 
 
 void MainState::Draw()
 {
-   m_DrawTimer = SDL_GetTicks();
-   g_Display->BlitImage( m_Background, 0, 0 );
+   m_DrawTimer = static_cast<uint32_t>(g_Engine->GameTimeInMS());
+   DrawImageAt( m_Background, 0, 0 );
 
 
    DrawConsoleStrings();
@@ -377,52 +377,52 @@ void MainState::Draw()
       {
          if(invcount < g_Player->m_PlayerInventory.size())
          {
-            g_Display->DrawSprite( g_Tiles[g_Player->m_PlayerInventory[invcount]->m_Tile], g_InventoryX + ((invcount % 4) * g_InventoryTileSize), g_InventoryY + ((invcount / 4) * g_InventoryTileSize) );
+            DrawSpriteAt( g_Tiles[g_Player->m_PlayerInventory[invcount]->m_Tile], g_InventoryX + ((invcount % 4) * g_InventoryTileSize), g_InventoryY + ((invcount / 4) * g_InventoryTileSize) );
             if( g_Player->m_PlayerInventory[invcount]->m_Stackable )
             {
                stringstream tempstream;
                tempstream << g_Player->m_PlayerInventory[invcount]->m_CurrentNumber;
-               g_SmallFont->DrawTextA( tempstream.str(), g_InventoryX + ((invcount % 4) * g_InventoryTileSize) + 23, g_InventoryY + ((invcount / 4) * g_InventoryTileSize) + 23, 0, 0, 0 );
-               g_SmallFont->DrawTextA( tempstream.str(), g_InventoryX + ((invcount % 4) * g_InventoryTileSize) + 22, g_InventoryY + ((invcount / 4) * g_InventoryTileSize) + 22 );
+               DrawTextAt(g_smallFont.get(), g_smallFontSize,  tempstream.str(), g_InventoryX + ((invcount % 4) * g_InventoryTileSize) + 23, g_InventoryY + ((invcount / 4) * g_InventoryTileSize) + 23, 0, 0, 0 );
+               DrawTextAt(g_smallFont.get(), g_smallFontSize,  tempstream.str(), g_InventoryX + ((invcount % 4) * g_InventoryTileSize) + 22, g_InventoryY + ((invcount / 4) * g_InventoryTileSize) + 22 );
             }
          }
          else
          {
-            g_Display->DrawSprite( g_Tiles[70], g_InventoryX + ((invcount % 4) * g_InventoryTileSize), g_InventoryY + ((invcount / 4) * 32) );
+            DrawSpriteAt( g_Tiles[70], g_InventoryX + ((invcount % 4) * g_InventoryTileSize), g_InventoryY + ((invcount / 4) * 32) );
          }
       }
 
 
       //  Weapon and Armor Slots
 
-      g_SmallFont->DrawTextA("Weapon", g_InventoryX + 162 - (g_SmallFont->GetStringMetrics("Weapon") / 2), g_InventoryY + 6);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, "Weapon", g_InventoryX + 162 - (GetStringMetrics(g_smallFont.get(), g_smallFontSize, "Weapon") / 2), g_InventoryY + 6);
       if(g_Player->m_CurrentWeaponType == NULL)
       {
-         g_Display->DrawSprite(g_Tiles[70], g_InventoryX + 144, g_InventoryY + 10 );
+         DrawSpriteAt(g_Tiles[70], g_InventoryX + 144, g_InventoryY + 10 );
       }
       else
       {
-         g_Display->DrawSprite(g_Tiles[g_Player->m_CurrentWeaponType->m_Tile], g_InventoryX + 144, g_InventoryY + 10 );
+         DrawSpriteAt(g_Tiles[g_Player->m_CurrentWeaponType->m_Tile], g_InventoryX + 144, g_InventoryY + 10 );
       }
 
-      g_SmallFont->DrawTextA("Armor", g_InventoryX + 162 - (g_SmallFont->GetStringMetrics("Armor") / 2), g_InventoryY + 48 );
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, "Armor", g_InventoryX + 162 - (GetStringMetrics(g_smallFont.get(), g_smallFontSize, "Armor") / 2), g_InventoryY + 48 );
       if(g_Player->m_CurrentArmorType == NULL)
       {
-         g_Display->DrawSprite(g_Tiles[70], g_InventoryX + 144, g_InventoryY + 53);
+         DrawSpriteAt(g_Tiles[70], g_InventoryX + 144, g_InventoryY + 53);
       }
       else
       {
-         g_Display->DrawSprite(g_Tiles[g_Player->m_CurrentArmorType->m_Tile], g_InventoryX + 144, g_InventoryY + 53);
+         DrawSpriteAt(g_Tiles[g_Player->m_CurrentArmorType->m_Tile], g_InventoryX + 144, g_InventoryY + 53);
       }
 
-      g_SmallFont->DrawTextA("Trinket", g_InventoryX + 162 - (g_SmallFont->GetStringMetrics("Trinket") / 2), g_InventoryY + 90);
+      DrawTextAt(g_smallFont.get(), g_smallFontSize, "Trinket", g_InventoryX + 162 - (GetStringMetrics(g_smallFont.get(), g_smallFontSize, "Trinket") / 2), g_InventoryY + 90);
       if(g_Player->m_CurrentTrinketType == NULL)
       {
-         g_Display->DrawSprite(g_Tiles[70], g_InventoryX + 144, g_InventoryY + 96);
+         DrawSpriteAt(g_Tiles[70], g_InventoryX + 144, g_InventoryY + 96);
       }
       else
       {
-         g_Display->DrawSprite(g_Tiles[g_Player->m_CurrentTrinketType->m_Tile], g_InventoryX + 144, g_InventoryY + 96);
+         DrawSpriteAt(g_Tiles[g_Player->m_CurrentTrinketType->m_Tile], g_InventoryX + 144, g_InventoryY + 96);
       }
    }
    else
@@ -432,11 +432,11 @@ void MainState::Draw()
       {
          if( g_SpecialAbilities[invcount].m_Active == true )
          {
-            g_Display->DrawSprite( g_Tiles[ g_SpecialAbilities[invcount].m_Tile], g_InventoryX + ((invcount % 4) * 47), g_InventoryY + ((invcount / 4) * g_InventoryTileSize) );
+            DrawSpriteAt( g_Tiles[ g_SpecialAbilities[invcount].m_Tile], g_InventoryX + ((invcount % 4) * 47), g_InventoryY + ((invcount / 4) * g_InventoryTileSize) );
          }
          else
          {
-            g_Display->DrawSprite( g_Tiles[ g_SpecialAbilities[invcount].m_Tile], g_InventoryX + ((invcount % 4) * 47), g_InventoryY + ((invcount / 4) * g_InventoryTileSize), 128, 128, 128 );
+            DrawSpriteAt( g_Tiles[ g_SpecialAbilities[invcount].m_Tile], g_InventoryX + ((invcount % 4) * 47), g_InventoryY + ((invcount / 4) * g_InventoryTileSize), 128, 128, 128 );
          }
       }
    }
@@ -453,90 +453,90 @@ void MainState::Draw()
 
    //  Line 1 - Max HP and Max MP
    snprintf(buffer, 64, "%d/%d", g_Player->m_CurrentHitPoints, g_Player->m_MaxHitPoints);
-   g_Display->DrawSprite(g_Tiles[73], xoffset, yoffset);
+   DrawSpriteAt(g_Tiles[73], xoffset, yoffset);
    float _endingpercent = (float)g_Player->m_CurrentHitPoints / (float)g_Player->m_MaxHitPoints;
    if( _endingpercent <= .33 || g_Player->m_PoisonCounter > 0 )
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset, 255, 64, 64);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset, 255, 64, 64);
    else
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset);
 
 
    snprintf(buffer, 64, "%d/%d", g_Player->m_CurrentManaPoints, g_Player->m_MaxManaPoints);
-   g_Display->DrawSprite(g_Tiles[72], xoffset + 98, yoffset);
-   g_Font->DrawTextA(buffer, xoffset + 115, yoffset);
+   DrawSpriteAt(g_Tiles[72], xoffset + 98, yoffset);
+   DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 115, yoffset);
 
 
    //  Line 2 - STR/Damage
 
    snprintf(buffer, 64, "%d", g_Player->GetStrengthWithBonus() );
-   g_Display->DrawSprite(g_Tiles[64], xoffset, yoffset + 18);
+   DrawSpriteAt(g_Tiles[64], xoffset, yoffset + 18);
    if( g_Player->GetStrengthBonus() > 0 )
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset + 18, 128, 255, 128);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset + 18, 128, 255, 128);
    else
-      g_Font->DrawTextA( buffer, xoffset + 17, yoffset + 18 );
+      DrawTextAt(g_font.get(), g_fontSize,  buffer, xoffset + 17, yoffset + 18 );
 
 
    snprintf(buffer, 64, "%d", g_Player->GetDamage());
-   g_Display->DrawSprite(g_Tiles[75], xoffset + 98, yoffset + 18);
+   DrawSpriteAt(g_Tiles[75], xoffset + 98, yoffset + 18);
    if ( g_SpecialAbilities[ABILITY_DAMAGEBONUS].m_Duration > 0 )
-      g_Font->DrawTextA(buffer, xoffset + 115, yoffset + 18, 128, 255, 128 );
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 115, yoffset + 18, 128, 255, 128 );
    else
-      g_Font->DrawTextA(buffer, xoffset + 115, yoffset + 18);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 115, yoffset + 18);
 
 
    //  Line 3 - DEX/Armor
    snprintf(buffer, 64, "%d", g_Player->GetDexterityWithBonus());
-   g_Display->DrawSprite(g_Tiles[107], xoffset, yoffset + 36);
+   DrawSpriteAt(g_Tiles[107], xoffset, yoffset + 36);
    if( g_Player->GetDexterityBonus() > 0 )
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset + 36, 128, 255, 128);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset + 36, 128, 255, 128);
    else
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset + 36);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset + 36);
 
    snprintf(buffer, 64, "%d", g_Player->GetArmor() );
-   g_Display->DrawSprite(g_Tiles[66], xoffset + 98, yoffset + 36);
+   DrawSpriteAt(g_Tiles[66], xoffset + 98, yoffset + 36);
    if( g_SpecialAbilities[ABILITY_MAGICARMOR].m_Duration > 0 )
-      g_Font->DrawTextA(buffer, xoffset + 115, yoffset + 36, 128, 255, 128);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 115, yoffset + 36, 128, 255, 128);
    else
-      g_Font->DrawTextA(buffer, xoffset + 115, yoffset + 36);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 115, yoffset + 36);
 
 
    //  Line 4 - INT/XP
    snprintf(buffer, 64, "%d", g_Player->GetIntelligenceWithBonus() );
-   g_Display->DrawSprite(g_Tiles[109], xoffset, yoffset + 54);
+   DrawSpriteAt(g_Tiles[109], xoffset, yoffset + 54);
    if( g_Player->GetIntelligenceBonus() > 0 )
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset + 54, 128, 255, 128);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset + 54, 128, 255, 128);
    else
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset + 54);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset + 54);
 
    snprintf(buffer, 64, "%d/%d", g_Player->m_CurrentXP, g_Player->m_NextLevel);
-   g_Display->DrawSprite(g_Tiles[74], xoffset + 98, yoffset + 54);
-   g_Font->DrawTextA(buffer, xoffset + 115, yoffset + 54);
+   DrawSpriteAt(g_Tiles[74], xoffset + 98, yoffset + 54);
+   DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 115, yoffset + 54);
 
 
    //  Line 5 - Endurance/Level
    snprintf(buffer, 64, "%d", g_Player->GetEnduranceWithBonus() );
-   g_Display->DrawSprite(g_Tiles[108], xoffset, yoffset + 72);
+   DrawSpriteAt(g_Tiles[108], xoffset, yoffset + 72);
    if( g_Player->GetEnduranceBonus() > 0 )
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset + 72, 128, 255, 128);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset + 72, 128, 255, 128);
    else
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset + 72);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset + 72);
 
    snprintf(buffer, 64, "%d", g_Player->m_Level);
-   g_Display->DrawSprite(g_Tiles[67], xoffset + 98, yoffset+72);
-   g_Font->DrawTextA(buffer, xoffset + 115, yoffset+72);
+   DrawSpriteAt(g_Tiles[67], xoffset + 98, yoffset+72);
+   DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 115, yoffset+72);
 
 
    //  Line 6 - Will/Coins
    snprintf(buffer, 64, "%d", g_Player->GetWillWithBonus() );
-   g_Display->DrawSprite(g_Tiles[110], xoffset, yoffset + 90);
+   DrawSpriteAt(g_Tiles[110], xoffset, yoffset + 90);
    if( g_Player->GetWillBonus() > 0 )
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset + 90, 128, 255, 128);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset + 90, 128, 255, 128);
    else
-      g_Font->DrawTextA(buffer, xoffset + 17, yoffset + 90);
+      DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 17, yoffset + 90);
 
    snprintf(buffer, 64, "%d", g_Player->m_CurrentGold);
-   g_Display->DrawSprite(g_Tiles[65], xoffset + 98, yoffset+90);
-   g_Font->DrawTextA(buffer, xoffset + 115, yoffset+90);
+   DrawSpriteAt(g_Tiles[65], xoffset + 98, yoffset+90);
+   DrawTextAt(g_font.get(), g_fontSize, buffer, xoffset + 115, yoffset+90);
 
 
    //  Draw the GUI
@@ -642,17 +642,17 @@ void MainState::Draw()
    {
       if( g_Player->m_StatPoints > 0 )
       {
-         int glower = (SDL_GetTicks() / 5) % 128;
+         int glower = (static_cast<uint32_t>(g_Engine->GameTimeInMS()) / 5) % 128;
          if( glower > 64 )
             glower = ( 128 - glower );
          glower += 127;
 
-         g_Display->DrawSprite( g_Tiles[g_Player->m_PlayerSprite], 382 + 208 - 36, 328,
+         DrawSpriteAt( g_Tiles[g_Player->m_PlayerSprite], 382 + 208 - 36, 328,
             glower, glower, glower);
       }
       else
       {
-         g_Display->DrawSprite( g_Tiles[g_Player->m_PlayerSprite], 382 + 208 - 36, 328, 128, 128, 128);
+         DrawSpriteAt( g_Tiles[g_Player->m_PlayerSprite], 382 + 208 - 36, 328, 128, 128, 128);
       }
    }
 
@@ -674,14 +674,14 @@ void MainState::Draw()
 
    //  Draw Tooltips
 
-   g_Display->BlitImage( m_Overlay, 0, 0 );
+   DrawImageAt( m_Overlay, 0, 0 );
 
-   g_Display->BlitImage( m_Crossbar, 372, 313 );
+   DrawImageAt( m_Crossbar, 372, 313 );
 
    if( !m_AbilityInventorySwitch )
-      g_Display->BlitImage( m_Button1, 372, 133 );
+      DrawImageAt( m_Button1, 372, 133 );
    else
-      g_Display->BlitImage( m_Button2, 372, 133 );
+      DrawImageAt( m_Button2, 372, 133 );
 
 
 
@@ -690,141 +690,141 @@ void MainState::Draw()
    if( g_StateMachine->GetCurrentState() == STATE_MAINSTATE )
    {
       //  Do inventory tooltips.
-      if( m_AbilityInventorySwitch == false && g_Input->IsMouseInRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 32), g_InventoryY + ( 4 * 32 ) ) )
+      if( m_AbilityInventorySwitch == false && g_InputSystem->IsMouseInDesignRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 32), g_InventoryY + ( 4 * 32 ) ) )
       {
          //  Turn the screen coordinates into inventory coordinates.
-         int mapx = ((g_Input->m_MouseX - g_InventoryX) / 32);
-         int mapy = ((g_Input->m_MouseY - g_InventoryY) / 32);
+         int mapx = ((GetDesignMouseX() - g_InventoryX) / 32);
+         int mapy = ((GetDesignMouseY() - g_InventoryY) / 32);
          int inventoryindex = mapy * 4 + mapx;
 
          if(inventoryindex < g_Player->m_PlayerInventory.size())
          {
-            DrawToolTip( g_SmallFont, ConstructItemTooltip(g_Player->m_PlayerInventory[inventoryindex]), g_InventoryX + mapx * 32, g_InventoryY + mapy * 32, 2 );
+            DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_PlayerInventory[inventoryindex]), g_InventoryX + mapx * 32, g_InventoryY + mapy * 32, 2 );
          }
       }
       //  Do ability tooltips.
-      else if( m_AbilityInventorySwitch == true && g_Input->m_MouseX > g_InventoryX && g_Input->m_MouseX < g_InventoryX + 4 * 47 && g_Input->m_MouseY > g_InventoryY && g_Input->m_MouseY < g_InventoryY + 4 * 32 )
+      else if( m_AbilityInventorySwitch == true && GetDesignMouseX() > g_InventoryX && GetDesignMouseX() < g_InventoryX + 4 * 47 && GetDesignMouseY() > g_InventoryY && GetDesignMouseY() < g_InventoryY + 4 * 32 )
       {
          //  Turn the screen coordinates into inventory coordinates.
-         int mapx = ((g_Input->m_MouseX - g_InventoryX) / 47);
-         int mapy = ((g_Input->m_MouseY - g_InventoryY) / 32);
+         int mapx = ((GetDesignMouseX() - g_InventoryX) / 47);
+         int mapy = ((GetDesignMouseY() - g_InventoryY) / 32);
          int inventoryindex = mapy * 4 + mapx;
 
 //         if( g_SpecialAbilities[inventoryindex].m_Active )
 //         {
-            DrawToolTip( g_SmallFont, ConstructAbilityTooltip(inventoryindex), g_InventoryX + mapx * 47, g_InventoryY + mapy * 32, 2 );
+            DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructAbilityTooltip(inventoryindex), g_InventoryX + mapx * 47, g_InventoryY + mapy * 32, 2 );
 //         }
       }
 
       //  Do equipped item tooltips
-      if( m_AbilityInventorySwitch == false && g_Input->IsMouseInRegion( g_InventoryX + 144, g_InventoryY + 10, g_InventoryX + 144 + 32, g_InventoryY + 10 + 32 ) && g_Player->m_CurrentWeaponType )
+      if( m_AbilityInventorySwitch == false && g_InputSystem->IsMouseInDesignRegion( g_InventoryX + 144, g_InventoryY + 10, g_InventoryX + 144 + 32, g_InventoryY + 10 + 32 ) && g_Player->m_CurrentWeaponType )
       {
-         DrawToolTip( g_SmallFont, ConstructItemTooltip(g_Player->m_CurrentWeaponType), g_InventoryX + 144, g_InventoryY + 10, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_CurrentWeaponType), g_InventoryX + 144, g_InventoryY + 10, 2 );
       }
 
-      if( m_AbilityInventorySwitch == false && g_Input->IsMouseInRegion( g_InventoryX + 144, g_InventoryY + 53, g_InventoryX + 144 + 32, g_InventoryY + 53 + 32 ) && g_Player->m_CurrentArmorType )
+      if( m_AbilityInventorySwitch == false && g_InputSystem->IsMouseInDesignRegion( g_InventoryX + 144, g_InventoryY + 53, g_InventoryX + 144 + 32, g_InventoryY + 53 + 32 ) && g_Player->m_CurrentArmorType )
       {
-         DrawToolTip( g_SmallFont, ConstructItemTooltip(g_Player->m_CurrentArmorType), g_InventoryX + 144, g_InventoryY + 53, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_CurrentArmorType), g_InventoryX + 144, g_InventoryY + 53, 2 );
       }
 
-      if( m_AbilityInventorySwitch == false && g_Input->IsMouseInRegion( g_InventoryX + 144, g_InventoryY + 96, g_InventoryX + 144 + 32, g_InventoryY + 96 + 32 ) && g_Player->m_CurrentTrinketType )
+      if( m_AbilityInventorySwitch == false && g_InputSystem->IsMouseInDesignRegion( g_InventoryX + 144, g_InventoryY + 96, g_InventoryX + 144 + 32, g_InventoryY + 96 + 32 ) && g_Player->m_CurrentTrinketType )
       {
-         DrawToolTip( g_SmallFont, ConstructItemTooltip(g_Player->m_CurrentTrinketType), g_InventoryX + 144, g_InventoryY + 96, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_CurrentTrinketType), g_InventoryX + 144, g_InventoryY + 96, 2 );
       }
 
       //  Do stat tooltips
       //  Line 1 - Max HP and Max MP
-      if( g_Input->IsMouseInRegion( xoffset, yoffset, xoffset + 16, yoffset + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset, xoffset + 16, yoffset + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Current/Max HP", xoffset, yoffset, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Current/Max HP", xoffset, yoffset, 1 );
       }
 
-      if( g_Input->IsMouseInRegion( xoffset + 98, yoffset, xoffset + 98 + 16, yoffset + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset, xoffset + 98 + 16, yoffset + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Current/Max MP", xoffset + 98, yoffset, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Current/Max MP", xoffset + 98, yoffset, 1 );
       }
 
       //  Line 2 - STR/Damage
-      if( g_Input->IsMouseInRegion( xoffset, yoffset + 18, xoffset + 16, yoffset + 18 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 18, xoffset + 16, yoffset + 18 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Strength", xoffset, yoffset + 18, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Strength", xoffset, yoffset + 18, 1 );
       }
 
-      if( g_Input->IsMouseInRegion( xoffset + 98, yoffset + 18, xoffset + 98 + 16, yoffset + 18 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 18, xoffset + 98 + 16, yoffset + 18 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Damage", xoffset + 98, yoffset + 18, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Damage", xoffset + 98, yoffset + 18, 1 );
       }
 
 
 
       //  Line 3 - DEX/Armor
-      if( g_Input->IsMouseInRegion( xoffset, yoffset + 36, xoffset + 16, yoffset + 36 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 36, xoffset + 16, yoffset + 36 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Dexterity", xoffset, yoffset + 36, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Dexterity", xoffset, yoffset + 36, 1 );
       }
 
-      if( g_Input->IsMouseInRegion( xoffset + 98, yoffset + 36, xoffset + 98 + 16, yoffset + 36 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 36, xoffset + 98 + 16, yoffset + 36 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Armor", xoffset + 98, yoffset + 36, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Armor", xoffset + 98, yoffset + 36, 1 );
       }
 
 
       //  Line 4 - INT/XP
 
-      if( g_Input->IsMouseInRegion( xoffset, yoffset + 54, xoffset + 16, yoffset + 54 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 54, xoffset + 16, yoffset + 54 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Intelligence", xoffset, yoffset + 54, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Intelligence", xoffset, yoffset + 54, 1 );
       }
 
-      if( g_Input->IsMouseInRegion( xoffset + 98, yoffset + 54, xoffset + 98 + 16, yoffset + 54 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 54, xoffset + 98 + 16, yoffset + 54 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Current XP/XP To Next Level", xoffset + 98, yoffset + 54, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Current XP/XP To Next Level", xoffset + 98, yoffset + 54, 1 );
       }
 
       //  Line 5 - Endurance/Level
-      if( g_Input->IsMouseInRegion( xoffset, yoffset + 72, xoffset + 16, yoffset + 72 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 72, xoffset + 16, yoffset + 72 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Endurance", xoffset, yoffset + 72, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Endurance", xoffset, yoffset + 72, 1 );
       }
 
-      if( g_Input->IsMouseInRegion( xoffset + 98, yoffset + 72, xoffset + 98 + 16, yoffset + 72 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 72, xoffset + 98 + 16, yoffset + 72 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Level", xoffset + 98, yoffset + 72, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Level", xoffset + 98, yoffset + 72, 1 );
       }
 
 
       //  Line 6 - Will/Coins
-      if( g_Input->IsMouseInRegion( xoffset, yoffset + 90, xoffset + 16, yoffset + 90 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 90, xoffset + 16, yoffset + 90 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Will", xoffset, yoffset + 90, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Will", xoffset, yoffset + 90, 1 );
       }
 
-      if( g_Input->IsMouseInRegion( xoffset + 98, yoffset + 90, xoffset + 98 + 16, yoffset + 90 + 16 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 90, xoffset + 98 + 16, yoffset + 90 + 16 ) )
       {
-         DrawToolTip( g_SmallFont, "Viridian Coins", xoffset + 98, yoffset + 90, 1 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Viridian Coins", xoffset + 98, yoffset + 90, 1 );
       }
 
-      if( g_Input->IsMouseInRegion( 382, 328, 382 + 31, 328 + 32 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( 382, 328, 382 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_SmallFont, "Get", 382, 328, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Get", 382, 328, 2 );
       }
 
-      if( g_Input->IsMouseInRegion( 382 + 32, 328, 382 + 32 + 31, 328 + 32 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( 382 + 32, 328, 382 + 32 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_SmallFont, "Fight", 382 + 32, 328, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Fight", 382 + 32, 328, 2 );
       }
 
-      if( g_Input->IsMouseInRegion( 382 + 64, 328, 382 + 64 + 31, 328 + 32 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( 382 + 64, 328, 382 + 64 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_SmallFont, "Talk", 382 + 64, 328, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Talk", 382 + 64, 328, 2 );
       }
 
-      if( g_Input->IsMouseInRegion( 382 + 96, 328, 382 + 96 + 31, 328 + 32 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( 382 + 96, 328, 382 + 96 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_SmallFont, "Look", 382 + 96, 328, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Look", 382 + 96, 328, 2 );
       }
 
-      if( g_Input->IsMouseInRegion( 382 + 172, 328, 382 + 172 + 31, 328 + 32 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( 382 + 172, 328, 382 + 172 + 31, 328 + 32 ) )
       {
          stringstream writer;
          writer.str("");
@@ -842,23 +842,23 @@ void MainState::Draw()
             ColoredString tempstring2(writer.str() );
             temp.push_back(tempstring2);
 
-            DrawToolTip( g_SmallFont, temp, 382 + 172, 328, 2 );
+            DrawToolTip( g_smallFont.get(), g_smallFontSize, temp, 382 + 172, 328, 2 );
          }
       }
 
-      if( g_Input->IsMouseInRegion( 382 + 208, 328, 382 + 208 + 31, 328 + 32 ) )
+      if( g_InputSystem->IsMouseInDesignRegion( 382 + 208, 328, 382 + 208 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_SmallFont, "Options", 382 + 208, 328, 2 );
+         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Options", 382 + 208, 328, 2 );
       }
    }
 
 
    if( g_Player->m_IsDead )
    {
-      g_Display->BlitImageRect( g_Mask, 0, 0, 228, 256, 76, 57);
-      g_Display->DrawBox(76, 57, 228, 256);
+      DrawImageRectAt( g_Mask, 0, 0, 228, 256, 76, 57);
+      DrawBoxAt(76, 57, 228, 256);
 
-      g_Font->DrawTextCentered("You have died.", 190, 130 );
+      DrawTextCenteredAt(g_font.get(), g_fontSize, "You have died.", 190, 130 );
 
 
       if( DrawButtonCentered("Load Game", 190, 200 ) )
@@ -879,64 +879,64 @@ void MainState::Draw()
    switch( m_ActiveGUIState )
    {
    case GUI_GET:
-      g_Display->BlitImage(g_Cursors[1], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[1], GetDesignMouseX(), GetDesignMouseY());
       break;
 
    case GUI_TALK:
-      g_Display->BlitImage(g_Cursors[2], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[2], GetDesignMouseX(), GetDesignMouseY());
       break;
 
    case GUI_FIGHT:
-      g_Display->BlitImage(g_Cursors[3], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[3], GetDesignMouseX(), GetDesignMouseY());
       break;
 
    case GUI_LOOK:
-      g_Display->BlitImage(g_Cursors[4], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[4], GetDesignMouseX(), GetDesignMouseY());
       break;
 
     case GUI_BASH:
-      g_Display->BlitImage(g_Cursors[5], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[5], GetDesignMouseX(), GetDesignMouseY());
       break;
 
     case GUI_SMITESPELL:
-      g_Display->BlitImage(g_Cursors[6], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[6], GetDesignMouseX(), GetDesignMouseY());
       break;
 
     case GUI_TELEPORT:
-      g_Display->BlitImage(g_Cursors[7], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[7], GetDesignMouseX(), GetDesignMouseY());
       break;
 
     case GUI_PICKLOCK:
-      g_Display->BlitImage(g_Cursors[8], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[8], GetDesignMouseX(), GetDesignMouseY());
       break;
 
     case GUI_MAGICUNLOCK:
-      g_Display->BlitImage(g_Cursors[9], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[9], GetDesignMouseX(), GetDesignMouseY());
       break;
 
    default:
-      g_Display->BlitImage(g_Cursors[0], g_Input->m_MouseX, g_Input->m_MouseY);
+      DrawImageAt(g_Cursors[0], GetDesignMouseX(), GetDesignMouseY());
       break;
    }
 
-   m_DrawTimer = SDL_GetTicks() - m_DrawTimer;
+   m_DrawTimer = static_cast<uint32_t>(g_Engine->GameTimeInMS()) - m_DrawTimer;
 
 /*   stringstream framestream;
    framestream.str("");
    framestream << "Milliseconds per update: " << m_UpdateTimer;
-   g_SmallFont->DrawTextA(framestream.str(), g_Offset, g_Offset);
+   DrawTextAt(g_smallFont.get(), g_smallFontSize, framestream.str(), g_Offset, g_Offset);
 
    framestream.str("");
    framestream << "Milliseconds per draw: " << m_DrawTimer;
-   g_SmallFont->DrawText(framestream.str(), g_Offset, g_Offset + 12 );
+   DrawTextAt(g_smallFont.get(), g_smallFontSize, framestream.str(), g_Offset, g_Offset + 12 );
 
    framestream.str("");
    framestream << "CheckPaths this update: " << g_CheckPathCount;
-   g_SmallFont->DrawText(framestream.str(), g_Offset, g_Offset + 24 );
+   DrawTextAt(g_smallFont.get(), g_smallFontSize, framestream.str(), g_Offset, g_Offset + 24 );
 
    framestream.str("");
    framestream << "LineLengths this update: " << g_LineLengthCount;
-   g_SmallFont->DrawText(framestream.str(), g_Offset, g_Offset + 36 );*/
+   DrawTextAt(g_smallFont.get(), g_smallFontSize, framestream.str(), g_Offset, g_Offset + 36 );*/
 
 }
 
@@ -946,17 +946,17 @@ void MainState::DoPlayerInput()
    //  First things first - if we're peering, ANY input at ALL takes off the peer
    if( g_Map->m_Peer )
    {
-      if( g_Input->WasLButtonClickedInRegion(0, 0, 640, 480 ) || g_Input->WasRButtonClickedInRegion(0, 0, 640, 480 ) || g_Input->WasMButtonClickedInRegion(0, 0, 640, 480 ) )
+      if( g_InputSystem->WasLButtonClickedInDesignRegion(0, 0, 640, 480 ) || g_InputSystem->WasRButtonClickedInDesignRegion(0, 0, 640, 480 ) || g_InputSystem->WasMButtonClickedInRegion(0, 0, 640, 480 ) )
       {
          g_Map->m_Peer = false;
-         g_Input->DumpInput();
+         g_InputSystem->DumpInput();
          return;
       }
       return;
    }
 
 
-   if( g_Input->WasKeyPressed(SDLK_SPACE) || g_Input->WasKeyPressed(SDLK_KP5) )
+   if( g_InputSystem->WasKeyPressed(KEY_SPACE) || g_InputSystem->WasKeyPressed(KEY_KP_5) )
    {
       AddConsoleString("Passed!", 255, 255, 255 );
       g_IsPlayerTurn = false;
@@ -970,12 +970,12 @@ void MainState::DoPlayerInput()
       return;
    }
 
-   if(g_Input->WasKeyPressed(SDLK_e) && g_Input->IsKeyDown(SDLK_LCTRL) )
+   if(g_InputSystem->WasKeyPressed(KEY_E) && g_InputSystem->IsKeyDown(KEY_LEFT_CONTROL) )
    {
       g_StateMachine->MakeStateTransition(STATE_EDITORSTATE);
    }
 
-   if( g_Input->WasLButtonClickedInRegion( 372, 133, 372 + 259, 133 + 17 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( 372, 133, 372 + 259, 133 + 17 ) )
    {
       m_AbilityInventorySwitch = !m_AbilityInventorySwitch;
    }
@@ -985,49 +985,49 @@ void MainState::DoPlayerInput()
 
    bool playermoved = false;
 
-   if( SDL_GetTicks() - m_PlayerMoveTimer > 100 && playermoved == false )
+   if( static_cast<uint32_t>(g_Engine->GameTimeInMS()) - m_PlayerMoveTimer > 100 && playermoved == false )
    {
-      if( g_Input->m_KeyboardState[SDLK_a] || g_Input->m_KeyboardState[SDLK_LEFT] || g_Input->m_KeyboardState[SDLK_KP4] && playermoved == false )
+      if( g_InputSystem->IsKeyDown(KEY_A) || g_InputSystem->IsKeyDown(KEY_LEFT) || g_InputSystem->IsKeyDown(KEY_KP_4) && playermoved == false )
       {
          targetx = g_Player->m_PlayerPosX - 1;
          playermoved = true;
       }
-      else if( g_Input->m_KeyboardState[SDLK_d] || g_Input->m_KeyboardState[SDLK_RIGHT] || g_Input->m_KeyboardState[SDLK_KP6] && playermoved == false )
+      else if( g_InputSystem->IsKeyDown(KEY_D) || g_InputSystem->IsKeyDown(KEY_RIGHT) || g_InputSystem->IsKeyDown(KEY_KP_6) && playermoved == false )
       {
          targetx = g_Player->m_PlayerPosX + 1;
          playermoved = true;
       }
-      else if( g_Input->m_KeyboardState[SDLK_w] || g_Input->m_KeyboardState[SDLK_UP] || g_Input->m_KeyboardState[SDLK_KP8] && playermoved == false )
+      else if( g_InputSystem->IsKeyDown(KEY_W) || g_InputSystem->IsKeyDown(KEY_UP) || g_InputSystem->IsKeyDown(KEY_KP_8) && playermoved == false )
       {
          targety = g_Player->m_PlayerPosY - 1;
          playermoved = true;
       }
-      else if( g_Input->m_KeyboardState[SDLK_s] || g_Input->m_KeyboardState[SDLK_x] || g_Input->m_KeyboardState[SDLK_DOWN] || g_Input->m_KeyboardState[SDLK_KP2] && playermoved == false )
+      else if( g_InputSystem->IsKeyDown(KEY_S) || g_InputSystem->IsKeyDown(KEY_X) || g_InputSystem->IsKeyDown(KEY_DOWN) || g_InputSystem->IsKeyDown(KEY_KP_2) && playermoved == false )
       {
          targety = g_Player->m_PlayerPosY + 1;
          playermoved = true;
       }
 
       //  DIAGONALS
-      if( g_Input->m_KeyboardState[SDLK_q] ||  g_Input->m_KeyboardState[SDLK_KP7] && playermoved == false )
+      if( g_InputSystem->IsKeyDown(KEY_Q) ||  g_InputSystem->IsKeyDown(KEY_KP_7) && playermoved == false )
       {
          targetx = g_Player->m_PlayerPosX - 1;
          targety = g_Player->m_PlayerPosY - 1;
          playermoved = true;
       }
-      else if( g_Input->m_KeyboardState[SDLK_e] || g_Input->m_KeyboardState[SDLK_KP9] && playermoved == false )
+      else if( g_InputSystem->IsKeyDown(KEY_E) || g_InputSystem->IsKeyDown(KEY_KP_9) && playermoved == false )
       {
          targetx = g_Player->m_PlayerPosX + 1;
          targety = g_Player->m_PlayerPosY - 1;
          playermoved = true;
       }
-      else if( g_Input->m_KeyboardState[SDLK_c] || g_Input->m_KeyboardState[SDLK_KP3] && playermoved == false )
+      else if( g_InputSystem->IsKeyDown(KEY_C) || g_InputSystem->IsKeyDown(KEY_KP_3) && playermoved == false )
       {
          targetx = g_Player->m_PlayerPosX + 1;
          targety = g_Player->m_PlayerPosY + 1;
          playermoved = true;
       }
-      else if( g_Input->m_KeyboardState[SDLK_z] || g_Input->m_KeyboardState[SDLK_KP1] && playermoved == false )
+      else if( g_InputSystem->IsKeyDown(KEY_Z) || g_InputSystem->IsKeyDown(KEY_KP_1) && playermoved == false )
       {
          targetx = g_Player->m_PlayerPosX - 1;
          targety = g_Player->m_PlayerPosY + 1;
@@ -1035,37 +1035,37 @@ void MainState::DoPlayerInput()
       }
    }
 
-   //else if( g_Input->WasKeyPressed(SDLK_a) || g_Input->WasKeyPressed(SDLK_LEFT) && playermoved == false )
+   //else if( g_InputSystem->WasKeyPressed(KEY_A) || g_InputSystem->WasKeyPressed(KEY_LEFT) && playermoved == false )
    //{
    //   targetx = g_Player->m_PlayerPosX - 1;
    //   playermoved = true;
    //}
-   //else if( g_Input->WasKeyPressed(SDLK_d) || g_Input->WasKeyPressed(SDLK_RIGHT) && playermoved == false )
+   //else if( g_InputSystem->WasKeyPressed(KEY_D) || g_InputSystem->WasKeyPressed(KEY_RIGHT) && playermoved == false )
    //{
    //   targetx = g_Player->m_PlayerPosX + 1;
    //   playermoved = true;
    //}
-   //else if( g_Input->WasKeyPressed(SDLK_w) || g_Input->WasKeyPressed(SDLK_UP) && playermoved == false )
+   //else if( g_InputSystem->WasKeyPressed(KEY_W) || g_InputSystem->WasKeyPressed(KEY_UP) && playermoved == false )
    //{
    //   targety = g_Player->m_PlayerPosY - 1;
    //   playermoved = true;
    //}
-   //else if( g_Input->WasKeyPressed(SDLK_s) || g_Input->WasKeyPressed(SDLK_DOWN) && playermoved == false )
+   //else if( g_InputSystem->WasKeyPressed(KEY_S) || g_InputSystem->WasKeyPressed(KEY_DOWN) && playermoved == false )
    //{
    //   targety = g_Player->m_PlayerPosY + 1;
    //   playermoved = true;
    //}
 
-   if( g_Input->WasLButtonClickedInRegion( 382 + 208 - 36, 328, 382 + 208 - 36 + 32, 328 + 32 ) )
+   if( g_InputSystem->WasLButtonClickedInDesignRegion( 382 + 208 - 36, 328, 382 + 208 - 36 + 32, 328 + 32 ) )
    {
       g_StateMachine->PushState(STATE_LEVELUPSTATE);
    }
 
 
    if( playermoved )
-      m_PlayerMoveTimer = SDL_GetTicks();
+      m_PlayerMoveTimer = static_cast<uint32_t>(g_Engine->GameTimeInMS());
 
-   if( g_Input->m_WasRightButtonClicked )
+   if( g_InputSystem->WasRButtonClicked() )
    {
       if( !g_Player->m_IsDead )
       {
@@ -1137,18 +1137,18 @@ void MainState::DoPlayerInput()
       }
    }
 
-   else if( g_Input->m_WasLeftButtonClicked )
+   else if( g_InputSystem->WasLButtonClicked() )
    {
       if( !g_Player->m_IsDead)      
       {
          //  Check for clicking on special abilities.
          if( m_AbilityInventorySwitch )
          {
-            if( g_Input->WasLButtonClickedInRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 47), g_InventoryY + (4 * 32 ) ) )
+            if( g_InputSystem->WasLButtonClickedInDesignRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 47), g_InventoryY + (4 * 32 ) ) )
             {
                //  Turn the screen coordinates into inventory coordinates.
-               int mapx = ((g_Input->m_MouseX - g_InventoryX) / 47);
-               int mapy = ((g_Input->m_MouseY - g_InventoryY) / 32);
+               int mapx = ((GetDesignMouseX() - g_InventoryX) / 47);
+               int mapy = ((GetDesignMouseY() - g_InventoryY) / 32);
                int ability = mapy * 4 + mapx;
 
                if( ability < 16 && g_SpecialAbilities[ability].m_Active > 0 )
@@ -1208,11 +1208,11 @@ void MainState::DoPlayerInput()
          if( m_ActiveGUIState == GUI_NOSTATE )  //  No special GUI state
          {
             //  Check to see if we are using an item
-            if( m_AbilityInventorySwitch == false && g_Input->m_MouseX > g_InventoryX && g_Input->m_MouseX < g_InventoryX + 4 * 32 && g_Input->m_MouseY > g_InventoryY && g_Input->m_MouseY < g_InventoryY + 4 * 32 )
+            if( m_AbilityInventorySwitch == false && GetDesignMouseX() > g_InventoryX && GetDesignMouseX() < g_InventoryX + 4 * 32 && GetDesignMouseY() > g_InventoryY && GetDesignMouseY() < g_InventoryY + 4 * 32 )
             {
                //  Turn the screen coordinates into inventory coordinates.
-               int mapx = ((g_Input->m_MouseX - g_InventoryX) / 32);
-               int mapy = ((g_Input->m_MouseY - g_InventoryY) / 32);
+               int mapx = ((GetDesignMouseX() - g_InventoryX) / 32);
+               int mapy = ((GetDesignMouseY() - g_InventoryY) / 32);
                int inventoryindex = mapy * 4 + mapx;
 
                if(inventoryindex < g_Player->m_PlayerInventory.size())
@@ -1221,12 +1221,12 @@ void MainState::DoPlayerInput()
                }
             }
             //  Check to see if we are moving.
-            if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+            if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
             {
                //  Turn the screen coordinates into map coordinates.
-               int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+               int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
                mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-               int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+               int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
                mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
                if(mapx > g_Player->m_PlayerPosX)
@@ -1256,7 +1256,7 @@ void MainState::DoPlayerInput()
 
             //  Unequip equipped items.
             //  Do equipped item tooltips
-            if( m_AbilityInventorySwitch == false && g_Input->WasLButtonClickedInRegion( g_InventoryX + 144, g_InventoryY + 10, g_InventoryX + 144 + 32, g_InventoryY + 10 + 32 ) && g_Player->m_CurrentWeaponType )
+            if( m_AbilityInventorySwitch == false && g_InputSystem->WasLButtonClickedInDesignRegion( g_InventoryX + 144, g_InventoryY + 10, g_InventoryX + 144 + 32, g_InventoryY + 10 + 32 ) && g_Player->m_CurrentWeaponType )
             {
                if( g_Player->m_PlayerInventory.size() <= 15 )  //  At least one empty space.
                {
@@ -1270,7 +1270,7 @@ void MainState::DoPlayerInput()
                }
             }
 
-            if( m_AbilityInventorySwitch == false && g_Input->WasLButtonClickedInRegion( g_InventoryX + 144, g_InventoryY + 53, g_InventoryX + 144 + 32, g_InventoryY + 53 + 32 ) && g_Player->m_CurrentArmorType )
+            if( m_AbilityInventorySwitch == false && g_InputSystem->WasLButtonClickedInDesignRegion( g_InventoryX + 144, g_InventoryY + 53, g_InventoryX + 144 + 32, g_InventoryY + 53 + 32 ) && g_Player->m_CurrentArmorType )
             {
                if( g_Player->m_PlayerInventory.size() <= 15 )  //  At least one empty space.
                {
@@ -1284,7 +1284,7 @@ void MainState::DoPlayerInput()
                }
             }
 
-            if( m_AbilityInventorySwitch == false && g_Input->WasLButtonClickedInRegion( g_InventoryX + 144, g_InventoryY + 96, g_InventoryX + 144 + 32, g_InventoryY + 96 + 32 ) && g_Player->m_CurrentTrinketType )
+            if( m_AbilityInventorySwitch == false && g_InputSystem->WasLButtonClickedInDesignRegion( g_InventoryX + 144, g_InventoryY + 96, g_InventoryX + 144 + 32, g_InventoryY + 96 + 32 ) && g_Player->m_CurrentTrinketType )
             {
                if( g_Player->m_PlayerInventory.size() <= 15 )  //  At least one empty space.
                {
@@ -1521,11 +1521,11 @@ void MainState::DoPlayerInput()
 bool MainState::DoInventoryUse()
 {
    //  Do right-click context item use.
-   if( m_AbilityInventorySwitch == false && g_Input->m_MouseX > g_InventoryX && g_Input->m_MouseX < g_InventoryX + 4 * 32 && g_Input->m_MouseY > g_InventoryY && g_Input->m_MouseY < g_InventoryY + 4 * 32 )
+   if( m_AbilityInventorySwitch == false && GetDesignMouseX() > g_InventoryX && GetDesignMouseX() < g_InventoryX + 4 * 32 && GetDesignMouseY() > g_InventoryY && GetDesignMouseY() < g_InventoryY + 4 * 32 )
    {
       //  Turn the screen coordinates into inventory coordinates.
-      int mapx = ((g_Input->m_MouseX - g_InventoryX) / 32);
-      int mapy = ((g_Input->m_MouseY - g_InventoryY) / 32);
+      int mapx = ((GetDesignMouseX() - g_InventoryX) / 32);
+      int mapy = ((GetDesignMouseY() - g_InventoryY) / 32);
       int inventoryindex = mapy * 4 + mapx;
 
       if(inventoryindex < g_Player->m_PlayerInventory.size())
@@ -1540,12 +1540,12 @@ bool MainState::DoInventoryUse()
 bool MainState::DoItemPickup()
 {
    //  Do right-click pickup-open
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
       //  Turn the screen coordinates into map coordinates.
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       //  Did we right-click on an item?  If so, try to pick it up.
@@ -1599,11 +1599,11 @@ bool MainState::DoItemPickup()
 
 bool MainState::DoNPCTalk()
 {
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       list<NPC*>::iterator node = g_Map->m_NPCList.begin();
@@ -1699,7 +1699,7 @@ bool MainState::DoNPCTalk()
                      {
                         (*node)->m_CurrentTalk = 8;
                         g_Player->m_CurrentGold += 500;
-                        g_Sound->Play("/Sounds/level_up.wav");
+                        g_SoundSystem->PlaySound("/Sounds/level_up.wav");
                         g_Player->m_PaidByInarianKing = true;
                      }
                   }
@@ -1752,12 +1752,12 @@ bool MainState::DoNPCFight()
       return false;
    }
  
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
       //  If this is the first attack on the Evil One, say his bark.
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       list<NPC*>::iterator node = g_Map->m_NPCList.begin();
@@ -1782,12 +1782,12 @@ bool MainState::DoNPCFight()
 
 bool MainState::DoMissileCombat()
 {
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
       //  Turn the screen coordinates into map coordinates.
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       //  Do hittable switches.
@@ -1798,7 +1798,7 @@ bool MainState::DoMissileCombat()
          {
             InariaEffect* tempanimation = new InariaEffect;
 
-            LegacySprite* arrow = NULL;
+            Sprite* arrow = NULL;
             if( (*itemattacknode)->m_PosX == g_Player->m_PlayerPosX && (*itemattacknode)->m_PosY > g_Player->m_PlayerPosY ) //  Firing right
                arrow = g_Tiles[141];
 
@@ -1879,7 +1879,7 @@ bool MainState::DoMissileCombat()
 
                InariaEffect* tempanimation = new InariaEffect;
 
-               LegacySprite* arrow = NULL;
+               Sprite* arrow = NULL;
                if( (*node)->m_PosX == g_Player->m_PlayerPosX && (*node)->m_PosY > g_Player->m_PlayerPosY ) //  Firing right
                   arrow = g_Tiles[141];
 
@@ -1918,7 +1918,7 @@ bool MainState::DoMissileCombat()
             {
                InariaEffect* tempanimation = new InariaEffect;
 
-               LegacySprite* arrow = NULL;
+               Sprite* arrow = NULL;
                if( (*node)->m_PosX == g_Player->m_PlayerPosX && (*node)->m_PosY > g_Player->m_PlayerPosY ) //  Firing right
                   arrow = g_Tiles[141];
 
@@ -1969,9 +1969,9 @@ bool MainState::DoMissileCombat()
 bool MainState::DoMeleeCombat()
 {
    //  Turn the screen coordinates into map coordinates.
-   int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+   int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
    mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-   int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+   int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
    mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
    //  Do hittable switches.
@@ -2123,12 +2123,12 @@ bool MainState::DoMeleeCombat()
 
 bool MainState::DoLookAt()
 {
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
       //  Turn the screen coordinates into map coordinates.
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       list<NPC*>::iterator node = g_Map->m_NPCList.begin();
@@ -2168,12 +2168,12 @@ bool MainState::DoLookAt()
 //  Non-spell special abilities
 bool MainState::DoBash()
 {
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
       //  Turn the screen coordinates into map coordinates.
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       list<Item*>::iterator itemnode = g_Map->m_ItemList.begin();
@@ -2212,12 +2212,12 @@ bool MainState::DoBash()
 
 bool MainState::DoPickLock()
 {
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
       //  Turn the screen coordinates into map coordinates.
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       list<Item*>::iterator itemnode = g_Map->m_ItemList.begin();
@@ -2269,7 +2269,7 @@ bool MainState::DoSmite()
 
    //  Check to see if there is an NPC under the mouse cursor.
 
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
 
       if( g_Map->m_MapTitle == "Inaria" || g_Map->m_MapTitle == "Inaria Special") //  Can't smite friendlies
@@ -2279,9 +2279,9 @@ bool MainState::DoSmite()
       }
 
       //  Turn the screen coordinates into map coordinates.
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       //  Do hittable switches.
@@ -2343,7 +2343,7 @@ bool MainState::DoSmite()
                if( g_SpecialAbilities[ABILITY_SMITE].m_Level % 16 == 0 )
                   AddConsoleString("Your Smite spell has improved! It will now hit more targets.", 255, 128, 255 );
 
-               //                        DrawSprite(23, g_Input->m_MouseX - (int(g_Input->m_MouseX) % 32) + 8, g_Input->m_MouseY - (int(g_Input->m_MouseY) % 32) + 8);
+               //                        DrawSprite(23, GetDesignMouseX() - (int(GetDesignMouseX()) % 32) + 8, GetDesignMouseY() - (int(GetDesignMouseY()) % 32) + 8);
             }
             else
             {
@@ -2408,7 +2408,7 @@ bool MainState::DoSmite()
                      --smitecounter;
                      if( smitecounter == 0 )
                         return true;
-                     //                        DrawSprite(23, g_Input->m_MouseX - (int(g_Input->m_MouseX) % 32) + 8, g_Input->m_MouseY - (int(g_Input->m_MouseY) % 32) + 8);
+                     //                        DrawSprite(23, GetDesignMouseX() - (int(GetDesignMouseX()) % 32) + 8, GetDesignMouseY() - (int(GetDesignMouseY()) % 32) + 8);
                   }
                   //  If a smite misses, that's it - no more bounces.
                   else
@@ -2512,12 +2512,12 @@ bool MainState::DoMagicUnlock()
       return false;
    }
 
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
       //  Turn the screen coordinates into map coordinates.
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       list<Item*>::iterator itemnode = g_Map->m_ItemList.begin();
@@ -2576,12 +2576,12 @@ bool MainState::DoTeleport()
       return false;
    }
 
-   if(g_Input->m_MouseX < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && g_Input->m_MouseX > g_Offset && g_Input->m_MouseY > g_Offset && g_Input->m_MouseY < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
+   if(GetDesignMouseX() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) && GetDesignMouseX() > g_Offset && GetDesignMouseY() > g_Offset && GetDesignMouseY() < g_Offset + ( (g_ViewRange * 2 + 1) * g_TileSize) )
    {
       //  Turn the screen coordinates into map coordinates.
-      int mapx = ((g_Input->m_MouseX - g_Offset) / g_TileSize);
+      int mapx = ((GetDesignMouseX() - g_Offset) / g_TileSize);
       mapx = mapx - g_ViewRange + g_Player->m_PlayerPosX;
-      int mapy = ((g_Input->m_MouseY - g_Offset) / g_TileSize);
+      int mapy = ((GetDesignMouseY() - g_Offset) / g_TileSize);
       mapy = mapy - g_ViewRange + g_Player->m_PlayerPosY;
 
       //  Make sure the map cell is passable.
