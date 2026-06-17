@@ -41,8 +41,16 @@ class ColoredString
 {
 public:
 	ColoredString(std::string instring = "", Color color = ColorFromNormalized(Vector4{ 1.0f, 1.0f, 1.0f, 1.0f })) { m_String = instring; m_Color = color; }
+	ColoredString(std::string instring, int r, int g, int b) {
+		m_String = instring;
+		m_Color = Color{ static_cast<unsigned char>(r), static_cast<unsigned char>(g), static_cast<unsigned char>(b), 255 };
+	}
 	std::string m_String;
 	Color m_Color;
+
+	int m_Red() const { return m_Color.r; }
+	int m_Green() const { return m_Color.g; }
+	int m_Blue() const { return m_Color.b; }
 };
 
 class Sprite

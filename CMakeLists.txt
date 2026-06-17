@@ -148,6 +148,26 @@ include_directories(
 # Source Files (Keep alphabetized)
 # ============================================================================
 set(SOURCES
+        Source/BaseUnit.cpp
+        Source/EditorState.cpp
+        Source/EnchantingState.cpp
+        Source/GameGlobals.cpp
+        Source/InariaCompat.cpp
+        Source/InariaEffect.cpp
+        Source/InfiniteWarningState.cpp
+        Source/Item.cpp
+        Source/LevelUpState.cpp
+        Source/Main.cpp
+        Source/MainState.cpp
+        Source/Map.cpp
+        Source/NPC.cpp
+        Source/OptionsState.cpp
+        Source/Player.cpp
+        Source/StoreState.cpp
+        Source/TitleState.cpp
+        Source/Trigger.cpp
+        Source/TutorialState.cpp
+
         Source/Geist/BaseUnits.cpp
         Source/Geist/Config.cpp
         Source/Geist/Engine.cpp
@@ -167,12 +187,6 @@ set(SOURCES
         Source/Geist/SoundSystem.cpp
         Source/Geist/StateMachine.cpp
         Source/Geist/TooltipSystem.cpp
-
-        Source/GameGlobals.cpp
-        Source/Main.cpp
-        Source/MainState.cpp
-        Source/OptionsState.cpp
-        Source/TitleState.cpp
 )
 
 # Organize files into virtual folders in Visual Studio

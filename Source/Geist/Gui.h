@@ -25,6 +25,7 @@ public:
 	virtual ~Gui() {};
 
 	virtual void Init(const std::string& configfile);
+	void LoadTXT(const std::string& fileName);
 	virtual void Update();
 	virtual void Draw();
 

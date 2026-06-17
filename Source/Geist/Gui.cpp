@@ -62,7 +62,50 @@ std::shared_ptr<GuiElement> Gui::GetActiveElement()
 
 void Gui::Init(const std::string& configfile)
 {
+	if (!configfile.empty())
+		LoadTXT(configfile);
+}
 
+void Gui::LoadTXT(const std::string& fileName)
+{
+	ifstream instream(fileName);
+	if (instream.fail())
+		return;
+
+	string line;
+	int guiX = 0;
+	int guiY = 0;
+	instream >> guiX >> guiY;
+	m_Pos = Vector2{ static_cast<float>(guiX), static_cast<float>(guiY) };
+
+	getline(instream, line);
+	getline(instream, line);
+
+	while (!instream.eof())
+	{
+		getline(instream, line);
+		if (line.empty() || line[0] == '#')
+			continue;
+
+		stringstream lineData(line);
+		int type = 0;
+		lineData >> type;
+
+		if (type == GUI_ICONBUTTON)
+		{
+			int buttonid = 0, active = 0, group = 0, tilex = 0, tiley = 0, posx = 0, posy = 0, width = 0, height = 0;
+			string textureName;
+			lineData >> buttonid >> active >> group >> tilex >> tiley >> posx >> posy >> width >> height >> textureName;
+
+			auto upbutton = make_shared<Sprite>();
+			upbutton->m_texture = g_ResourceManager->GetTexture(textureName);
+			upbutton->m_sourceRect = Rectangle{ static_cast<float>(tilex), static_cast<float>(tiley),
+				static_cast<float>(width), static_cast<float>(height) };
+
+			AddIconButton(buttonid, posx, posy, upbutton, nullptr, nullptr, "", nullptr,
+				Color{ 255, 255, 255, 255 }, 1, group, active != 0);
+		}
+	}
 }
 
 void Gui::Update()
