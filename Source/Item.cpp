@@ -524,7 +524,7 @@ void Item::OnAttack()
       }
 
 
-      g_SoundSystem->PlaySoundGroup("Sounds/Hit", 5, ".wav");
+      PlaySoundGroup("Sounds/Hit", 5, ".wav");
       m_IsDead = true;
    }
 }

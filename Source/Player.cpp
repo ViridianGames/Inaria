@@ -143,7 +143,7 @@ void Player::DoDamage(string _NPCName, int _damage)
       m_CurrentHitPoints = 0;
       AddConsoleString("You have been killed!");
       m_IsDead = true;
-      g_SoundSystem->StopCurrentMusic();
+      StopCurrentMusic();
       g_CurrentMusic = -1;
       g_SoundSystem->PlaySound("Sounds/inaria-death_withfade.wav");
    }

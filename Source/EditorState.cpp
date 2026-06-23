@@ -1,6 +1,6 @@
 #include "EditorState.h"
 #include "GameGlobals.h"
-#include "Geist/Engine.h"
+#include "../Geist/Source/Engine.h"
 
 #include <list>
 #include <string>
@@ -188,7 +188,7 @@ void EditorState::Draw()
 
    DrawTextAt(g_smallFont.get(), g_smallFontSize, g_AllMaps[g_CurrentEditorMap]->m_MapName.c_str(), 0, 370 );
 
-   if( g_InputSystem->IsMouseInDesignRegion(g_Offset, g_Offset, 368, 368) )
+   if( IsMouseInDesignRegion(g_Offset, g_Offset, 368, 368) )
    {
       int x = ( GetDesignMouseX() - g_Offset ) / 16;
       int y = ( GetDesignMouseY() - g_Offset ) / 16;
@@ -261,7 +261,7 @@ void EditorState::Draw()
    //  Draw tooltips
    if( m_MapMode == 0 )
    {
-      if( g_InputSystem->IsMouseInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( IsMouseInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
          int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
          index += ((GetDesignMouseX() - m_ItemListX) / 24);
@@ -282,7 +282,7 @@ void EditorState::Draw()
                coloredstrings.push_back(*temp);
             }
 
-            DrawToolTip( g_smallFont.get(), g_smallFontSize,  coloredstrings, GetDesignMouseX() - (GetDesignMouseX() % 24), GetDesignMouseY() - (GetDesignMouseY() % 24), 2 );
+            DrawDesignToolTip( g_smallFont.get(), g_smallFontSize,  coloredstrings, GetDesignMouseX() - (GetDesignMouseX() % 24), GetDesignMouseY() - (GetDesignMouseY() % 24), 2 );
          }
       }
    }
@@ -291,7 +291,7 @@ void EditorState::Draw()
    //  Draw tooltips
    if( m_MapMode == 1 )
    {
-      if( g_InputSystem->IsMouseInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( IsMouseInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
          int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
          index += ((GetDesignMouseX() - m_ItemListX) / 24);
@@ -304,7 +304,7 @@ void EditorState::Draw()
             ColoredString* temp = new ColoredString((*node)->m_Name);
             vector<ColoredString> coloredstrings;
             coloredstrings.push_back(*temp);
-            DrawToolTip( g_smallFont.get(), g_smallFontSize, coloredstrings, GetDesignMouseX() - (GetDesignMouseX() % 24), GetDesignMouseY() - (GetDesignMouseY() % 24), 2 );
+            DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, coloredstrings, GetDesignMouseX() - (GetDesignMouseX() % 24), GetDesignMouseY() - (GetDesignMouseY() % 24), 2 );
          }
       }
    }
@@ -312,7 +312,7 @@ void EditorState::Draw()
    //  Draw tooltips
    if( m_MapMode == 2 )
    {
-      if( g_InputSystem->IsMouseInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( IsMouseInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
          int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
          index += ((GetDesignMouseX() - m_ItemListX) / 24);
@@ -325,7 +325,7 @@ void EditorState::Draw()
             ColoredString* temp = new ColoredString((*node)->m_Name);
             vector<ColoredString> coloredstrings;
             coloredstrings.push_back(*temp);
-            DrawToolTip( g_smallFont.get(), g_smallFontSize,  coloredstrings, GetDesignMouseX() - (GetDesignMouseX() % 24), GetDesignMouseY() - (GetDesignMouseY() % 24), 2 );
+            DrawDesignToolTip( g_smallFont.get(), g_smallFontSize,  coloredstrings, GetDesignMouseX() - (GetDesignMouseX() % 24), GetDesignMouseY() - (GetDesignMouseY() % 24), 2 );
          }
       }
    }
@@ -376,7 +376,7 @@ void EditorState::Draw()
       DrawTextAt(g_font.get(), g_fontSize,  "Please click the item this item is linked to.", 0, 432, 255, 255, 0);
    }*/
 
-   if( g_InputSystem->IsMouseInDesignRegion( g_Offset, g_Offset, 364, 364 ) )
+   if( IsMouseInDesignRegion( g_Offset, g_Offset, 364, 364 ) )
    {
       int x = (GetDesignMouseX() - g_Offset) / 32;
       int y = (GetDesignMouseY() - g_Offset) / 32;
@@ -398,7 +398,7 @@ void EditorState::Draw()
             ColoredString* temp = new ColoredString(sstream.str());
             vector<ColoredString> coloredstrings;
             coloredstrings.push_back(*temp);
-            DrawToolTip( g_smallFont.get(), g_smallFontSize, coloredstrings, GetDesignMouseX(), GetDesignMouseY(), 3);
+            DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, coloredstrings, GetDesignMouseX(), GetDesignMouseY(), 3);
             break;
          }
       }
@@ -416,7 +416,7 @@ void EditorState::Draw()
                ColoredString* temp = new ColoredString(sstream.str());
                vector<ColoredString> coloredstrings;
                coloredstrings.push_back(*temp);
-               DrawToolTip( g_smallFont.get(), g_smallFontSize, coloredstrings, GetDesignMouseX(), GetDesignMouseY(), 3);
+               DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, coloredstrings, GetDesignMouseX(), GetDesignMouseY(), 3);
                break;
             }
          }
@@ -473,12 +473,12 @@ void EditorState::Draw()
          g_CurrentEditorMap = 0;
    }
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( 428, 428, 428 + GetStringMetrics(g_font.get(), g_fontSize, "Delete Mode"), 428 + 16 ) )
+   if( WasLButtonClickedInDesignRegion( 428, 428, 428 + GetStringMetrics(g_font.get(), g_fontSize, "Delete Mode"), 428 + 16 ) )
    {
    }
 
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( 428, 444, 428 + GetStringMetrics(g_font.get(), g_fontSize, "Add Map Link"), 444 + 16 ) )
+   if( WasLButtonClickedInDesignRegion( 428, 444, 428 + GetStringMetrics(g_font.get(), g_fontSize, "Add Map Link"), 444 + 16 ) )
    {
    }
 
@@ -488,7 +488,7 @@ void EditorState::Draw()
 
 void EditorState::DoPlayerInput()
 {
-   if(  g_InputSystem->IsMouseInDesignRegion( 0, 0, 416, 416 ) )
+   if(  IsMouseInDesignRegion( 0, 0, 416, 416 ) )
    {
 
    }
@@ -512,17 +512,17 @@ void EditorState::DoPlayerInput()
    }
 
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( 438, 196, 517, 212 ) )
+   if( WasLButtonClickedInDesignRegion( 438, 196, 517, 212 ) )
    {
       m_MapMode = 0;
    }
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( 518, 196, 577, 212 ) )
+   if( WasLButtonClickedInDesignRegion( 518, 196, 577, 212 ) )
    {
       m_MapMode = 1;
    }
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( 578, 196, 639, 212 ) )
+   if( WasLButtonClickedInDesignRegion( 578, 196, 639, 212 ) )
    {
       m_MapMode = 2;
    }
@@ -530,7 +530,7 @@ void EditorState::DoPlayerInput()
 
    if( m_MapMode == 0 )
    {
-      if( g_InputSystem->WasLButtonClickedInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( WasLButtonClickedInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
          int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
          index += ((GetDesignMouseX() - m_ItemListX) / 24);
@@ -541,7 +541,7 @@ void EditorState::DoPlayerInput()
          }
       }
 
-      if( g_InputSystem->IsLButtonDownInDesignRegion( g_Offset, g_Offset, 364, 364 ) && m_CurrentTerrainType >= 0 )
+      if( IsLButtonDownInDesignRegion( g_Offset, g_Offset, 364, 364 ) && m_CurrentTerrainType >= 0 )
       {
          int x = (GetDesignMouseX() - g_Offset) / 16;
          int y = (GetDesignMouseY() - g_Offset) / 16;
@@ -560,7 +560,7 @@ void EditorState::DoPlayerInput()
 
    if( m_MapMode == 2 )
    {
-      if( g_InputSystem->WasLButtonClickedInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( WasLButtonClickedInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
          int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
          index += ((GetDesignMouseX() - m_ItemListX) / 24);
@@ -574,7 +574,7 @@ void EditorState::DoPlayerInput()
          }
       }
 
-      if( g_InputSystem->WasLButtonClickedInDesignRegion( g_Offset, g_Offset, 364, 364 ) )
+      if( WasLButtonClickedInDesignRegion( g_Offset, g_Offset, 364, 364 ) )
       {
          int x = (GetDesignMouseX() - g_Offset) / 16;
          int y = (GetDesignMouseY() - g_Offset) / 16;
@@ -599,7 +599,7 @@ void EditorState::DoPlayerInput()
 
    if( m_MapMode == 1 )
    {
-      if( g_InputSystem->WasLButtonClickedInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
+      if( WasLButtonClickedInDesignRegion( m_ItemListX, m_ItemListY, 640, 480 ) )
       {
          int index = ((GetDesignMouseY() - m_ItemListY) / 24 ) * 10 ;
          index += ((GetDesignMouseX() - m_ItemListX) / 24);
@@ -613,7 +613,7 @@ void EditorState::DoPlayerInput()
          }
       }
 
-      if( g_InputSystem->WasLButtonClickedInDesignRegion( g_Offset, g_Offset, 364, 364 ) )
+      if( WasLButtonClickedInDesignRegion( g_Offset, g_Offset, 364, 364 ) )
       {
          int x = (GetDesignMouseX() - g_Offset) / 16;
          int y = (GetDesignMouseY() - g_Offset) / 16;

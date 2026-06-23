@@ -1341,7 +1341,7 @@ void NPC::DoDamage(int damage, bool critical, NPC* hitter )
          }
 
          sprintf(_tempString, "You kill %s!", m_Name.c_str());
-         g_SoundSystem->PlaySoundGroup("Sounds/Kill", 5, ".wav");
+         PlaySoundGroup("Sounds/Kill", 5, ".wav");
          AddConsoleString(_tempString);
 
          int _gainedXP = (this->m_Strength + this->m_Dexterity + this->m_Endurance + this->m_Intelligence + this->m_Will) - 5; 
@@ -1363,7 +1363,7 @@ void NPC::DoDamage(int damage, bool critical, NPC* hitter )
       else
       {
          //  Hit 'em, didn't kill 'em.
-         g_SoundSystem->PlaySoundGroup("Sounds/Hit", 5, ".wav");
+         PlaySoundGroup("Sounds/Hit", 5, ".wav");
       }
    }
    else
@@ -1398,7 +1398,7 @@ void NPC::DoDamage(int damage, bool critical, NPC* hitter )
       if(m_HitPoints <= 0)
       {
          sprintf(_tempString, "%s kills the %s!", hitter->m_Name.c_str(), m_Name.c_str());
-//         g_SoundSystem->PlaySoundGroup("Sounds/Kill", 5, ".wav");
+//         PlaySoundGroup("Sounds/Kill", 5, ".wav");
 //         AddConsoleString(_tempString);
          m_IsDead = true;
          if(m_Name == "Slornite King")

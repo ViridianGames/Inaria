@@ -125,15 +125,15 @@ void AddConsoleString( std::string str, int r, int g, int b )
       length = str.copy(string2,  str.size() - lastsplit, lastsplit );
       string2[length] = '\0';
 
-      ColoredString _coloredString( string1, r, g, b);
+      ColoredString _coloredString( string1, MakeColor(r, g, b));
       g_ConsoleStrings.push_back(_coloredString);
-      ColoredString _coloredString2( string2, r, g, b);
+      ColoredString _coloredString2( string2, MakeColor(r, g, b));
       g_ConsoleStrings.push_back(_coloredString2);
 
    }
    else
    {
-      ColoredString _coloredString(str, r, g, b);
+      ColoredString _coloredString(str, MakeColor(r, g, b));
       g_ConsoleStrings.push_back(_coloredString);
    }
 
@@ -168,7 +168,7 @@ bool DrawButton( std::string text, int x, int y, int r, int g, int b, int a )
 
    DrawImageRectAt( g_Mask, 0, 0, xwidth - 1, yheight - 1, x + 1, y + 1 );
 
-   if( g_InputSystem->IsLButtonDownInDesignRegion( x, y, x + xwidth, y + yheight ) )
+   if( IsLButtonDownInDesignRegion( x, y, x + xwidth, y + yheight ) )
    {
       DrawBoxAt(x, y, xwidth + 2, yheight + 2, r, g, b, a, true);
       DrawTextAt(g_font.get(), g_fontSize,  text, x + 2, y, 255 - r, 255 - g, 255 - b, a );
@@ -179,7 +179,7 @@ bool DrawButton( std::string text, int x, int y, int r, int g, int b, int a )
       DrawTextAt(g_font.get(), g_fontSize,  text, x + 2, y, r, g, b, a );
    }
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( x, y, x + xwidth, y + yheight ) )
+   if( WasLButtonClickedInDesignRegion( x, y, x + xwidth, y + yheight ) )
       return true;
    else
       return false;
@@ -198,7 +198,7 @@ bool DrawButtonCentered( std::string text, int x, int y, int r, int g, int b, in
 
    DrawImageRectAt( g_Mask, 0, 0, xwidth - 1, yheight - 1, x + 1, y + 1 );
 
-   if( g_InputSystem->IsLButtonDownInDesignRegion( x, y, x + xwidth, y + yheight ) )
+   if( IsLButtonDownInDesignRegion( x, y, x + xwidth, y + yheight ) )
    {
       DrawBoxAt(x, y, xwidth + 2, yheight + 2, r, g, b, a, true);
       DrawTextAt(g_font.get(), g_fontSize,  text, x + 2, y, 255 - r, 255 - g, 255 - b, a );
@@ -209,7 +209,7 @@ bool DrawButtonCentered( std::string text, int x, int y, int r, int g, int b, in
       DrawTextAt(g_font.get(), g_fontSize,  text, x + 2, y, r, g, b, a );
    }
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( x, y, x + xwidth, y + yheight ) )
+   if( WasLButtonClickedInDesignRegion( x, y, x + xwidth, y + yheight ) )
       return true;
    else
       return false;
@@ -299,7 +299,7 @@ vector<ColoredString> ConstructItemTooltip( Item* item )
    {
       if( g_Player->m_Strength < 4 )
       {
-         temp = new ColoredString( "Requires Strength 4", 255, 128, 128 );
+         temp = new ColoredString( "Requires Strength 4", MakeColor(255, 128, 128) );
       }
       else
          temp = new ColoredString( "Requires Strength 4" );
@@ -310,7 +310,7 @@ vector<ColoredString> ConstructItemTooltip( Item* item )
    {
       if( g_Player->m_Dexterity < 5 )
       {
-         temp = new ColoredString( "Requires Dexterity 5", 255, 128, 128 );
+         temp = new ColoredString( "Requires Dexterity 5", MakeColor(255, 128, 128) );
       }
       else
          temp = new ColoredString( "Requires Dexterity 5" );
@@ -321,7 +321,7 @@ vector<ColoredString> ConstructItemTooltip( Item* item )
    {
      if( g_Player->m_Strength < 8 )
       {
-         temp = new ColoredString( "Requires Strength 8", 255, 128, 128 );
+         temp = new ColoredString( "Requires Strength 8", MakeColor(255, 128, 128) );
       }
       else
          temp = new ColoredString( "Requires Strength 8" );
@@ -332,7 +332,7 @@ vector<ColoredString> ConstructItemTooltip( Item* item )
    {
      if( g_Player->m_Strength < 3 )
       {
-         temp = new ColoredString( "Requires Strength 3", 255, 128, 128 );
+         temp = new ColoredString( "Requires Strength 3", MakeColor(255, 128, 128) );
       }
       else
          temp = new ColoredString( "Requires Strength 3" );
@@ -343,7 +343,7 @@ vector<ColoredString> ConstructItemTooltip( Item* item )
    {
      if( g_Player->m_Strength < 5 )
       {
-         temp = new ColoredString( "Requires Strength 5", 255, 128, 128 );
+         temp = new ColoredString( "Requires Strength 5", MakeColor(255, 128, 128) );
       }
       else
          temp = new ColoredString( "Requires Strength 5" );
@@ -354,7 +354,7 @@ vector<ColoredString> ConstructItemTooltip( Item* item )
    {
      if( g_Player->m_Strength < 7 )
       {
-         temp = new ColoredString( "Requires Strength 7", 255, 128, 128 );
+         temp = new ColoredString( "Requires Strength 7", MakeColor(255, 128, 128) );
       }
       else
          temp = new ColoredString( "Requires Strength 7" );
@@ -1109,6 +1109,14 @@ bool IsPlayerInRegion(int x, int y, int endx, int endy )
 
 
 //  Plays the appropriate music for the current situation.
+void StopCurrentMusic()
+{
+   if (g_SoundSystem && g_CurrentMusic >= 0 && g_CurrentMusic < NUMBER_OF_MUSIC_TRACKS)
+   {
+      g_SoundSystem->StopMusic(g_MusicTracks[g_CurrentMusic]);
+   }
+}
+
 void PlayMusic()
 {
 
@@ -1237,7 +1245,7 @@ void PlayMusic()
 
    else if( g_StateMachine->GetCurrentState() == STATE_EDITORSTATE )
    {
-      g_SoundSystem->StopCurrentMusic();
+      StopCurrentMusic();
    }
 }
 
@@ -1554,30 +1562,30 @@ Texture* g_TalkSpurLeft;
 Texture* g_TalkSpurRight;
 Texture* g_TalkSpurRightUp;
 
-void DrawToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, int anchorcorner)
+void DrawDesignToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, int anchorcorner)
 {
     DrawToolTipRender(font, fontSize, strings,
         static_cast<int>(DesignToRenderX(static_cast<float>(x))),
         static_cast<int>(DesignToRenderY(static_cast<float>(y))), 1.0f, anchorcorner);
 }
 
-void DrawToolTip(Font* font, float fontSize, std::string strings, int x, int y, int anchorcorner, int r, int g, int b)
+void DrawDesignToolTip(Font* font, float fontSize, std::string strings, int x, int y, int anchorcorner, int r, int g, int b)
 {
     std::vector<ColoredString> temp;
     temp.emplace_back(strings, MakeColor(r, g, b));
-    DrawToolTip(font, fontSize, temp, x, y, anchorcorner);
+    DrawDesignToolTip(font, fontSize, temp, x, y, anchorcorner);
 }
 
-void DrawToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, float linewidth, int anchorcorner)
+void DrawDesignToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, float linewidth, int anchorcorner)
 {
     DrawToolTipRender(font, fontSize, strings,
         static_cast<int>(DesignToRenderX(static_cast<float>(x))),
         static_cast<int>(DesignToRenderY(static_cast<float>(y))), linewidth, anchorcorner);
 }
 
-void DrawToolTip(Font* font, float fontSize, std::string strings, int x, int y, float linewidth, int anchorcorner, int r, int g, int b)
+void DrawDesignToolTip(Font* font, float fontSize, std::string strings, int x, int y, float linewidth, int anchorcorner, int r, int g, int b)
 {
     std::vector<ColoredString> temp;
     temp.emplace_back(strings, MakeColor(r, g, b));
-    DrawToolTip(font, fontSize, temp, x, y, linewidth, anchorcorner);
+    DrawDesignToolTip(font, fontSize, temp, x, y, linewidth, anchorcorner);
 }

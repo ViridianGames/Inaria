@@ -2,7 +2,7 @@
 #define _PLAYER_H_
 
 #include "BaseUnit.h"
-#include "Geist/Object.h"
+#include "../Geist/Source/Object.h"
 #include "Item.h"
 
 class Player : public BaseUnit

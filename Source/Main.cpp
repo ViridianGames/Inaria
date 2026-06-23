@@ -7,11 +7,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "Geist/Globals.h"
-#include "Geist/Engine.h"
-#include "Geist/StateMachine.h"
-#include "Geist/ResourceManager.h"
-#include "Geist/RNG.h"
+#include "../Geist/Source/Globals.h"
+#include "../Geist/Source/Engine.h"
+#include "../Geist/Source/StateMachine.h"
+#include "../Geist/Source/ResourceManager.h"
+#include "../Geist/Source/RNG.h"
 #include "raylib.h"
 
 #include <memory>
@@ -37,7 +37,6 @@ int main(int argv, char** argc)
 {
     g_Engine = make_unique<Engine>();
     g_Engine->Init("engine.cfg");
-    g_Engine->m_useVirtualResolution = true;
 
     g_fontSize = 12.0f;
     g_smallFontSize = 8.0f;
@@ -97,7 +96,7 @@ int main(int argv, char** argc)
     g_MusicTracks[MUSIC_VOLCANOHEART] = "Music/inaria_volcano_heart-v001m1.ogg";
     g_MusicTracks[MUSIC_WIN] = "Music/inaria_win-v002fm1.ogg";
 
-    g_TileSize = 18;
+    g_TileSize = 128;
     g_Offset = static_cast<int>(g_Engine->m_EngineConfig.GetNumber("offset"));
     g_ViewRange = static_cast<int>(g_Engine->m_EngineConfig.GetNumber("viewrange"));
 

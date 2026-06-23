@@ -1,7 +1,7 @@
 #include "TitleState.h"
 #include "GameGlobals.h"
-#include "Geist/ResourceManager.h"
-#include "Geist/Engine.h"
+#include "../Geist/Source/ResourceManager.h"
+#include "../Geist/Source/Engine.h"
 
 #include <list>
 #include <string>

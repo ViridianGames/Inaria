@@ -1,6 +1,6 @@
 #include "MainState.h"
 #include "GameGlobals.h"
-#include "Geist/ResourceManager.h"
+#include "../Geist/Source/ResourceManager.h"
 
 #include <list>
 #include <string>
@@ -321,7 +321,7 @@ void MainState::Update()
                g_Player->m_CurrentHitPoints = 0;
                AddConsoleString("You have been killed!");
                g_Player->m_IsDead = true;
-               g_SoundSystem->StopCurrentMusic();
+               StopCurrentMusic();
                g_CurrentMusic = -1;
                g_SoundSystem->PlaySound("Sounds/inaria-death_withfade.wav");
             }
@@ -690,7 +690,7 @@ void MainState::Draw()
    if( g_StateMachine->GetCurrentState() == STATE_MAINSTATE )
    {
       //  Do inventory tooltips.
-      if( m_AbilityInventorySwitch == false && g_InputSystem->IsMouseInDesignRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 32), g_InventoryY + ( 4 * 32 ) ) )
+      if( m_AbilityInventorySwitch == false && IsMouseInDesignRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 32), g_InventoryY + ( 4 * 32 ) ) )
       {
          //  Turn the screen coordinates into inventory coordinates.
          int mapx = ((GetDesignMouseX() - g_InventoryX) / 32);
@@ -699,7 +699,7 @@ void MainState::Draw()
 
          if(inventoryindex < g_Player->m_PlayerInventory.size())
          {
-            DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_PlayerInventory[inventoryindex]), g_InventoryX + mapx * 32, g_InventoryY + mapy * 32, 2 );
+            DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_PlayerInventory[inventoryindex]), g_InventoryX + mapx * 32, g_InventoryY + mapy * 32, 2 );
          }
       }
       //  Do ability tooltips.
@@ -712,119 +712,119 @@ void MainState::Draw()
 
 //         if( g_SpecialAbilities[inventoryindex].m_Active )
 //         {
-            DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructAbilityTooltip(inventoryindex), g_InventoryX + mapx * 47, g_InventoryY + mapy * 32, 2 );
+            DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, ConstructAbilityTooltip(inventoryindex), g_InventoryX + mapx * 47, g_InventoryY + mapy * 32, 2 );
 //         }
       }
 
       //  Do equipped item tooltips
-      if( m_AbilityInventorySwitch == false && g_InputSystem->IsMouseInDesignRegion( g_InventoryX + 144, g_InventoryY + 10, g_InventoryX + 144 + 32, g_InventoryY + 10 + 32 ) && g_Player->m_CurrentWeaponType )
+      if( m_AbilityInventorySwitch == false && IsMouseInDesignRegion( g_InventoryX + 144, g_InventoryY + 10, g_InventoryX + 144 + 32, g_InventoryY + 10 + 32 ) && g_Player->m_CurrentWeaponType )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_CurrentWeaponType), g_InventoryX + 144, g_InventoryY + 10, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_CurrentWeaponType), g_InventoryX + 144, g_InventoryY + 10, 2 );
       }
 
-      if( m_AbilityInventorySwitch == false && g_InputSystem->IsMouseInDesignRegion( g_InventoryX + 144, g_InventoryY + 53, g_InventoryX + 144 + 32, g_InventoryY + 53 + 32 ) && g_Player->m_CurrentArmorType )
+      if( m_AbilityInventorySwitch == false && IsMouseInDesignRegion( g_InventoryX + 144, g_InventoryY + 53, g_InventoryX + 144 + 32, g_InventoryY + 53 + 32 ) && g_Player->m_CurrentArmorType )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_CurrentArmorType), g_InventoryX + 144, g_InventoryY + 53, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_CurrentArmorType), g_InventoryX + 144, g_InventoryY + 53, 2 );
       }
 
-      if( m_AbilityInventorySwitch == false && g_InputSystem->IsMouseInDesignRegion( g_InventoryX + 144, g_InventoryY + 96, g_InventoryX + 144 + 32, g_InventoryY + 96 + 32 ) && g_Player->m_CurrentTrinketType )
+      if( m_AbilityInventorySwitch == false && IsMouseInDesignRegion( g_InventoryX + 144, g_InventoryY + 96, g_InventoryX + 144 + 32, g_InventoryY + 96 + 32 ) && g_Player->m_CurrentTrinketType )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_CurrentTrinketType), g_InventoryX + 144, g_InventoryY + 96, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_CurrentTrinketType), g_InventoryX + 144, g_InventoryY + 96, 2 );
       }
 
       //  Do stat tooltips
       //  Line 1 - Max HP and Max MP
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset, xoffset + 16, yoffset + 16 ) )
+      if( IsMouseInDesignRegion( xoffset, yoffset, xoffset + 16, yoffset + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Current/Max HP", xoffset, yoffset, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Current/Max HP", xoffset, yoffset, 1 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset, xoffset + 98 + 16, yoffset + 16 ) )
+      if( IsMouseInDesignRegion( xoffset + 98, yoffset, xoffset + 98 + 16, yoffset + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Current/Max MP", xoffset + 98, yoffset, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Current/Max MP", xoffset + 98, yoffset, 1 );
       }
 
       //  Line 2 - STR/Damage
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 18, xoffset + 16, yoffset + 18 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset, yoffset + 18, xoffset + 16, yoffset + 18 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Strength", xoffset, yoffset + 18, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Strength", xoffset, yoffset + 18, 1 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 18, xoffset + 98 + 16, yoffset + 18 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset + 98, yoffset + 18, xoffset + 98 + 16, yoffset + 18 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Damage", xoffset + 98, yoffset + 18, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Damage", xoffset + 98, yoffset + 18, 1 );
       }
 
 
 
       //  Line 3 - DEX/Armor
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 36, xoffset + 16, yoffset + 36 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset, yoffset + 36, xoffset + 16, yoffset + 36 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Dexterity", xoffset, yoffset + 36, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Dexterity", xoffset, yoffset + 36, 1 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 36, xoffset + 98 + 16, yoffset + 36 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset + 98, yoffset + 36, xoffset + 98 + 16, yoffset + 36 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Armor", xoffset + 98, yoffset + 36, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Armor", xoffset + 98, yoffset + 36, 1 );
       }
 
 
       //  Line 4 - INT/XP
 
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 54, xoffset + 16, yoffset + 54 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset, yoffset + 54, xoffset + 16, yoffset + 54 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Intelligence", xoffset, yoffset + 54, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Intelligence", xoffset, yoffset + 54, 1 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 54, xoffset + 98 + 16, yoffset + 54 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset + 98, yoffset + 54, xoffset + 98 + 16, yoffset + 54 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Current XP/XP To Next Level", xoffset + 98, yoffset + 54, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Current XP/XP To Next Level", xoffset + 98, yoffset + 54, 1 );
       }
 
       //  Line 5 - Endurance/Level
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 72, xoffset + 16, yoffset + 72 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset, yoffset + 72, xoffset + 16, yoffset + 72 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Endurance", xoffset, yoffset + 72, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Endurance", xoffset, yoffset + 72, 1 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 72, xoffset + 98 + 16, yoffset + 72 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset + 98, yoffset + 72, xoffset + 98 + 16, yoffset + 72 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Level", xoffset + 98, yoffset + 72, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Level", xoffset + 98, yoffset + 72, 1 );
       }
 
 
       //  Line 6 - Will/Coins
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset, yoffset + 90, xoffset + 16, yoffset + 90 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset, yoffset + 90, xoffset + 16, yoffset + 90 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Will", xoffset, yoffset + 90, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Will", xoffset, yoffset + 90, 1 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( xoffset + 98, yoffset + 90, xoffset + 98 + 16, yoffset + 90 + 16 ) )
+      if( IsMouseInDesignRegion( xoffset + 98, yoffset + 90, xoffset + 98 + 16, yoffset + 90 + 16 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Viridian Coins", xoffset + 98, yoffset + 90, 1 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Viridian Coins", xoffset + 98, yoffset + 90, 1 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( 382, 328, 382 + 31, 328 + 32 ) )
+      if( IsMouseInDesignRegion( 382, 328, 382 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Get", 382, 328, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Get", 382, 328, 2 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( 382 + 32, 328, 382 + 32 + 31, 328 + 32 ) )
+      if( IsMouseInDesignRegion( 382 + 32, 328, 382 + 32 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Fight", 382 + 32, 328, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Fight", 382 + 32, 328, 2 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( 382 + 64, 328, 382 + 64 + 31, 328 + 32 ) )
+      if( IsMouseInDesignRegion( 382 + 64, 328, 382 + 64 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Talk", 382 + 64, 328, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Talk", 382 + 64, 328, 2 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( 382 + 96, 328, 382 + 96 + 31, 328 + 32 ) )
+      if( IsMouseInDesignRegion( 382 + 96, 328, 382 + 96 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Look", 382 + 96, 328, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Look", 382 + 96, 328, 2 );
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( 382 + 172, 328, 382 + 172 + 31, 328 + 32 ) )
+      if( IsMouseInDesignRegion( 382 + 172, 328, 382 + 172 + 31, 328 + 32 ) )
       {
          stringstream writer;
          writer.str("");
@@ -842,13 +842,13 @@ void MainState::Draw()
             ColoredString tempstring2(writer.str() );
             temp.push_back(tempstring2);
 
-            DrawToolTip( g_smallFont.get(), g_smallFontSize, temp, 382 + 172, 328, 2 );
+            DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, temp, 382 + 172, 328, 2 );
          }
       }
 
-      if( g_InputSystem->IsMouseInDesignRegion( 382 + 208, 328, 382 + 208 + 31, 328 + 32 ) )
+      if( IsMouseInDesignRegion( 382 + 208, 328, 382 + 208 + 31, 328 + 32 ) )
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, "Options", 382 + 208, 328, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, "Options", 382 + 208, 328, 2 );
       }
    }
 
@@ -946,7 +946,7 @@ void MainState::DoPlayerInput()
    //  First things first - if we're peering, ANY input at ALL takes off the peer
    if( g_Map->m_Peer )
    {
-      if( g_InputSystem->WasLButtonClickedInDesignRegion(0, 0, 640, 480 ) || g_InputSystem->WasRButtonClickedInDesignRegion(0, 0, 640, 480 ) || g_InputSystem->WasMButtonClickedInRegion(0, 0, 640, 480 ) )
+      if( WasLButtonClickedInDesignRegion(0, 0, 640, 480 ) || WasRButtonClickedInDesignRegion(0, 0, 640, 480 ) || g_InputSystem->WasMButtonClickedInRegion(0, 0, 640, 480 ) )
       {
          g_Map->m_Peer = false;
          g_InputSystem->DumpInput();
@@ -975,7 +975,7 @@ void MainState::DoPlayerInput()
       g_StateMachine->MakeStateTransition(STATE_EDITORSTATE);
    }
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( 372, 133, 372 + 259, 133 + 17 ) )
+   if( WasLButtonClickedInDesignRegion( 372, 133, 372 + 259, 133 + 17 ) )
    {
       m_AbilityInventorySwitch = !m_AbilityInventorySwitch;
    }
@@ -1056,7 +1056,7 @@ void MainState::DoPlayerInput()
    //   playermoved = true;
    //}
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( 382 + 208 - 36, 328, 382 + 208 - 36 + 32, 328 + 32 ) )
+   if( WasLButtonClickedInDesignRegion( 382 + 208 - 36, 328, 382 + 208 - 36 + 32, 328 + 32 ) )
    {
       g_StateMachine->PushState(STATE_LEVELUPSTATE);
    }
@@ -1144,7 +1144,7 @@ void MainState::DoPlayerInput()
          //  Check for clicking on special abilities.
          if( m_AbilityInventorySwitch )
          {
-            if( g_InputSystem->WasLButtonClickedInDesignRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 47), g_InventoryY + (4 * 32 ) ) )
+            if( WasLButtonClickedInDesignRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 47), g_InventoryY + (4 * 32 ) ) )
             {
                //  Turn the screen coordinates into inventory coordinates.
                int mapx = ((GetDesignMouseX() - g_InventoryX) / 47);
@@ -1256,7 +1256,7 @@ void MainState::DoPlayerInput()
 
             //  Unequip equipped items.
             //  Do equipped item tooltips
-            if( m_AbilityInventorySwitch == false && g_InputSystem->WasLButtonClickedInDesignRegion( g_InventoryX + 144, g_InventoryY + 10, g_InventoryX + 144 + 32, g_InventoryY + 10 + 32 ) && g_Player->m_CurrentWeaponType )
+            if( m_AbilityInventorySwitch == false && WasLButtonClickedInDesignRegion( g_InventoryX + 144, g_InventoryY + 10, g_InventoryX + 144 + 32, g_InventoryY + 10 + 32 ) && g_Player->m_CurrentWeaponType )
             {
                if( g_Player->m_PlayerInventory.size() <= 15 )  //  At least one empty space.
                {
@@ -1270,7 +1270,7 @@ void MainState::DoPlayerInput()
                }
             }
 
-            if( m_AbilityInventorySwitch == false && g_InputSystem->WasLButtonClickedInDesignRegion( g_InventoryX + 144, g_InventoryY + 53, g_InventoryX + 144 + 32, g_InventoryY + 53 + 32 ) && g_Player->m_CurrentArmorType )
+            if( m_AbilityInventorySwitch == false && WasLButtonClickedInDesignRegion( g_InventoryX + 144, g_InventoryY + 53, g_InventoryX + 144 + 32, g_InventoryY + 53 + 32 ) && g_Player->m_CurrentArmorType )
             {
                if( g_Player->m_PlayerInventory.size() <= 15 )  //  At least one empty space.
                {
@@ -1284,7 +1284,7 @@ void MainState::DoPlayerInput()
                }
             }
 
-            if( m_AbilityInventorySwitch == false && g_InputSystem->WasLButtonClickedInDesignRegion( g_InventoryX + 144, g_InventoryY + 96, g_InventoryX + 144 + 32, g_InventoryY + 96 + 32 ) && g_Player->m_CurrentTrinketType )
+            if( m_AbilityInventorySwitch == false && WasLButtonClickedInDesignRegion( g_InventoryX + 144, g_InventoryY + 96, g_InventoryX + 144 + 32, g_InventoryY + 96 + 32 ) && g_Player->m_CurrentTrinketType )
             {
                if( g_Player->m_PlayerInventory.size() <= 15 )  //  At least one empty space.
                {

@@ -4,8 +4,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "Geist/Config.h"
-#include "Geist/Object.h"
+#include "../Geist/Source/Config.h"
+#include "../Geist/Source/Object.h"
 
 class UnitConfigMap
 {

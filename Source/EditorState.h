@@ -11,12 +11,12 @@
 #ifndef _EditorState_H_
 #define _EditorState_H_
 
-#include "Geist/State.h"
+#include "../Geist/Source/State.h"
 #include "Map.h"
 #include "NPC.h"
 #include "Item.h"
 #include "Trigger.h"
-#include "Geist/Gui.h"
+#include "../Geist/Source/Gui.h"
 #include <list>
 #include <deque>
 #include <math.h>

@@ -7,15 +7,16 @@
 #include <string>
 #include <vector>
 
-#include "Geist/Globals.h"
-#include "Geist/Engine.h"
-#include "Geist/InputSystem.h"
-#include "Geist/SoundSystem.h"
-#include "Geist/TooltipSystem.h"
+#include "../Geist/Source/Globals.h"
+#include "InariaGeistCompat.h"
+#include "../Geist/Source/Engine.h"
+#include "../Geist/Source/InputSystem.h"
+#include "../Geist/Source/SoundSystem.h"
+#include "../Geist/Source/TooltipSystem.h"
 #include "raylib.h"
-#include "Geist/Primitives.h"
-#include "Geist/RNG.h"
-#include "Geist/StateMachine.h"
+#include "../Geist/Source/Primitives.h"
+#include "../Geist/Source/RNG.h"
+#include "../Geist/Source/StateMachine.h"
 #include "InariaEffect.h"
 #include "NPC.h"
 #include "Map.h"
@@ -91,6 +92,7 @@ extern std::string g_Version;
 extern RNG* g_RNG;
 
 void AddConsoleString(std::string str, int r = 255, int g = 255, int b = 255);
+void StopCurrentMusic();
 void DrawConsoleStrings();
 
 std::vector<ColoredString> ConstructItemTooltip(Item* item);
@@ -253,9 +255,9 @@ extern int g_InfiniteYes;
 extern int g_CheckPathCount;
 extern int g_LineLengthCount;
 
-void DrawToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, int anchorcorner = 0);
-void DrawToolTip(Font* font, float fontSize, std::string strings, int x, int y, int anchorcorner = 0, int r = 255, int g = 255, int b = 255);
-void DrawToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, float linewidth, int anchorcorner);
-void DrawToolTip(Font* font, float fontSize, std::string strings, int x, int y, float linewidth, int anchorcorner, int r, int g, int b);
+void DrawDesignToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, int anchorcorner = 0);
+void DrawDesignToolTip(Font* font, float fontSize, std::string strings, int x, int y, int anchorcorner = 0, int r = 255, int g = 255, int b = 255);
+void DrawDesignToolTip(Font* font, float fontSize, std::vector<ColoredString> strings, int x, int y, float linewidth, int anchorcorner);
+void DrawDesignToolTip(Font* font, float fontSize, std::string strings, int x, int y, float linewidth, int anchorcorner, int r, int g, int b);
 
 #endif

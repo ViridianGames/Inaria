@@ -78,7 +78,7 @@ void EnchantingState::Draw()
    if( DrawButton("Done", 220, 256 ) )
       g_StateMachine->PopState();
 
-   if( g_InputSystem->IsMouseInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
+   if( IsMouseInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
    {
       //  Turn the screen coordinates into inventory coordinates.
       int mapx = ((GetDesignMouseX() - 124) / 32);
@@ -87,7 +87,7 @@ void EnchantingState::Draw()
 
       if(inventoryindex < m_EnchantingInventory.size())
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(m_EnchantingInventory[inventoryindex]), 123 + mapx * 32, 124 + mapy * 32, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(m_EnchantingInventory[inventoryindex]), 123 + mapx * 32, 124 + mapy * 32, 2 );
       }
    }
    
@@ -195,7 +195,7 @@ void EnchantingState::DoPlayerInput()
       }
    }
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
+   if( WasLButtonClickedInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
    {
       //  Turn the screen coordinates into inventory coordinates.
       int mapx = ((GetDesignMouseX() - 124) / 32);

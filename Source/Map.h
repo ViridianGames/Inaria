@@ -1,6 +1,6 @@
 #ifndef _MAP_H_
 #define _MAP_H_
-#include "Geist/Object.h"
+#include "../Geist/Source/Object.h"
 #include "raylib.h"
 #include "Item.h"
 #include "NPC.h"

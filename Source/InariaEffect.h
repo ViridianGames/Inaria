@@ -6,7 +6,7 @@
 #include <list>
 #include <string>
 
-#include "Geist/Primitives.h"
+#include "../Geist/Source/Primitives.h"
 
 struct Position
 {

@@ -1,214 +1,195 @@
- Wed Jun 17 05:02:02 2026.530 Starting Engine::Init()
- Wed Jun 17 05:02:02 2026.530 Starting StateMachine::Init
- Wed Jun 17 05:02:02 2026.530 Leaving StateMachine::Init
- Wed Jun 17 05:02:02 2026.530 Starting InputSystem::Init()
- Wed Jun 17 05:02:02 2026.530 Done With InputSystem::Init()
- Wed Jun 17 05:02:02 2026.670 Done with Engine::Init()
- Wed Jun 17 05:02:02 2026.671 Loading texture Images/mask.png on the fly!
- Wed Jun 17 05:02:02 2026.671 Loading texture Images/mask.png
- Wed Jun 17 05:02:02 2026.673 Texture ID: 6, Width: 512, Height: 512
- Wed Jun 17 05:02:02 2026.673 Load successful.
- Wed Jun 17 05:02:02 2026.674 Loading texture Images/star.png on the fly!
- Wed Jun 17 05:02:02 2026.674 Loading texture Images/star.png
- Wed Jun 17 05:02:02 2026.674 Texture ID: 7, Width: 128, Height: 32
- Wed Jun 17 05:02:02 2026.674 Load successful.
- Wed Jun 17 05:02:02 2026.674 Loading texture Images/bubble.png on the fly!
- Wed Jun 17 05:02:02 2026.674 Loading texture Images/bubble.png
- Wed Jun 17 05:02:02 2026.674 Texture ID: 8, Width: 64, Height: 16
- Wed Jun 17 05:02:02 2026.674 Load successful.
- Wed Jun 17 05:02:02 2026.674 Loading texture Images/textbackground.png on the fly!
- Wed Jun 17 05:02:02 2026.674 Loading texture Images/textbackground.png
- Wed Jun 17 05:02:02 2026.674 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.674 WARNING: Texture failed to load properly - file may not exist at path: Images/textbackground.png
- Wed Jun 17 05:02:02 2026.674 Loading texture Images/tbul.png on the fly!
- Wed Jun 17 05:02:02 2026.674 Loading texture Images/tbul.png
- Wed Jun 17 05:02:02 2026.674 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.674 WARNING: Texture failed to load properly - file may not exist at path: Images/tbul.png
- Wed Jun 17 05:02:02 2026.674 Loading texture Images/tbur.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/tbur.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.675 WARNING: Texture failed to load properly - file may not exist at path: Images/tbur.png
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/tblr.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/tblr.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.675 WARNING: Texture failed to load properly - file may not exist at path: Images/tblr.png
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/tbll.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/tbll.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.675 WARNING: Texture failed to load properly - file may not exist at path: Images/tbll.png
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/talkspurleft.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/talkspurleft.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.675 WARNING: Texture failed to load properly - file may not exist at path: Images/talkspurleft.png
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/talkspurright.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/talkspurright.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.675 WARNING: Texture failed to load properly - file may not exist at path: Images/talkspurright.png
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/talkspurrightup.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/talkspurrightup.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.675 WARNING: Texture failed to load properly - file may not exist at path: Images/talkspurrightup.png
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_corner1.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_corner1.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 9, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.675 Load successful.
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_corner2.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_corner2.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 10, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.675 Load successful.
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_corner3.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_corner3.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 11, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.675 Load successful.
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_corner4.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_corner4.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 12, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.675 Load successful.
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_e.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_e.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 13, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.675 Load successful.
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_s.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/floorshadow_s.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 14, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.675 Load successful.
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/wallshadow_e.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/wallshadow_e.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 15, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.675 Load successful.
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/wallshadow_n.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/wallshadow_n.png
- Wed Jun 17 05:02:02 2026.675 Texture ID: 16, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.675 Load successful.
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/wallshadow_ne.png on the fly!
- Wed Jun 17 05:02:02 2026.675 Loading texture Images/wallshadow_ne.png
- Wed Jun 17 05:02:02 2026.676 Texture ID: 17, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.676 Load successful.
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_nw.png on the fly!
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_nw.png
- Wed Jun 17 05:02:02 2026.676 Texture ID: 18, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.676 Load successful.
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_s.png on the fly!
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_s.png
- Wed Jun 17 05:02:02 2026.676 Texture ID: 19, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.676 Load successful.
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_se.png on the fly!
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_se.png
- Wed Jun 17 05:02:02 2026.676 Texture ID: 20, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.676 Load successful.
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_sw.png on the fly!
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_sw.png
- Wed Jun 17 05:02:02 2026.676 Texture ID: 21, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.676 Load successful.
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_w.png on the fly!
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/wallshadow_w.png
- Wed Jun 17 05:02:02 2026.676 Texture ID: 22, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.676 Load successful.
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/background.png on the fly!
- Wed Jun 17 05:02:02 2026.676 Loading texture Images/background.png
- Wed Jun 17 05:02:02 2026.679 Texture ID: 23, Width: 1024, Height: 512
- Wed Jun 17 05:02:02 2026.679 Load successful.
- Wed Jun 17 05:02:02 2026.679 Loading texture Images/levelup.png on the fly!
- Wed Jun 17 05:02:02 2026.679 Loading texture Images/levelup.png
- Wed Jun 17 05:02:02 2026.679 Texture ID: 24, Width: 256, Height: 64
- Wed Jun 17 05:02:02 2026.679 Load successful.
- Wed Jun 17 05:02:02 2026.679 Loading texture Images/buy.png on the fly!
- Wed Jun 17 05:02:02 2026.679 Loading texture Images/buy.png
- Wed Jun 17 05:02:02 2026.680 Texture ID: 25, Width: 256, Height: 64
- Wed Jun 17 05:02:02 2026.680 Load successful.
- Wed Jun 17 05:02:02 2026.680 Loading texture Images/overlay.png on the fly!
- Wed Jun 17 05:02:02 2026.680 Loading texture Images/overlay.png
- Wed Jun 17 05:02:02 2026.682 Texture ID: 26, Width: 1024, Height: 512
- Wed Jun 17 05:02:02 2026.682 Load successful.
- Wed Jun 17 05:02:02 2026.682 Loading texture Images/crossbar.png on the fly!
- Wed Jun 17 05:02:02 2026.682 Loading texture Images/crossbar.png
- Wed Jun 17 05:02:02 2026.682 Texture ID: 27, Width: 512, Height: 32
- Wed Jun 17 05:02:02 2026.682 Load successful.
- Wed Jun 17 05:02:02 2026.682 Loading texture Images/button1.png on the fly!
- Wed Jun 17 05:02:02 2026.682 Loading texture Images/button1.png
- Wed Jun 17 05:02:02 2026.682 Texture ID: 28, Width: 512, Height: 32
- Wed Jun 17 05:02:02 2026.682 Load successful.
- Wed Jun 17 05:02:02 2026.682 Loading texture Images/button2.png on the fly!
- Wed Jun 17 05:02:02 2026.682 Loading texture Images/button2.png
- Wed Jun 17 05:02:02 2026.682 Texture ID: 29, Width: 512, Height: 32
- Wed Jun 17 05:02:02 2026.682 Load successful.
- Wed Jun 17 05:02:02 2026.682 Loading texture Images/cursor.png on the fly!
- Wed Jun 17 05:02:02 2026.682 Loading texture Images/cursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 30, Width: 16, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/getcursor.png on the fly!
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/getcursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 31, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/talkcursor.png on the fly!
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/talkcursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 32, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/attackcursor.png on the fly!
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/attackcursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 33, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/lookcursor.png on the fly!
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/lookcursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 34, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/bashcursor.png on the fly!
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/bashcursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 35, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/smitecursor.png on the fly!
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/smitecursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 36, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/teleportcursor.png on the fly!
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/teleportcursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 37, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/lockpickcursor.png on the fly!
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/lockpickcursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 38, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/magicunlockcursor.png on the fly!
- Wed Jun 17 05:02:02 2026.683 Loading texture Images/magicunlockcursor.png
- Wed Jun 17 05:02:02 2026.683 Texture ID: 39, Width: 32, Height: 32
- Wed Jun 17 05:02:02 2026.683 Load successful.
- Wed Jun 17 05:02:02 2026.684 Loading texture images/0020.png on the fly!
- Wed Jun 17 05:02:02 2026.684 Loading texture images/0020.png
- Wed Jun 17 05:02:02 2026.684 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.684 WARNING: Texture failed to load properly - file may not exist at path: images/0020.png
- Wed Jun 17 05:02:02 2026.684 Loading texture images/0018.png on the fly!
- Wed Jun 17 05:02:02 2026.684 Loading texture images/0018.png
- Wed Jun 17 05:02:02 2026.684 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.684 WARNING: Texture failed to load properly - file may not exist at path: images/0018.png
- Wed Jun 17 05:02:02 2026.684 Loading texture images/0017.png on the fly!
- Wed Jun 17 05:02:02 2026.684 Loading texture images/0017.png
- Wed Jun 17 05:02:02 2026.685 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.685 WARNING: Texture failed to load properly - file may not exist at path: images/0017.png
- Wed Jun 17 05:02:02 2026.685 Loading texture images/0019.png on the fly!
- Wed Jun 17 05:02:02 2026.685 Loading texture images/0019.png
- Wed Jun 17 05:02:02 2026.685 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.685 WARNING: Texture failed to load properly - file may not exist at path: images/0019.png
- Wed Jun 17 05:02:02 2026.685 Loading texture images/0107.png on the fly!
- Wed Jun 17 05:02:02 2026.685 Loading texture images/0107.png
- Wed Jun 17 05:02:02 2026.685 Texture ID: 0, Width: 0, Height: 0
- Wed Jun 17 05:02:02 2026.685 WARNING: Texture failed to load properly - file may not exist at path: images/0107.png
- Wed Jun 17 05:02:02 2026.685 Created state MainState with ID 0
- Wed Jun 17 05:02:02 2026.685 Created state LevelUpState with ID 1
- Wed Jun 17 05:02:02 2026.685 Created state StoreState with ID 2
- Wed Jun 17 05:02:02 2026.685 Created state OptionsState with ID 3
- Wed Jun 17 05:02:02 2026.685 Loading texture Images/logo.png on the fly!
- Wed Jun 17 05:02:02 2026.685 Loading texture Images/logo.png
- Wed Jun 17 05:02:02 2026.685 Texture ID: 40, Width: 256, Height: 64
- Wed Jun 17 05:02:02 2026.685 Load successful.
- Wed Jun 17 05:02:02 2026.685 Created state TitleState with ID 4
- Wed Jun 17 05:02:02 2026.693 Created state EditorState with ID 5
- Wed Jun 17 05:02:02 2026.693 Created state TutorialState with ID 6
- Wed Jun 17 05:02:02 2026.693 Created state EnchantingState with ID 7
- Wed Jun 17 05:02:02 2026.693 Created state InfiniteWarningState with ID 8
- Wed Jun 17 05:02:02 2026.693 Loading texture Images/sprites.png on the fly!
- Wed Jun 17 05:02:02 2026.693 Loading texture Images/sprites.png
- Wed Jun 17 05:02:02 2026.695 Texture ID: 41, Width: 512, Height: 512
- Wed Jun 17 05:02:02 2026.695 Load successful.
- Wed Jun 17 05:02:02 2026.695 StateMachine: Transitioning to state TitleState, ID 4
- Wed Jun 17 05:02:02 2026.698 Loading music Music/inaria_theme-v003m1.ogg
- Wed Jun 17 05:02:02 2026.699 Load successful.
+ Tue Jun 23 14:08:50 2026.781 Starting Engine::Init()
+ Tue Jun 23 14:08:50 2026.781 Starting StateMachine::Init
+ Tue Jun 23 14:08:50 2026.781 Leaving StateMachine::Init
+ Tue Jun 23 14:08:50 2026.781 Starting InputSystem::Init()
+ Tue Jun 23 14:08:50 2026.781 Done With InputSystem::Init()
+ Tue Jun 23 14:08:50 2026.961 Done with Engine::Init()
+ Tue Jun 23 14:08:50 2026.962 Loading texture Images/mask.png on the fly!
+ Tue Jun 23 14:08:50 2026.962 Loading texture Images/mask.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 7, Width: 512, Height: 512
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/star.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/star.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 8, Width: 128, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/bubble.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/bubble.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 9, Width: 64, Height: 16
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/textbackground.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/textbackground.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 0, Width: 0, Height: 0
+ Tue Jun 23 14:08:50 2026.963 WARNING: Texture failed to load properly - file may not exist at path: Images/textbackground.png
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/tbul.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/tbul.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 0, Width: 0, Height: 0
+ Tue Jun 23 14:08:50 2026.963 WARNING: Texture failed to load properly - file may not exist at path: Images/tbul.png
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/tbur.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/tbur.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 0, Width: 0, Height: 0
+ Tue Jun 23 14:08:50 2026.963 WARNING: Texture failed to load properly - file may not exist at path: Images/tbur.png
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/tblr.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/tblr.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 0, Width: 0, Height: 0
+ Tue Jun 23 14:08:50 2026.963 WARNING: Texture failed to load properly - file may not exist at path: Images/tblr.png
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/tbll.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/tbll.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 0, Width: 0, Height: 0
+ Tue Jun 23 14:08:50 2026.963 WARNING: Texture failed to load properly - file may not exist at path: Images/tbll.png
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/talkspurleft.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/talkspurleft.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 0, Width: 0, Height: 0
+ Tue Jun 23 14:08:50 2026.963 WARNING: Texture failed to load properly - file may not exist at path: Images/talkspurleft.png
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/talkspurright.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/talkspurright.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 0, Width: 0, Height: 0
+ Tue Jun 23 14:08:50 2026.963 WARNING: Texture failed to load properly - file may not exist at path: Images/talkspurright.png
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/talkspurrightup.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/talkspurrightup.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 0, Width: 0, Height: 0
+ Tue Jun 23 14:08:50 2026.963 WARNING: Texture failed to load properly - file may not exist at path: Images/talkspurrightup.png
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_corner1.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_corner1.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 10, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_corner2.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_corner2.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 11, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_corner3.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_corner3.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 12, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_corner4.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_corner4.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 13, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_e.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_e.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 14, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_s.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/floorshadow_s.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 15, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_e.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_e.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 16, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_n.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_n.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 17, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_ne.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_ne.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 18, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_nw.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_nw.png
+ Tue Jun 23 14:08:50 2026.963 Texture ID: 19, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.963 Load successful.
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_s.png on the fly!
+ Tue Jun 23 14:08:50 2026.963 Loading texture Images/wallshadow_s.png
+ Tue Jun 23 14:08:50 2026.964 Texture ID: 20, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.964 Load successful.
+ Tue Jun 23 14:08:50 2026.964 Loading texture Images/wallshadow_se.png on the fly!
+ Tue Jun 23 14:08:50 2026.964 Loading texture Images/wallshadow_se.png
+ Tue Jun 23 14:08:50 2026.964 Texture ID: 21, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.964 Load successful.
+ Tue Jun 23 14:08:50 2026.964 Loading texture Images/wallshadow_sw.png on the fly!
+ Tue Jun 23 14:08:50 2026.964 Loading texture Images/wallshadow_sw.png
+ Tue Jun 23 14:08:50 2026.964 Texture ID: 22, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.964 Load successful.
+ Tue Jun 23 14:08:50 2026.964 Loading texture Images/wallshadow_w.png on the fly!
+ Tue Jun 23 14:08:50 2026.964 Loading texture Images/wallshadow_w.png
+ Tue Jun 23 14:08:50 2026.964 Texture ID: 23, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.964 Load successful.
+ Tue Jun 23 14:08:50 2026.964 Loading texture Images/background.png on the fly!
+ Tue Jun 23 14:08:50 2026.964 Loading texture Images/background.png
+ Tue Jun 23 14:08:50 2026.966 Texture ID: 24, Width: 1024, Height: 512
+ Tue Jun 23 14:08:50 2026.966 Load successful.
+ Tue Jun 23 14:08:50 2026.966 Loading texture Images/levelup.png on the fly!
+ Tue Jun 23 14:08:50 2026.966 Loading texture Images/levelup.png
+ Tue Jun 23 14:08:50 2026.966 Texture ID: 25, Width: 256, Height: 64
+ Tue Jun 23 14:08:50 2026.966 Load successful.
+ Tue Jun 23 14:08:50 2026.966 Loading texture Images/buy.png on the fly!
+ Tue Jun 23 14:08:50 2026.966 Loading texture Images/buy.png
+ Tue Jun 23 14:08:50 2026.966 Texture ID: 26, Width: 256, Height: 64
+ Tue Jun 23 14:08:50 2026.966 Load successful.
+ Tue Jun 23 14:08:50 2026.966 Loading texture Images/overlay.png on the fly!
+ Tue Jun 23 14:08:50 2026.966 Loading texture Images/overlay.png
+ Tue Jun 23 14:08:50 2026.968 Texture ID: 27, Width: 1024, Height: 512
+ Tue Jun 23 14:08:50 2026.968 Load successful.
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/crossbar.png on the fly!
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/crossbar.png
+ Tue Jun 23 14:08:50 2026.968 Texture ID: 28, Width: 512, Height: 32
+ Tue Jun 23 14:08:50 2026.968 Load successful.
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/button1.png on the fly!
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/button1.png
+ Tue Jun 23 14:08:50 2026.968 Texture ID: 29, Width: 512, Height: 32
+ Tue Jun 23 14:08:50 2026.968 Load successful.
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/button2.png on the fly!
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/button2.png
+ Tue Jun 23 14:08:50 2026.968 Texture ID: 30, Width: 512, Height: 32
+ Tue Jun 23 14:08:50 2026.968 Load successful.
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/cursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/cursor.png
+ Tue Jun 23 14:08:50 2026.968 Texture ID: 31, Width: 16, Height: 32
+ Tue Jun 23 14:08:50 2026.968 Load successful.
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/getcursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/getcursor.png
+ Tue Jun 23 14:08:50 2026.968 Texture ID: 32, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.968 Load successful.
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/talkcursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/talkcursor.png
+ Tue Jun 23 14:08:50 2026.968 Texture ID: 33, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.968 Load successful.
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/attackcursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/attackcursor.png
+ Tue Jun 23 14:08:50 2026.968 Texture ID: 34, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.968 Load successful.
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/lookcursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.968 Loading texture Images/lookcursor.png
+ Tue Jun 23 14:08:50 2026.968 Texture ID: 35, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.969 Load successful.
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/bashcursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/bashcursor.png
+ Tue Jun 23 14:08:50 2026.969 Texture ID: 36, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.969 Load successful.
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/smitecursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/smitecursor.png
+ Tue Jun 23 14:08:50 2026.969 Texture ID: 37, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.969 Load successful.
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/teleportcursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/teleportcursor.png
+ Tue Jun 23 14:08:50 2026.969 Texture ID: 38, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.969 Load successful.
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/lockpickcursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/lockpickcursor.png
+ Tue Jun 23 14:08:50 2026.969 Texture ID: 39, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.969 Load successful.
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/magicunlockcursor.png on the fly!
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/magicunlockcursor.png
+ Tue Jun 23 14:08:50 2026.969 Texture ID: 40, Width: 32, Height: 32
+ Tue Jun 23 14:08:50 2026.969 Load successful.
+ Tue Jun 23 14:08:50 2026.969 Created state MainState with ID 0
+ Tue Jun 23 14:08:50 2026.969 Created state LevelUpState with ID 1
+ Tue Jun 23 14:08:50 2026.969 Created state StoreState with ID 2
+ Tue Jun 23 14:08:50 2026.969 Created state OptionsState with ID 3
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/logo.png on the fly!
+ Tue Jun 23 14:08:50 2026.969 Loading texture Images/logo.png
+ Tue Jun 23 14:08:50 2026.969 Texture ID: 41, Width: 256, Height: 64
+ Tue Jun 23 14:08:50 2026.969 Load successful.
+ Tue Jun 23 14:08:50 2026.969 Created state TitleState with ID 4
+ Tue Jun 23 14:08:50 2026.975 Created state EditorState with ID 5
+ Tue Jun 23 14:08:50 2026.975 Created state TutorialState with ID 6
+ Tue Jun 23 14:08:50 2026.975 Created state EnchantingState with ID 7
+ Tue Jun 23 14:08:50 2026.975 Created state InfiniteWarningState with ID 8
+ Tue Jun 23 14:08:50 2026.975 Loading texture Images/sprites.png on the fly!
+ Tue Jun 23 14:08:50 2026.975 Loading texture Images/sprites.png
+ Tue Jun 23 14:08:50 2026.978 Texture ID: 42, Width: 512, Height: 512
+ Tue Jun 23 14:08:50 2026.978 Load successful.
+ Tue Jun 23 14:08:50 2026.978 StateMachine: Transitioning to state TitleState, ID 4
+ Tue Jun 23 14:08:50 2026.979 Loading music Music/inaria_theme-v003m1.ogg
+ Tue Jun 23 14:08:50 2026.980 Load successful.
+ Tue Jun 23 14:09:18 2026.749 StateMachine: Transitioning to state MainState, ID 0

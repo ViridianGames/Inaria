@@ -1,6 +1,6 @@
 #include "GameGlobals.h"
-#include "Geist/Engine.h"
-#include "Geist/Globals.h"
+#include "../Geist/Source/Engine.h"
+#include "../Geist/Source/Globals.h"
 #include "GameGlobals.h"
 #include <fstream>
 #include <assert.h>

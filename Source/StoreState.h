@@ -11,10 +11,10 @@
 #ifndef _STORESTATE_H_
 #define _STORESTATE_H_
 
-#include "Geist/State.h"
+#include "../Geist/Source/State.h"
 #include "Map.h"
 #include "NPC.h"
-#include "Geist/Gui.h"
+#include "../Geist/Source/Gui.h"
 #include <list>
 #include <deque>
 #include <math.h>

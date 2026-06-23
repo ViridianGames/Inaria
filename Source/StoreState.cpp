@@ -78,7 +78,7 @@ void StoreState::Draw()
    if( DrawButton("Done", 220, 256 ) )
       g_StateMachine->PopState();
 
-   if( g_InputSystem->IsMouseInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
+   if( IsMouseInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
    {
       //  Turn the screen coordinates into inventory coordinates.
       int mapx = ((GetDesignMouseX() - 124) / 32);
@@ -87,12 +87,12 @@ void StoreState::Draw()
 
       if(inventoryindex < m_StoreInventory.size())
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(m_StoreInventory[inventoryindex]), 123 + mapx * 32, 124 + mapy * 32, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(m_StoreInventory[inventoryindex]), 123 + mapx * 32, 124 + mapy * 32, 2 );
       }
    }
 
    //  Do inventory tooltips.
-   if( g_InputSystem->IsMouseInDesignRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 32), g_InventoryY + ( 4 * 32 ) ) )
+   if( IsMouseInDesignRegion( g_InventoryX, g_InventoryY, g_InventoryX + (4 * 32), g_InventoryY + ( 4 * 32 ) ) )
    {
       //  Turn the screen coordinates into inventory coordinates.
       int mapx = ((GetDesignMouseX() - g_InventoryX) / 32);
@@ -101,7 +101,7 @@ void StoreState::Draw()
 
       if(inventoryindex < g_Player->m_PlayerInventory.size())
       {
-         DrawToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_PlayerInventory[inventoryindex]), g_InventoryX + mapx * 32, g_InventoryY + mapy * 32, 2 );
+         DrawDesignToolTip( g_smallFont.get(), g_smallFontSize, ConstructItemTooltip(g_Player->m_PlayerInventory[inventoryindex]), g_InventoryX + mapx * 32, g_InventoryY + mapy * 32, 2 );
       }
    }
 
@@ -191,7 +191,7 @@ void StoreState::DoPlayerInput()
       }
    }
 
-   if( g_InputSystem->WasLButtonClickedInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
+   if( WasLButtonClickedInDesignRegion( 124, 124, 124 + (4 * 32), 124 + ( 4 * 32 ) ) )
    {
       //  Turn the screen coordinates into inventory coordinates.
       int mapx = ((GetDesignMouseX() - 124) / 32);

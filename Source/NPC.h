@@ -3,7 +3,7 @@
 #define _NPC_H_
 
 #include "BaseUnit.h"
-#include "Geist/Config.h"
+#include "../Geist/Source/Config.h"
 #include "Item.h"
 #include <cstdint>
 #include <vector>
